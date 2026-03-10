@@ -1,1423 +1,689 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>NKCC — Market Visit Form</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
-  <style>
-    /* ── DESIGN TOKENS ─────────────────────────────────── */
-    :root {
-      --green:      #0d6e3f;
-      --green-dark: #094d2c;
-      --green-lt:   #e6f4ed;
-      --accent:     #f5a623;
-      --accent-lt:  #fff8ec;
-      --red:        #d94f4f;
-      --text:       #1a1a2e;
-      --muted:      #6b7280;
-      --border:     #d1d5db;
-      --surface:    #ffffff;
-      --bg:         #f0f4f1;
-      --radius:     14px;
-      --shadow:     0 2px 12px rgba(0,0,0,0.08);
-      --shadow-lg:  0 8px 32px rgba(13,110,63,0.15);
-    }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>NKCC Market Visit Form</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{--green:#0d6e3f;--green-dark:#094d2c;--green-lt:#e6f4ed;--accent:#f5a623;--red:#d94f4f;--text:#1a1a2e;--muted:#6b7280;--border:#d1d5db;--surface:#fff;--bg:#f0f4f1;--radius:14px;--shadow:0 2px 12px rgba(0,0,0,0.08)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:60px}
 
-    /* ── RESET ─────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      padding-bottom: 40px;
-    }
+.hdr{background:linear-gradient(135deg,var(--green-dark),var(--green));padding:22px 20px 30px;text-align:center;position:relative;overflow:hidden}
+.hdr::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.06)}
+.hdr-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:4px 12px;font-size:11px;color:rgba(255,255,255,.85);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.hdr-badge .dot{width:6px;height:6px;background:var(--accent);border-radius:50%}
+.hdr h1{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1.2}
+.hdr p{font-size:13px;color:rgba(255,255,255,.7);margin-top:4px}
 
-    /* ── HEADER ────────────────────────────────────────── */
-    .app-header {
-      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%);
-      padding: 20px 20px 28px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .app-header::before {
-      content: '';
-      position: absolute;
-      top: -40px; right: -40px;
-      width: 160px; height: 160px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.06);
-    }
-    .app-header::after {
-      content: '';
-      position: absolute;
-      bottom: -30px; left: -20px;
-      width: 120px; height: 120px;
-      border-radius: 50%;
-      background: rgba(245,166,35,0.12);
-    }
-    .header-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 20px;
-      padding: 4px 12px;
-      font-size: 11px;
-      color: rgba(255,255,255,0.85);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-    .header-badge .dot {
-      width: 6px; height: 6px;
-      background: var(--accent);
-      border-radius: 50%;
-    }
-    .app-header h1 {
-      font-family: 'Syne', sans-serif;
-      font-size: 22px;
-      font-weight: 800;
-      color: #fff;
-      letter-spacing: -0.02em;
-      line-height: 1.2;
-    }
-    .app-header p {
-      font-size: 13px;
-      color: rgba(255,255,255,0.7);
-      margin-top: 4px;
-    }
+.prog-wrap{background:var(--surface);padding:14px 20px;box-shadow:var(--shadow);position:sticky;top:0;z-index:100}
+.prog-steps{display:flex;gap:6px;align-items:center;justify-content:center;margin-bottom:8px}
+.sdot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;border:2px solid var(--border);color:var(--muted);background:var(--surface);transition:all .3s;cursor:pointer}
+.sdot.active{border-color:var(--green);background:var(--green);color:#fff;box-shadow:0 0 0 3px rgba(13,110,63,.15)}
+.sdot.done{border-color:var(--green);background:var(--green-lt);color:var(--green)}
+.sline{flex:1;height:2px;background:var(--border);border-radius:2px;transition:background .3s}
+.sline.done{background:var(--green)}
+.prog-label{text-align:center;font-size:12px;color:var(--muted)}
+.prog-label strong{color:var(--green)}
 
-    /* ── PROGRESS BAR ──────────────────────────────────── */
-    .progress-wrap {
-      background: var(--surface);
-      padding: 16px 20px;
-      box-shadow: var(--shadow);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .progress-steps {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 10px;
-    }
-    .step-dot {
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 11px;
-      font-weight: 700;
-      border: 2px solid var(--border);
-      color: var(--muted);
-      background: var(--surface);
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-    .step-dot.active {
-      border-color: var(--green);
-      background: var(--green);
-      color: #fff;
-      box-shadow: 0 0 0 3px rgba(13,110,63,0.15);
-    }
-    .step-dot.done {
-      border-color: var(--green);
-      background: var(--green-lt);
-      color: var(--green);
-    }
-    .step-dot.done::after { content: "✓"; }
-    .step-line {
-      flex: 1;
-      height: 2px;
-      background: var(--border);
-      border-radius: 2px;
-      transition: background 0.3s ease;
-    }
-    .step-line.done { background: var(--green); }
-    .progress-label {
-      text-align: center;
-      font-size: 12px;
-      color: var(--muted);
-    }
-    .progress-label strong { color: var(--green); }
+.wrap{max-width:540px;margin:0 auto;padding:20px 16px 0}
+.step{display:none;animation:fu .35s ease}
+.step.active{display:block}
+@keyframes fu{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.step-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--green-dark);margin-bottom:4px}
+.step-sub{font-size:13px;color:var(--muted);margin-bottom:18px}
 
-    /* ── CONTAINER ─────────────────────────────────────── */
-    .container { max-width: 540px; margin: 0 auto; padding: 20px 16px 0; }
+.card{background:var(--surface);border-radius:var(--radius);padding:18px;margin-bottom:14px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.04)}
+.field{margin-bottom:16px}
+.field:last-child{margin-bottom:0}
+label{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
+.req{color:var(--red);margin-left:2px}
 
-    /* ── STEPS ─────────────────────────────────────────── */
-    .step { display: none; animation: fadeUp 0.35s ease; }
-    .step.active { display: block; }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+input[type=text],input[type=tel],input[type=date],input[type=number],textarea{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);background:var(--surface);transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none}
+input:focus,textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(13,110,63,.1)}
+input::placeholder,textarea::placeholder{color:#b0b8c1}
+textarea{resize:vertical;min-height:80px}
 
-    .step-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--green-dark);
-      margin-bottom: 4px;
-    }
-    .step-subtitle {
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 20px;
-    }
+/* SEARCH PICKER */
+.picker-wrap{position:relative}
+.pi-row{display:flex;align-items:center;gap:8px;border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;background:var(--surface);transition:border-color .2s,box-shadow .2s}
+.pi-row:focus-within{border-color:var(--green);box-shadow:0 0 0 3px rgba(13,110,63,.1)}
+.pi-ico{font-size:15px;opacity:.45;flex-shrink:0}
+.pi-input{flex:1;border:none!important;padding:0!important;font-size:14px;background:transparent;color:var(--text);outline:none!important;box-shadow:none!important;-webkit-appearance:none;appearance:none}
+.pi-input::placeholder{color:#b0b8c1}
+.pi-x{background:none;border:none;cursor:pointer;font-size:14px;color:var(--muted);padding:0 2px;flex-shrink:0;line-height:1;display:none}
+.pi-x:hover{color:var(--red)}
+.pi-badge{display:none;align-items:center;gap:8px;margin-top:8px;background:var(--green-lt);border:1.5px solid #b6dfc9;border-radius:8px;padding:9px 12px;font-size:13px;font-weight:600;color:var(--green-dark)}
+.pi-badge.show{display:flex}
+.pi-chk{color:var(--green);font-weight:800;font-size:15px;flex-shrink:0}
+.pi-change{margin-left:auto;background:none;border:none;font-size:11px;color:var(--green);cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;text-decoration:underline;flex-shrink:0}
+.pi-drop{display:none;margin-top:6px;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;background:var(--surface);box-shadow:0 4px 16px rgba(0,0,0,.1);max-height:220px;overflow-y:auto}
+.pi-drop.open{display:block}
+.pi-opt{padding:12px 14px;font-size:14px;color:var(--text);cursor:pointer;border-bottom:1px solid #f0f0f0;transition:background .15s}
+.pi-opt:last-of-type{border-bottom:none}
+.pi-opt:hover,.pi-opt:active{background:var(--green-lt);color:var(--green-dark)}
+.pi-opt mark{background:#fff3b0;color:inherit;border-radius:2px;padding:0 1px}
+.pi-empty{padding:14px;font-size:13px;color:var(--muted);text-align:center;display:none}
 
-    /* ── CARDS ─────────────────────────────────────────── */
-    .card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: 18px;
-      margin-bottom: 14px;
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(0,0,0,0.04);
-    }
+/* RADIO / CHECKBOX */
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opt{position:relative}
+.opt input[type=radio],.opt input[type=checkbox]{position:absolute;opacity:0;width:0;height:0}
+.opt label{display:flex;align-items:center;gap:8px;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text);transition:all .2s;background:#fafafa;margin:0;user-select:none}
+.opt label::before{content:'';width:16px;height:16px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;transition:all .2s}
+.opt.cb label::before{border-radius:4px}
+.opt input:checked+label{border-color:var(--green);background:var(--green-lt);color:var(--green-dark)}
+.opt input:checked+label::before{background:var(--green);border-color:var(--green)}
+.opt.cb input:checked+label::before{background:var(--green) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='8'%3E%3Cpath d='M1 4l3 3 5-6' stroke='white' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/10px no-repeat;border-color:var(--green)}
 
-    /* ── FORM FIELDS ───────────────────────────────────── */
-    .field { margin-bottom: 16px; }
-    .field:last-child { margin-bottom: 0; }
+/* LOCATION */
+.loc-box{background:var(--green-lt);border:1.5px solid #b6dfc9;border-radius:10px;padding:14px;transition:all .3s}
+.loc-box.locked{border-color:var(--green);background:#d4edd9}
+.loc-box.loc-err-state{border-color:#fca5a5;background:#fef9f9}
+.loc-row{display:flex;align-items:center;gap:12px}
+.loc-radar{position:relative;width:44px;height:44px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.rring{position:absolute;border-radius:50%;border:2px solid var(--green);opacity:0;animation:rp 2s ease-out infinite}
+.r1{width:44px;height:44px;animation-delay:0s}.r2{width:30px;height:30px;animation-delay:.6s}.r3{width:18px;height:18px;animation-delay:1.2s}
+@keyframes rp{0%{opacity:.7;transform:scale(.5)}100%{opacity:0;transform:scale(1.5)}}
+.radar-ico{font-size:18px;position:relative;z-index:1}
+.loc-ok-ico{font-size:28px;flex-shrink:0}
+.loc-txt strong{display:block;font-size:13px;font-weight:600;color:var(--green-dark)}
+.loc-txt span{font-size:12px;color:var(--muted)}
+.loc-pulse{animation:lp 1.5s infinite}
+@keyframes lp{0%,100%{opacity:1}50%{opacity:.4}}
+.loc-details{margin-top:10px;padding-top:10px;border-top:1px solid #b6dfc9;display:none}
+.loc-details.show{display:block}
+.loc-chips{display:flex;flex-wrap:wrap;gap:6px}
+.lchip{background:rgba(13,110,63,.1);border:1px solid #b6dfc9;border-radius:20px;padding:3px 10px;font-size:11px;color:var(--green-dark)}
+.lchip b{font-weight:700}
+.loc-err-box{display:none;margin-top:8px;background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:10px 14px}
+.loc-err-msg{font-size:13px;color:var(--red);margin-bottom:6px}
+.btn-retry{background:none;border:1.5px solid var(--red);color:var(--red);border-radius:8px;padding:6px 14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer}
 
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 6px;
-    }
-    label .req { color: var(--red); margin-left: 2px; }
+/* BUTTONS */
+.btn-row{display:flex;gap:10px;margin-top:22px;padding-bottom:10px}
+.btn{flex:1;padding:14px;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;border:none;transition:all .2s}
+.btn-pri{background:var(--green);color:#fff;box-shadow:0 4px 14px rgba(13,110,63,.3)}
+.btn-pri:hover{background:var(--green-dark);transform:translateY(-1px)}
+.btn-sec{background:var(--surface);color:var(--text);border:1.5px solid var(--border)}
+.btn-sec:hover{background:var(--bg)}
+.btn-sub{background:linear-gradient(135deg,var(--accent),#e8930a);color:#fff;box-shadow:0 4px 14px rgba(245,166,35,.35);font-size:16px}
+.btn-sub:hover{transform:translateY(-1px)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
 
-    input[type="text"],
-    input[type="tel"],
-    input[type="date"],
-    input[type="number"],
-    textarea,
-    select {
-      width: 100%;
-      padding: 11px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      color: var(--text);
-      background: var(--surface);
-      transition: border-color 0.2s, box-shadow 0.2s;
-      -webkit-appearance: none;
-    }
-    input:focus, textarea:focus, select:focus {
-      outline: none;
-      border-color: var(--green);
-      box-shadow: 0 0 0 3px rgba(13,110,63,0.1);
-    }
-    input::placeholder, textarea::placeholder { color: #b0b8c1; }
-    textarea { resize: vertical; min-height: 80px; }
+.err-msg{background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:12px;display:none}
+.err-msg.show{display:block}
 
-    /* ── RADIO / CHECKBOX OPTIONS ──────────────────────── */
-    .options-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-    .options-grid.single-col { grid-template-columns: 1fr; }
+.spin{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes sp{to{transform:rotate(360deg)}}
 
-    .option-btn {
-      position: relative;
-    }
-    .option-btn input[type="radio"],
-    .option-btn input[type="checkbox"] {
-      position: absolute;
-      opacity: 0;
-      width: 0; height: 0;
-    }
-    .option-btn label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text);
-      transition: all 0.2s;
-      background: #fafafa;
-      margin: 0;
-      user-select: none;
-    }
-    .option-btn label::before {
-      content: '';
-      width: 16px; height: 16px;
-      border-radius: 50%;
-      border: 2px solid var(--border);
-      flex-shrink: 0;
-      transition: all 0.2s;
-    }
-    .option-btn.checkbox label::before {
-      border-radius: 4px;
-    }
-    .option-btn input:checked + label {
-      border-color: var(--green);
-      background: var(--green-lt);
-      color: var(--green-dark);
-    }
-    .option-btn input:checked + label::before {
-      background: var(--green);
-      border-color: var(--green);
-    }
-    .option-btn input[type="checkbox"]:checked + label::before {
-      background: var(--green) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='8' viewBox='0 0 10 8'%3E%3Cpath d='M1 4l3 3 5-6' stroke='white' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/10px no-repeat;
-      border-color: var(--green);
-    }
-
-    /* ── CSR SELECTOR ──────────────────────────────────── */
-    .csr-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    /* ── LOCATION BOX ──────────────────────────────────── */
-    .location-box {
-      background: var(--green-lt);
-      border: 1.5px solid #b6dfc9;
-      border-radius: 10px;
-      padding: 14px;
-      transition: border-color 0.3s;
-    }
-    .location-box.locked {
-      border-color: var(--green);
-      background: #d4edd9;
-    }
-    .location-box.error-state {
-      border-color: #fca5a5;
-      background: #fef9f9;
-    }
-    .loc-state {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    /* Radar animation */
-    .loc-radar {
-      position: relative;
-      width: 42px; height: 42px;
-      flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .radar-ring {
-      position: absolute;
-      border-radius: 50%;
-      border: 2px solid var(--green);
-      opacity: 0;
-      animation: radarPulse 2s ease-out infinite;
-    }
-    .radar-ring.r1 { width: 42px; height: 42px; animation-delay: 0s; }
-    .radar-ring.r2 { width: 30px; height: 30px; animation-delay: 0.5s; }
-    .radar-ring.r3 { width: 18px; height: 18px; animation-delay: 1s; }
-    @keyframes radarPulse {
-      0%   { opacity: 0.7; transform: scale(0.5); }
-      100% { opacity: 0;   transform: scale(1.4); }
-    }
-    .radar-icon {
-      font-size: 18px;
-      position: relative;
-      z-index: 1;
-    }
-    /* Captured icon */
-    .loc-captured-icon {
-      font-size: 28px;
-      flex-shrink: 0;
-    }
-    .loc-text strong {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--green-dark);
-    }
-    .loc-text span {
-      font-size: 12px;
-      color: var(--muted);
-    }
-    .loc-pulse { animation: pulse 1.5s infinite; }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
-    /* Details chips */
-    .location-details {
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px solid #b6dfc9;
-      display: none;
-    }
-    .location-details.show { display: block; }
-    .loc-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-    .loc-chip {
-      background: rgba(13,110,63,0.1);
-      border: 1px solid #b6dfc9;
-      border-radius: 20px;
-      padding: 3px 10px;
-      font-size: 11px;
-      color: var(--green-dark);
-    }
-    .loc-chip b { font-weight: 700; }
-    /* Accuracy bar */
-    .acc-bar-wrap {
-      margin-top: 8px;
-    }
-    .acc-bar-label {
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 3px;
-      display: flex;
-      justify-content: space-between;
-    }
-    .acc-bar {
-      height: 6px;
-      background: rgba(13,110,63,0.15);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    .acc-bar-fill {
-      height: 100%;
-      border-radius: 3px;
-      background: var(--green);
-      transition: width 0.6s ease, background 0.3s;
-    }
-    /* Retry button */
-    .btn-retry {
-      background: none;
-      border: 1.5px solid var(--red);
-      color: var(--red);
-      border-radius: 8px;
-      padding: 6px 14px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .btn-retry:hover { background: #fef2f2; }
-
-    /* ── BUTTONS ───────────────────────────────────────── */
-    .btn-row {
-      display: flex;
-      gap: 10px;
-      margin-top: 24px;
-      padding-bottom: 10px;
-    }
-    .btn {
-      flex: 1;
-      padding: 14px;
-      border-radius: 12px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s;
-    }
-    .btn-primary {
-      background: var(--green);
-      color: #fff;
-      box-shadow: 0 4px 14px rgba(13,110,63,0.3);
-    }
-    .btn-primary:hover { background: var(--green-dark); transform: translateY(-1px); }
-    .btn-primary:active { transform: translateY(0); }
-    .btn-secondary {
-      background: var(--surface);
-      color: var(--text);
-      border: 1.5px solid var(--border);
-    }
-    .btn-secondary:hover { background: var(--bg); }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-    /* Submit button */
-    .btn-submit {
-      background: linear-gradient(135deg, var(--accent) 0%, #e8930a 100%);
-      color: #fff;
-      box-shadow: 0 4px 14px rgba(245,166,35,0.35);
-      font-size: 16px;
-    }
-    .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(245,166,35,0.4); }
-
-    /* ── SUCCESS SCREEN ────────────────────────────────── */
-    #success-screen {
-      display: none;
-      text-align: center;
-      padding: 40px 20px;
-    }
-    .success-icon {
-      width: 80px; height: 80px;
-      background: var(--green-lt);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 36px;
-      margin: 0 auto 20px;
-      border: 3px solid var(--green);
-    }
-    #success-screen h2 {
-      font-family: 'Syne', sans-serif;
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--green-dark);
-      margin-bottom: 8px;
-    }
-    #success-screen p {
-      font-size: 14px;
-      color: var(--muted);
-      margin-bottom: 24px;
-    }
-
-    /* ── ERROR MESSAGE ─────────────────────────────────── */
-    .error-msg {
-      background: #fef2f2;
-      border: 1px solid #fca5a5;
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 13px;
-      color: var(--red);
-      margin-bottom: 12px;
-      display: none;
-    }
-    .error-msg.show { display: block; }
-
-    /* ── LOADING SPINNER ───────────────────────────────── */
-    .spinner {
-      display: inline-block;
-      width: 18px; height: 18px;
-      border: 2px solid rgba(255,255,255,0.4);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      vertical-align: middle;
-      margin-right: 6px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ── CONFIG NOTICE ─────────────────────────────────── */
-    .config-notice {
-      background: var(--accent-lt);
-      border: 1.5px solid var(--accent);
-      border-radius: 10px;
-      padding: 12px 16px;
-      font-size: 13px;
-      margin: 0 16px 16px;
-      max-width: 540px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .config-notice strong { color: #b36900; }
-
-    /* ── SCROLLABLE LIST ───────────────────────────────── */
-    .scroll-list {
-      max-height: 260px;
-      overflow-y: auto;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      padding: 8px;
-      background: #fafafa;
-    }
-    .scroll-list .option-btn { margin-bottom: 6px; }
-    .scroll-list .option-btn:last-child { margin-bottom: 0; }
-
-    /* ── SEARCH PICKER ─────────────────────────────────── */
-    .search-picker { position: relative; }
-
-    .search-input-wrap {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 12px;
-      background: var(--surface);
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    .search-input-wrap:focus-within {
-      border-color: var(--green);
-      box-shadow: 0 0 0 3px rgba(13,110,63,0.1);
-    }
-    .search-icon { font-size: 14px; flex-shrink: 0; opacity: 0.5; }
-    .search-input {
-      flex: 1;
-      border: none !important;
-      padding: 0 !important;
-      font-size: 14px;
-      background: transparent;
-      color: var(--text);
-      outline: none !important;
-      box-shadow: none !important;
-    }
-    .search-input::placeholder { color: #b0b8c1; }
-    .search-clear {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 13px;
-      color: var(--muted);
-      padding: 0 2px;
-      line-height: 1;
-      flex-shrink: 0;
-    }
-    .search-clear:hover { color: var(--red); }
-
-    /* Selected badge */
-    .picker-selected {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 8px;
-      background: var(--green-lt);
-      border: 1.5px solid #b6dfc9;
-      border-radius: 8px;
-      padding: 8px 12px;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--green-dark);
-    }
-    .picker-selected::before { content: '✓'; font-weight: 800; color: var(--green); }
-
-    /* Dropdown list */
-    .picker-dropdown {
-      margin-top: 6px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      overflow: hidden;
-      background: var(--surface);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-      max-height: 220px;
-      overflow-y: auto;
-    }
-    .picker-option {
-      padding: 11px 14px;
-      font-size: 14px;
-      color: var(--text);
-      cursor: pointer;
-      border-bottom: 1px solid #f0f0f0;
-      transition: background 0.15s;
-    }
-    .picker-option:last-of-type { border-bottom: none; }
-    .picker-option:hover,
-    .picker-option:active { background: var(--green-lt); color: var(--green-dark); }
-    .picker-option.selected {
-      background: var(--green-lt);
-      color: var(--green-dark);
-      font-weight: 600;
-    }
-    .picker-option mark {
-      background: #fff3b0;
-      color: inherit;
-      border-radius: 2px;
-      padding: 0 1px;
-    }
-    .picker-empty {
-      padding: 14px;
-      font-size: 13px;
-      color: var(--muted);
-      text-align: center;
-    }
-
-    @media (min-width: 400px) {
-      .app-header h1 { font-size: 24px; }
-    }
+#success{display:none;text-align:center;padding:50px 20px}
+.suc-ico{width:80px;height:80px;background:var(--green-lt);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 20px;border:3px solid var(--green)}
+#success h2{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--green-dark);margin-bottom:8px}
+#success p{font-size:14px;color:var(--muted);margin-bottom:24px}
+</style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════════
-     ⚙️  CONFIGURATION — PASTE YOUR APPS SCRIPT URL BELOW
-═══════════════════════════════════════════════════════ -->
 <script>
-  // After deploying Google Apps Script, paste the Web App URL here:
-  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxesIR5U25HUo_OUMbwAhGyf-8LJJBVIxlVfNdKSDIFRAnk_aJZgAn2SV7Y34WoJtM9/exec";
+var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxesIR5U25HUo_OUMbwAhGyf-8LJJBVIxlVfNdKSDIFRAnk_aJZgAn2SV7Y34WoJtM9/exec";
 </script>
 
-<!-- CONFIG NOTICE (hidden — URL is configured) -->
-<div class="config-notice" id="configNotice" style="display:none;"></div>
-
-<!-- ── HEADER ─────────────────────────────────────────── -->
-<div class="app-header">
-  <div class="header-badge"><span class="dot"></span> CSR Field Tool</div>
+<div class="hdr">
+  <div class="hdr-badge"><span class="dot"></span> CSR Field Tool</div>
   <h1>General Trade<br>Market Visit Form</h1>
   <p>Fill out after every customer visit</p>
 </div>
 
-<!-- ── PROGRESS ───────────────────────────────────────── -->
-<div class="progress-wrap">
-  <div class="progress-steps">
-    <div class="step-dot active" id="dot-1" onclick="goToStep(1)">1</div>
-    <div class="step-line" id="line-1"></div>
-    <div class="step-dot" id="dot-2" onclick="goToStep(2)">2</div>
-    <div class="step-line" id="line-2"></div>
-    <div class="step-dot" id="dot-3" onclick="goToStep(3)">3</div>
-    <div class="step-line" id="line-3"></div>
-    <div class="step-dot" id="dot-4" onclick="goToStep(4)">4</div>
+<div class="prog-wrap">
+  <div class="prog-steps">
+    <div class="sdot active" id="d1" onclick="goTo(1)">1</div>
+    <div class="sline" id="l1"></div>
+    <div class="sdot" id="d2" onclick="goTo(2)">2</div>
+    <div class="sline" id="l2"></div>
+    <div class="sdot" id="d3" onclick="goTo(3)">3</div>
+    <div class="sline" id="l3"></div>
+    <div class="sdot" id="d4" onclick="goTo(4)">4</div>
   </div>
-  <div class="progress-label" id="progressLabel">Step <strong>1</strong> of 4 — Visit Info</div>
+  <div class="prog-label" id="plab">Step <strong>1</strong> of 4 &mdash; Visit Info</div>
 </div>
 
-<div class="container">
+<div class="wrap">
 
-  <!-- ════════════════════════════════
-       STEP 1: Visit Info
-  ════════════════════════════════ -->
-  <div class="step active" id="step-1">
-    <h2 class="step-title">Visit Information</h2>
-    <p class="step-subtitle">When and where is this visit taking place?</p>
+<!-- STEP 1 -->
+<div class="step active" id="step-1">
+  <h2 class="step-title">Visit Information</h2>
+  <p class="step-sub">When and where is this visit taking place?</p>
 
-    <!-- Date -->
-    <div class="card">
-      <div class="field">
-        <label for="visitDate">Date of Market Visit <span class="req">*</span></label>
-        <input type="date" id="visitDate" required />
-      </div>
-    </div>
-
-    <!-- Region -->
-    <div class="card">
-      <div class="field">
-        <label>Region <span class="req">*</span></label>
-        <div class="search-picker" id="regionPicker">
-          <div class="search-input-wrap">
-            <span class="search-icon">🔍</span>
-            <input type="text" class="search-input" id="regionSearch" placeholder="Search region..." oninput="filterPicker('region')" onfocus="openPicker('region')" autocomplete="off" />
-            <button class="search-clear" id="regionClear" onclick="clearPicker('region')" style="display:none;">✕</button>
-          </div>
-          <div class="picker-selected" id="regionSelected" style="display:none;"></div>
-          <div class="picker-dropdown" id="regionDropdown" style="display:none;">
-            <div class="picker-option" onclick="selectPicker('region','Nairobi North')">Nairobi North</div>
-            <div class="picker-option" onclick="selectPicker('region','Nairobi South')">Nairobi South</div>
-            <div class="picker-option" onclick="selectPicker('region','Eastern')">Eastern</div>
-            <div class="picker-option" onclick="selectPicker('region','Nairobi Tier I')">Nairobi Tier I</div>
-            <div class="picker-option" onclick="selectPicker('region','Nairobi Tier II')">Nairobi Tier II</div>
-            <div class="picker-option" onclick="selectPicker('region','Institutions / Exports')">Institutions / Exports</div>
-            <div class="picker-empty" style="display:none;">No results found</div>
-          </div>
-        </div>
-        <input type="hidden" id="regionValue" name="region" />
-      </div>
-    </div>
-
-    <!-- CSR Name -->
-    <div class="card">
-      <div class="field">
-        <label>CSR Name <span class="req">*</span></label>
-        <div class="search-picker" id="csrPicker">
-          <div class="search-input-wrap">
-            <span class="search-icon">🔍</span>
-            <input type="text" class="search-input" id="csrSearch" placeholder="Search your name..." oninput="filterPicker('csr')" onfocus="openPicker('csr')" autocomplete="off" />
-            <button class="search-clear" id="csrClear" onclick="clearPicker('csr')" style="display:none;">✕</button>
-          </div>
-          <div class="picker-selected" id="csrSelected" style="display:none;"></div>
-          <div class="picker-dropdown" id="csrDropdown" style="display:none;">
-            <div class="picker-option" onclick="selectPicker('csr','James Njeru')">James Njeru</div>
-            <div class="picker-option" onclick="selectPicker('csr','Evans Bokoo')">Evans Bokoo</div>
-            <div class="picker-option" onclick="selectPicker('csr','Philomena Ndunge')">Philomena Ndunge</div>
-            <div class="picker-option" onclick="selectPicker('csr','Edwin Rono')">Edwin Rono</div>
-            <div class="picker-option" onclick="selectPicker('csr','Ndooci Gitau')">Ndooci Gitau</div>
-            <div class="picker-option" onclick="selectPicker('csr','Julius Mutura')">Julius Mutura</div>
-            <div class="picker-option" onclick="selectPicker('csr','Dalmas Lechamakanya')">Dalmas Lechamakanya</div>
-            <div class="picker-option" onclick="selectPicker('csr','Duncan Yegon')">Duncan Yegon</div>
-            <div class="picker-option" onclick="selectPicker('csr','Geofreey Too')">Geofreey Too</div>
-            <div class="picker-option" onclick="selectPicker('csr','Rebecca Boit')">Rebecca Boit</div>
-            <div class="picker-option" onclick="selectPicker('csr','Lilian Kariuki')">Lilian Kariuki</div>
-            <div class="picker-option" onclick="selectPicker('csr','Agnes Miano')">Agnes Miano</div>
-            <div class="picker-option" onclick="selectPicker('csr','Francis Koge')">Francis Koge</div>
-            <div class="picker-option" onclick="selectPicker('csr','Moses Kaburu')">Moses Kaburu</div>
-            <div class="picker-option" onclick="selectPicker('csr','Wilfred Bitonja')">Wilfred Bitonja</div>
-            <div class="picker-empty" style="display:none;">No results found</div>
-          </div>
-        </div>
-        <input type="hidden" id="csrValue" name="csrName" />
-      </div>
-    </div>
-
-    <div class="error-msg" id="err-1">⚠ Please fill in all required fields before continuing.</div>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="nextStep(1)">Continue →</button>
+  <div class="card">
+    <div class="field">
+      <label for="visitDate">Date of Market Visit <span class="req">*</span></label>
+      <input type="date" id="visitDate"/>
     </div>
   </div>
 
-  <!-- ════════════════════════════════
-       STEP 2: Customer Info
-  ════════════════════════════════ -->
-  <div class="step" id="step-2">
-    <h2 class="step-title">Customer Details</h2>
-    <p class="step-subtitle">Tell us about the outlet you're visiting.</p>
-
-    <div class="card">
-      <div class="field">
-        <label for="outletName">Outlet / Customer Name <span class="req">*</span></label>
-        <input type="text" id="outletName" placeholder="e.g. Mama Pima Shop" />
-      </div>
-      <div class="field">
-        <label>New / Existing Customer <span class="req">*</span></label>
-        <div class="options-grid">
-          <div class="option-btn">
-            <input type="radio" name="customerStatus" id="cs1" value="New" />
-            <label for="cs1">New</label>
-          </div>
-          <div class="option-btn">
-            <input type="radio" name="customerStatus" id="cs2" value="Existing" />
-            <label for="cs2">Existing</label>
-          </div>
+  <div class="card">
+    <div class="field">
+      <label>Region <span class="req">*</span></label>
+      <div class="picker-wrap" id="rgnWrap">
+        <div class="pi-row">
+          <span class="pi-ico">&#128269;</span>
+          <input class="pi-input" id="rgnInput" type="text" placeholder="Search region..." autocomplete="off"/>
+          <button class="pi-x" id="rgnX" onclick="clearPicker('rgn')">&#x2715;</button>
+        </div>
+        <div class="pi-badge" id="rgnBadge">
+          <span class="pi-chk">&#x2713;</span>
+          <span id="rgnBadgeTxt"></span>
+          <button class="pi-change" onclick="changePicker('rgn')">Change</button>
+        </div>
+        <div class="pi-drop" id="rgnDrop">
+          <div class="pi-opt" data-v="Nairobi North">Nairobi North</div>
+          <div class="pi-opt" data-v="Nairobi South">Nairobi South</div>
+          <div class="pi-opt" data-v="Eastern">Eastern</div>
+          <div class="pi-opt" data-v="Nairobi Tier I">Nairobi Tier I</div>
+          <div class="pi-opt" data-v="Nairobi Tier II">Nairobi Tier II</div>
+          <div class="pi-opt" data-v="Institutions / Exports">Institutions / Exports</div>
+          <div class="pi-empty">No results found</div>
         </div>
       </div>
-    </div>
-
-    <div class="card">
-      <div class="field">
-        <label for="contactPerson">Contact Person Name <span class="req">*</span></label>
-        <input type="text" id="contactPerson" placeholder="Full name" />
-      </div>
-      <div class="field">
-        <label for="telephone">Telephone No. <span class="req">*</span></label>
-        <input type="tel" id="telephone" placeholder="e.g. 0712 345 678" />
-      </div>
-      <div class="field">
-        <label for="distributor">Distributor Serving Outlet <span class="req">*</span></label>
-        <input type="text" id="distributor" placeholder="Distributor name" />
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="field">
-        <label>Outlet Type <span class="req">*</span></label>
-        <div class="options-grid" id="outletTypeOptions">
-          <div class="option-btn">
-            <input type="radio" name="outletType" id="ot1" value="Wholesale" />
-            <label for="ot1">Wholesale</label>
-          </div>
-          <div class="option-btn">
-            <input type="radio" name="outletType" id="ot2" value="Retail" />
-            <label for="ot2">Retail</label>
-          </div>
-          <div class="option-btn">
-            <input type="radio" name="outletType" id="ot3" value="Agent" />
-            <label for="ot3">Agent</label>
-          </div>
-          <div class="option-btn">
-            <input type="radio" name="outletType" id="ot4" value="Street Vendors" />
-            <label for="ot4">Street Vendors</label>
-          </div>
-          <div class="option-btn">
-            <input type="radio" name="outletType" id="ot5" value="Supermarkets" />
-            <label for="ot5">Supermarkets</label>
-          </div>
-          <div class="option-btn">
-            <input type="radio" name="outletType" id="ot6" value="Petrol Station" />
-            <label for="ot6">Petrol Station</label>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="error-msg" id="err-2">⚠ Please fill in all required fields before continuing.</div>
-    <div class="btn-row">
-      <button class="btn btn-secondary" onclick="prevStep(2)">← Back</button>
-      <button class="btn btn-primary" onclick="nextStep(2)">Continue →</button>
+      <input type="hidden" id="rgnVal"/>
     </div>
   </div>
 
-  <!-- ════════════════════════════════
-       STEP 3: Products & Order
-  ════════════════════════════════ -->
-  <div class="step" id="step-3">
-    <h2 class="step-title">Products & Order</h2>
-    <p class="step-subtitle">Which NKCC products are stocked? What was ordered?</p>
-
-    <div class="card">
-      <div class="field">
-        <label>NKCC Products <span class="req">*</span></label>
-        <div class="options-grid" id="productOptions">
-          <div class="option-btn checkbox">
-            <input type="checkbox" name="products" id="p1" value="Fresh Milk" />
-            <label for="p1">Fresh Milk</label>
-          </div>
-          <div class="option-btn checkbox">
-            <input type="checkbox" name="products" id="p2" value="TFA" />
-            <label for="p2">TFA</label>
-          </div>
-          <div class="option-btn checkbox">
-            <input type="checkbox" name="products" id="p3" value="TCA" />
-            <label for="p3">TCA</label>
-          </div>
-          <div class="option-btn checkbox">
-            <input type="checkbox" name="products" id="p4" value="ESL" />
-            <label for="p4">ESL</label>
-          </div>
-          <div class="option-btn checkbox">
-            <input type="checkbox" name="products" id="p5" value="Mala" />
-            <label for="p5">Mala</label>
-          </div>
-          <div class="option-btn checkbox">
-            <input type="checkbox" name="products" id="p6" value="Yoghurts" />
-            <label for="p6">Yoghurts</label>
-          </div>
-          <div class="option-btn checkbox">
-            <input type="checkbox" name="products" id="p7" value="Butter" />
-            <label for="p7">Butter</label>
-          </div>
-          <div class="option-btn checkbox">
-            <input type="checkbox" name="products" id="p8" value="Ghee" />
-            <label for="p8">Ghee</label>
-          </div>
-          <div class="option-btn checkbox">
-            <input type="checkbox" name="products" id="p9" value="None" />
-            <label for="p9">None</label>
-          </div>
-          <div class="option-btn checkbox">
-            <input type="checkbox" name="products" id="p10" value="Other" />
-            <label for="p10">Other</label>
-          </div>
+  <div class="card">
+    <div class="field">
+      <label>CSR Name <span class="req">*</span></label>
+      <div class="picker-wrap" id="csrWrap">
+        <div class="pi-row">
+          <span class="pi-ico">&#128269;</span>
+          <input class="pi-input" id="csrInput" type="text" placeholder="Search your name..." autocomplete="off"/>
+          <button class="pi-x" id="csrX" onclick="clearPicker('csr')">&#x2715;</button>
+        </div>
+        <div class="pi-badge" id="csrBadge">
+          <span class="pi-chk">&#x2713;</span>
+          <span id="csrBadgeTxt"></span>
+          <button class="pi-change" onclick="changePicker('csr')">Change</button>
+        </div>
+        <div class="pi-drop" id="csrDrop">
+          <div class="pi-opt" data-v="James Njeru">James Njeru</div>
+          <div class="pi-opt" data-v="Evans Bokoo">Evans Bokoo</div>
+          <div class="pi-opt" data-v="Philomena Ndunge">Philomena Ndunge</div>
+          <div class="pi-opt" data-v="Edwin Rono">Edwin Rono</div>
+          <div class="pi-opt" data-v="Ndooci Gitau">Ndooci Gitau</div>
+          <div class="pi-opt" data-v="Julius Mutura">Julius Mutura</div>
+          <div class="pi-opt" data-v="Dalmas Lechamakanya">Dalmas Lechamakanya</div>
+          <div class="pi-opt" data-v="Duncan Yegon">Duncan Yegon</div>
+          <div class="pi-opt" data-v="Geofreey Too">Geofreey Too</div>
+          <div class="pi-opt" data-v="Rebecca Boit">Rebecca Boit</div>
+          <div class="pi-opt" data-v="Lilian Kariuki">Lilian Kariuki</div>
+          <div class="pi-opt" data-v="Agnes Miano">Agnes Miano</div>
+          <div class="pi-opt" data-v="Francis Koge">Francis Koge</div>
+          <div class="pi-opt" data-v="Moses Kaburu">Moses Kaburu</div>
+          <div class="pi-opt" data-v="Wilfred Bitonja">Wilfred Bitonja</div>
+          <div class="pi-empty">No results found</div>
         </div>
       </div>
-    </div>
-
-    <div class="card">
-      <div class="field">
-        <label for="orderGenerated">Order Generated (KSH) <span class="req">*</span></label>
-        <input type="number" id="orderGenerated" placeholder="e.g. 5000" min="0" step="1" />
-      </div>
-    </div>
-
-    <div class="error-msg" id="err-3">⚠ Please fill in all required fields before continuing.</div>
-    <div class="btn-row">
-      <button class="btn btn-secondary" onclick="prevStep(3)">← Back</button>
-      <button class="btn btn-primary" onclick="nextStep(3)">Continue →</button>
+      <input type="hidden" id="csrVal"/>
     </div>
   </div>
 
-  <!-- ════════════════════════════════
-       STEP 4: Notes, Location & Sign-Off
-  ════════════════════════════════ -->
-  <div class="step" id="step-4">
-    <h2 class="step-title">Notes & Sign-Off</h2>
-    <p class="step-subtitle">Final details before submitting your visit report.</p>
+  <div class="err-msg" id="err1">Please fill in all required fields before continuing.</div>
+  <div class="btn-row">
+    <button class="btn btn-pri" onclick="next(1)">Continue &rarr;</button>
+  </div>
+</div>
 
-    <div class="card">
-      <div class="field">
-        <label for="comment">Comment / Market Visit Notes</label>
-        <textarea id="comment" placeholder="Any observations, challenges, or highlights from this visit…"></textarea>
-      </div>
+<!-- STEP 2 -->
+<div class="step" id="step-2">
+  <h2 class="step-title">Customer Details</h2>
+  <p class="step-sub">Tell us about the outlet you are visiting.</p>
+
+  <div class="card">
+    <div class="field">
+      <label for="outletName">Outlet / Customer Name <span class="req">*</span></label>
+      <input type="text" id="outletName" placeholder="e.g. Mama Pima Shop"/>
     </div>
-
-    <!-- Location -->
-    <div class="card">
-      <div class="field">
-        <label>GPS Location <span class="req">*</span> <span style="font-weight:400; color:var(--muted); font-size:11px;">— captured automatically</span></label>
-        <div class="location-box" id="locationBox">
-          <div id="locScanning" class="loc-state">
-            <div class="loc-radar">
-              <div class="radar-ring r1"></div>
-              <div class="radar-ring r2"></div>
-              <div class="radar-ring r3"></div>
-              <span class="radar-icon">&#x1F4E1;</span>
-            </div>
-            <div class="loc-text">
-              <strong id="locStatus">Acquiring GPS signal...</strong>
-              <span id="locDetail" class="loc-pulse">Allow location access when prompted</span>
-            </div>
-          </div>
-          <div id="locCaptured" class="loc-state" style="display:none;">
-            <div class="loc-captured-icon">&#x2705;</div>
-            <div class="loc-text" style="flex:1;">
-              <strong>Location Locked</strong>
-              <span id="locAddress" style="font-size:11px; color:var(--green-dark); display:block; margin-top:2px;"></span>
-            </div>
-          </div>
-          <div class="location-details" id="locationDetails">
-            <div class="loc-chips">
-              <span class="loc-chip">Lat: <b id="dispLat">--</b></span>
-              <span class="loc-chip">Lng: <b id="dispLng">--</b></span>
-              <span class="loc-chip" id="accChip">Acc: <b id="dispAcc">--</b>m</span>
-            </div>
-          </div>
-        </div>
-        <div id="locErrorBox" style="display:none; margin-top:8px; background:#fef2f2; border:1px solid #fca5a5; border-radius:8px; padding:10px 14px;">
-          <p style="font-size:13px; color:var(--red); margin-bottom:6px;" id="locErrorMsg">Location access denied.</p>
-          <button type="button" onclick="retryLocation()" class="btn-retry">Retry location</button>
-        </div>
+    <div class="field">
+      <label>New / Existing Customer <span class="req">*</span></label>
+      <div class="opts">
+        <div class="opt"><input type="radio" name="custStatus" id="cs1" value="New"/><label for="cs1">New</label></div>
+        <div class="opt"><input type="radio" name="custStatus" id="cs2" value="Existing"/><label for="cs2">Existing</label></div>
       </div>
-    </div>
-
-    <div class="card">
-      <div class="field">
-        <label for="signedBy">Accuracy of Information — Sign Out with Your Name <span class="req">*</span></label>
-        <input type="text" id="signedBy" placeholder="Type your full name to confirm" />
-      </div>
-    </div>
-
-    <div class="error-msg" id="err-4">⚠ Please fill in all required fields and allow location access.</div>
-    <div class="btn-row">
-      <button class="btn btn-secondary" onclick="prevStep(4)">← Back</button>
-      <button class="btn btn-submit" id="submitBtn" onclick="submitForm()">
-        Submit Visit ✓
-      </button>
     </div>
   </div>
 
-  <!-- ════════════════════════════════
-       SUCCESS SCREEN
-  ════════════════════════════════ -->
-  <div id="success-screen">
-    <div class="success-icon">✅</div>
-    <h2>Visit Recorded!</h2>
-    <p>Your market visit data has been saved to the NKCC Google Sheet successfully.</p>
-    <button class="btn btn-primary" onclick="resetForm()" style="max-width:240px; margin:0 auto; display:block;">
-      + Record Another Visit
-    </button>
+  <div class="card">
+    <div class="field">
+      <label for="contactPerson">Contact Person Name <span class="req">*</span></label>
+      <input type="text" id="contactPerson" placeholder="Full name"/>
+    </div>
+    <div class="field">
+      <label for="telephone">Telephone No. <span class="req">*</span></label>
+      <input type="tel" id="telephone" placeholder="e.g. 0712 345 678"/>
+    </div>
+    <div class="field">
+      <label for="distributor">Distributor Serving Outlet <span class="req">*</span></label>
+      <input type="text" id="distributor" placeholder="Distributor name"/>
+    </div>
   </div>
 
-</div><!-- /container -->
+  <div class="card">
+    <div class="field">
+      <label>Outlet Type <span class="req">*</span></label>
+      <div class="opts">
+        <div class="opt"><input type="radio" name="outletType" id="ot1" value="Wholesale"/><label for="ot1">Wholesale</label></div>
+        <div class="opt"><input type="radio" name="outletType" id="ot2" value="Retail"/><label for="ot2">Retail</label></div>
+        <div class="opt"><input type="radio" name="outletType" id="ot3" value="Agent"/><label for="ot3">Agent</label></div>
+        <div class="opt"><input type="radio" name="outletType" id="ot4" value="Street Vendors"/><label for="ot4">Street Vendors</label></div>
+        <div class="opt"><input type="radio" name="outletType" id="ot5" value="Supermarkets"/><label for="ot5">Supermarkets</label></div>
+        <div class="opt"><input type="radio" name="outletType" id="ot6" value="Petrol Station"/><label for="ot6">Petrol Station</label></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="err-msg" id="err2">Please fill in all required fields before continuing.</div>
+  <div class="btn-row">
+    <button class="btn btn-sec" onclick="prev(2)">&larr; Back</button>
+    <button class="btn btn-pri" onclick="next(2)">Continue &rarr;</button>
+  </div>
+</div>
+
+<!-- STEP 3 -->
+<div class="step" id="step-3">
+  <h2 class="step-title">Products &amp; Order</h2>
+  <p class="step-sub">Which NKCC products are stocked? What was ordered?</p>
+
+  <div class="card">
+    <div class="field">
+      <label>NKCC Products <span class="req">*</span></label>
+      <div class="opts">
+        <div class="opt cb"><input type="checkbox" name="products" id="p1" value="Fresh Milk"/><label for="p1">Fresh Milk</label></div>
+        <div class="opt cb"><input type="checkbox" name="products" id="p2" value="TFA"/><label for="p2">TFA</label></div>
+        <div class="opt cb"><input type="checkbox" name="products" id="p3" value="TCA"/><label for="p3">TCA</label></div>
+        <div class="opt cb"><input type="checkbox" name="products" id="p4" value="ESL"/><label for="p4">ESL</label></div>
+        <div class="opt cb"><input type="checkbox" name="products" id="p5" value="Mala"/><label for="p5">Mala</label></div>
+        <div class="opt cb"><input type="checkbox" name="products" id="p6" value="Yoghurts"/><label for="p6">Yoghurts</label></div>
+        <div class="opt cb"><input type="checkbox" name="products" id="p7" value="Butter"/><label for="p7">Butter</label></div>
+        <div class="opt cb"><input type="checkbox" name="products" id="p8" value="Ghee"/><label for="p8">Ghee</label></div>
+        <div class="opt cb"><input type="checkbox" name="products" id="p9" value="None"/><label for="p9">None</label></div>
+        <div class="opt cb"><input type="checkbox" name="products" id="p10" value="Other"/><label for="p10">Other</label></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="field">
+      <label for="orderAmt">Order Generated (KSH) <span class="req">*</span></label>
+      <input type="number" id="orderAmt" placeholder="e.g. 5000" min="0"/>
+    </div>
+  </div>
+
+  <div class="err-msg" id="err3">Please fill in all required fields before continuing.</div>
+  <div class="btn-row">
+    <button class="btn btn-sec" onclick="prev(3)">&larr; Back</button>
+    <button class="btn btn-pri" onclick="next(3)">Continue &rarr;</button>
+  </div>
+</div>
+
+<!-- STEP 4 -->
+<div class="step" id="step-4">
+  <h2 class="step-title">Notes &amp; Sign-Off</h2>
+  <p class="step-sub">Final details before submitting your visit report.</p>
+
+  <div class="card">
+    <div class="field">
+      <label for="comment">Comment / Market Visit Notes</label>
+      <textarea id="comment" placeholder="Any observations, challenges, or highlights..."></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="field">
+      <label>GPS Location <span class="req">*</span> <span style="font-weight:400;color:var(--muted);font-size:11px;">&#8212; captured automatically</span></label>
+      <div class="loc-box" id="locBox">
+        <div id="locScanning" class="loc-row">
+          <div class="loc-radar">
+            <div class="rring r1"></div>
+            <div class="rring r2"></div>
+            <div class="rring r3"></div>
+            <span class="radar-ico">&#128225;</span>
+          </div>
+          <div class="loc-txt">
+            <strong id="locStatus">Acquiring GPS signal...</strong>
+            <span id="locDetail" class="loc-pulse">Allow location access when prompted</span>
+          </div>
+        </div>
+        <div id="locCaptured" class="loc-row" style="display:none">
+          <div class="loc-ok-ico">&#9989;</div>
+          <div class="loc-txt" style="flex:1">
+            <strong>Location Locked</strong>
+            <span id="locAddr" style="font-size:11px;color:var(--green-dark)"></span>
+          </div>
+        </div>
+        <div class="loc-details" id="locDetails">
+          <div class="loc-chips">
+            <span class="lchip">Lat: <b id="dLat">--</b></span>
+            <span class="lchip">Lng: <b id="dLng">--</b></span>
+            <span class="lchip">Acc: <b id="dAcc">--</b>m</span>
+          </div>
+        </div>
+      </div>
+      <div class="loc-err-box" id="locErrBox">
+        <p class="loc-err-msg" id="locErrMsg">Location access denied.</p>
+        <button class="btn-retry" onclick="startLocation()">&#8635; Retry location</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="field">
+      <label for="signedBy">Sign Out with Your Name <span class="req">*</span></label>
+      <input type="text" id="signedBy" placeholder="Type your full name to confirm accuracy"/>
+    </div>
+  </div>
+
+  <div class="err-msg" id="err4">Please fill in all fields and allow location access.</div>
+  <div class="btn-row">
+    <button class="btn btn-sec" onclick="prev(4)">&larr; Back</button>
+    <button class="btn btn-sub" id="submitBtn" onclick="submitForm()">Submit Visit &#10003;</button>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div id="success">
+  <div class="suc-ico">&#9989;</div>
+  <h2>Visit Recorded!</h2>
+  <p>Your market visit has been saved to the NKCC Google Sheet successfully.</p>
+  <button class="btn btn-pri" onclick="resetForm()" style="max-width:240px;margin:0 auto;display:block">+ Record Another Visit</button>
+</div>
+
+</div>
 
 <script>
-  // ═══════════════════════════════════════════════════
-  //  STATE
-  // ═══════════════════════════════════════════════════
-  let currentStep = 1;
-  const TOTAL_STEPS = 4;
-  let locationData = { latitude: null, longitude: null, accuracy: null, address: null };
+var cur = 1;
+var locData = {lat:null,lng:null,acc:null,addr:null};
+var watchId = null;
+var bestAcc = Infinity;
+var stepLabels = ['Visit Info','Customer Details','Products & Order','Notes & Sign-Off'];
 
-  const stepLabels = ["Visit Info", "Customer Details", "Products & Order", "Notes & Sign-Off"];
+window.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('visitDate').value = new Date().toISOString().split('T')[0];
+  initPicker('rgn');
+  initPicker('csr');
+  startLocation();
+});
 
-  // ═══════════════════════════════════════════════════
-  //  INIT
-  // ═══════════════════════════════════════════════════
-  window.addEventListener('DOMContentLoaded', () => {
-    // Set today's date as default
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('visitDate').value = today;
-
-    // Config notice
-    if (APPS_SCRIPT_URL && APPS_SCRIPT_URL !== "PASTE_YOUR_APPS_SCRIPT_URL_HERE") {
-      document.getElementById('configNotice').style.display = 'none';
-    }
-
-    // Start location
-    getLocation();
-  });
-
-  // ═══════════════════════════════════════════════════
-  //  STEP NAVIGATION
-  // ═══════════════════════════════════════════════════
-  function updateProgressUI() {
-    for (let i = 1; i <= TOTAL_STEPS; i++) {
-      const dot = document.getElementById(`dot-${i}`);
-      dot.className = 'step-dot';
-      if (i < currentStep) { dot.className += ' done'; dot.textContent = ''; }
-      else if (i === currentStep) { dot.className += ' active'; dot.textContent = i; }
-      else { dot.textContent = i; }
-
-      if (i < TOTAL_STEPS) {
-        const line = document.getElementById(`line-${i}`);
-        line.className = 'step-line' + (i < currentStep ? ' done' : '');
-      }
-    }
-    document.getElementById('progressLabel').innerHTML =
-      `Step <strong>${currentStep}</strong> of ${TOTAL_STEPS} — ${stepLabels[currentStep - 1]}`;
+function updateProg() {
+  for (var i = 1; i <= 4; i++) {
+    var d = document.getElementById('d'+i);
+    var l = document.getElementById('l'+i);
+    d.className = 'sdot';
+    if (i < cur)       { d.className += ' done'; d.textContent = String.fromCharCode(10003); }
+    else if (i === cur){ d.className += ' active'; d.textContent = i; }
+    else               { d.textContent = i; }
+    if (l) l.className = 'sline' + (i < cur ? ' done' : '');
   }
+  document.getElementById('plab').innerHTML = 'Step <strong>'+cur+'</strong> of 4 &mdash; '+stepLabels[cur-1];
+}
 
-  function goToStep(n) {
-    if (n >= currentStep) return; // can only go back
-    document.getElementById(`step-${currentStep}`).classList.remove('active');
-    currentStep = n;
-    document.getElementById(`step-${currentStep}`).classList.add('active');
-    updateProgressUI();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+function goTo(n) {
+  if (n >= cur) return;
+  document.getElementById('step-'+cur).classList.remove('active');
+  cur = n;
+  document.getElementById('step-'+cur).classList.add('active');
+  updateProg();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function next(from) {
+  if (!validate(from)) return;
+  document.getElementById('step-'+from).classList.remove('active');
+  cur = from + 1;
+  document.getElementById('step-'+cur).classList.add('active');
+  updateProg();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function prev(from) {
+  document.getElementById('step-'+from).classList.remove('active');
+  cur = from - 1;
+  document.getElementById('step-'+cur).classList.add('active');
+  updateProg();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function validate(step) {
+  var ok = true;
+  if (step===1) {
+    if (!document.getElementById('visitDate').value) ok=false;
+    if (!document.getElementById('rgnVal').value) ok=false;
+    if (!document.getElementById('csrVal').value) ok=false;
   }
-
-  function nextStep(from) {
-    if (!validateStep(from)) return;
-    document.getElementById(`step-${from}`).classList.remove('active');
-    currentStep = from + 1;
-    document.getElementById(`step-${currentStep}`).classList.add('active');
-    updateProgressUI();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (step===2) {
+    if (!document.getElementById('outletName').value.trim()) ok=false;
+    if (!document.querySelector('input[name="custStatus"]:checked')) ok=false;
+    if (!document.getElementById('contactPerson').value.trim()) ok=false;
+    if (!document.getElementById('telephone').value.trim()) ok=false;
+    if (!document.getElementById('distributor').value.trim()) ok=false;
+    if (!document.querySelector('input[name="outletType"]:checked')) ok=false;
   }
-
-  function prevStep(from) {
-    document.getElementById(`step-${from}`).classList.remove('active');
-    currentStep = from - 1;
-    document.getElementById(`step-${currentStep}`).classList.add('active');
-    updateProgressUI();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (step===3) {
+    if (!document.querySelectorAll('input[name="products"]:checked').length) ok=false;
+    if (!document.getElementById('orderAmt').value.trim()) ok=false;
   }
-
-  // ═══════════════════════════════════════════════════
-  //  VALIDATION
-  // ═══════════════════════════════════════════════════
-  function validateStep(step) {
-    const err = document.getElementById(`err-${step}`);
-    let valid = true;
-
-    if (step === 1) {
-      const date = document.getElementById('visitDate').value;
-      const region = document.getElementById('regionValue').value;
-      const csr = document.getElementById('csrValue').value;
-      if (!date || !region || !csr) valid = false;
-    }
-
-    if (step === 2) {
-      const outlet = document.getElementById('outletName').value.trim();
-      const status = document.querySelector('input[name="customerStatus"]:checked');
-      const contact = document.getElementById('contactPerson').value.trim();
-      const tel = document.getElementById('telephone').value.trim();
-      const dist = document.getElementById('distributor').value.trim();
-      const type = document.querySelector('input[name="outletType"]:checked');
-      if (!outlet || !status || !contact || !tel || !dist || !type) valid = false;
-    }
-
-    if (step === 3) {
-      const products = document.querySelectorAll('input[name="products"]:checked');
-      const order = document.getElementById('orderGenerated').value.trim();
-      if (products.length === 0 || !order) valid = false;
-    }
-
-    if (step === 4) {
-      const signed = document.getElementById('signedBy').value.trim();
-      if (!signed || !locationData.latitude) valid = false;
-    }
-
-    err.classList.toggle('show', !valid);
-    return valid;
+  if (step===4) {
+    if (!document.getElementById('signedBy').value.trim()) ok=false;
+    if (!locData.lat) ok=false;
   }
+  var e = document.getElementById('err'+step);
+  e.className = ok ? 'err-msg' : 'err-msg show';
+  return ok;
+}
 
-  // ═══════════════════════════════════════════════════
-  //  LOCATION
-  // ═══════════════════════════════════════════════════
-  // ═══════════════════════════════════════════════════
-  //  SEARCH PICKERS (Region & CSR)
-  // ═══════════════════════════════════════════════════
-  const pickerConfig = {
-    region: {
-      search:   'regionSearch',
-      dropdown: 'regionDropdown',
-      selected: 'regionSelected',
-      clear:    'regionClear',
-      hidden:   'regionValue',
-    },
-    csr: {
-      search:   'csrSearch',
-      dropdown: 'csrDropdown',
-      selected: 'csrSelected',
-      clear:    'csrClear',
-      hidden:   'csrValue',
-    }
-  };
+function initPicker(key) {
+  var input = document.getElementById(key+'Input');
+  var drop  = document.getElementById(key+'Drop');
+  var opts  = drop.querySelectorAll('.pi-opt');
+  var empty = drop.querySelector('.pi-empty');
+  var xBtn  = document.getElementById(key+'X');
 
-  function openPicker(key) {
-    const cfg = pickerConfig[key];
-    // Hide the selected badge while searching
-    document.getElementById(cfg.selected).style.display = 'none';
-    document.getElementById(cfg.dropdown).style.display = 'block';
-    filterPicker(key); // refresh visible options
-  }
-
-  function filterPicker(key) {
-    const cfg   = pickerConfig[key];
-    const query = document.getElementById(cfg.search).value.trim().toLowerCase();
-    const dropdown = document.getElementById(cfg.dropdown);
-    const options  = dropdown.querySelectorAll('.picker-option');
-    const emptyMsg = dropdown.querySelector('.picker-empty');
-    let anyVisible = false;
-
-    options.forEach(opt => {
-      const text = opt.getAttribute('data-value') || opt.textContent;
-      const match = text.toLowerCase().includes(query);
-      opt.style.display = match ? '' : 'none';
+  function filter() {
+    var q = input.value.trim().toLowerCase();
+    xBtn.style.display = q ? 'inline' : 'none';
+    var any = false;
+    opts.forEach(function(o) {
+      var txt = o.getAttribute('data-v');
+      var match = txt.toLowerCase().indexOf(q) > -1;
+      o.style.display = match ? '' : 'none';
       if (match) {
-        anyVisible = true;
-        // Highlight matched text
-        if (query) {
-          const re = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
-          opt.innerHTML = text.replace(re, '<mark>$1</mark>');
+        any = true;
+        if (q) {
+          var re = new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+          o.innerHTML = txt.replace(re,'<mark>$1</mark>');
         } else {
-          opt.textContent = text;
+          o.textContent = txt;
         }
       }
     });
-
-    emptyMsg.style.display = anyVisible ? 'none' : 'block';
-    document.getElementById(cfg.clear).style.display = query ? 'inline' : 'none';
-    dropdown.style.display = 'block';
+    empty.style.display = any ? 'none' : 'block';
+    drop.classList.add('open');
   }
 
-  function selectPicker(key, value) {
-    const cfg = pickerConfig[key];
-    // Store value
-    document.getElementById(cfg.hidden).value = value;
-    // Update search input
-    document.getElementById(cfg.search).value = '';
-    // Show selected badge
-    const badge = document.getElementById(cfg.selected);
-    badge.textContent = value;
-    badge.style.display = 'flex';
-    badge.insertAdjacentHTML('afterbegin', '<span style="color:var(--green);font-weight:800;margin-right:6px;">✓</span>');
-    // Hide dropdown
-    document.getElementById(cfg.dropdown).style.display = 'none';
-    document.getElementById(cfg.clear).style.display = 'none';
-    // Highlight selected option
-    const dropdown = document.getElementById(cfg.dropdown);
-    dropdown.querySelectorAll('.picker-option').forEach(opt => {
-      opt.classList.toggle('selected', opt.textContent.trim() === value || opt.getAttribute('data-value') === value);
-    });
-  }
-
-  function clearPicker(key) {
-    const cfg = pickerConfig[key];
-    document.getElementById(cfg.hidden).value = '';
-    document.getElementById(cfg.search).value = '';
-    document.getElementById(cfg.selected).style.display = 'none';
-    document.getElementById(cfg.clear).style.display = 'none';
-    document.getElementById(cfg.dropdown).style.display = 'none';
-    document.getElementById(cfg.dropdown).querySelectorAll('.picker-option').forEach(o => {
-      o.style.display = '';
-      o.classList.remove('selected');
-    });
-  }
-
-  // Close dropdowns when tapping outside
-  document.addEventListener('click', (e) => {
-    ['region', 'csr'].forEach(key => {
-      const picker = document.getElementById(key + 'Picker');
-      if (picker && !picker.contains(e.target)) {
-        const dropdown = document.getElementById(pickerConfig[key].dropdown);
-        const val = document.getElementById(pickerConfig[key].hidden).value;
-        if (val) {
-          dropdown.style.display = 'none';
-          document.getElementById(pickerConfig[key].selected).style.display = 'flex';
-        } else {
-          dropdown.style.display = 'none';
-        }
-      }
-    });
+  input.addEventListener('input', filter);
+  input.addEventListener('focus', function() {
+    opts.forEach(function(o){ o.style.display=''; o.textContent=o.getAttribute('data-v'); });
+    empty.style.display = 'none';
+    drop.classList.add('open');
   });
 
+  opts.forEach(function(o) {
+    o.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      var v = this.getAttribute('data-v');
+      document.getElementById(key+'Val').value = v;
+      input.value = '';
+      xBtn.style.display = 'none';
+      document.getElementById(key+'BadgeTxt').textContent = v;
+      document.getElementById(key+'Badge').classList.add('show');
+      drop.classList.remove('open');
+    });
+  });
+}
 
-  // ═══════════════════════════════════════════════════
-  let watchId = null;
-  let bestAccuracy = Infinity;
+function clearPicker(key) {
+  document.getElementById(key+'Val').value = '';
+  document.getElementById(key+'Input').value = '';
+  document.getElementById(key+'X').style.display = 'none';
+  document.getElementById(key+'Badge').classList.remove('show');
+  var drop = document.getElementById(key+'Drop');
+  drop.classList.remove('open');
+  drop.querySelectorAll('.pi-opt').forEach(function(o){ o.style.display=''; o.textContent=o.getAttribute('data-v'); });
+  drop.querySelector('.pi-empty').style.display = 'none';
+}
 
-  function getLocation() {
-    if (!navigator.geolocation) {
-      showLocError('Your browser does not support geolocation.');
-      return;
+function changePicker(key) {
+  document.getElementById(key+'Badge').classList.remove('show');
+  document.getElementById(key+'Val').value = '';
+  document.getElementById(key+'Input').focus();
+}
+
+document.addEventListener('click', function(e) {
+  ['rgn','csr'].forEach(function(key) {
+    var wrap = document.getElementById(key+'Wrap');
+    if (wrap && !wrap.contains(e.target)) {
+      document.getElementById(key+'Drop').classList.remove('open');
     }
+  });
+});
 
-    // Reset UI to scanning state
-    document.getElementById('locScanning').style.display = 'flex';
-    document.getElementById('locCaptured').style.display  = 'none';
-    document.getElementById('locErrorBox').style.display  = 'none';
-    document.getElementById('locationDetails').classList.remove('show');
-    document.getElementById('locationBox').classList.remove('locked','error-state');
-    document.getElementById('locStatus').textContent = 'Acquiring GPS signal...';
-    document.getElementById('locDetail').textContent  = 'Allow location access when prompted';
-    document.getElementById('locDetail').className    = 'loc-pulse';
-    bestAccuracy = Infinity;
+function startLocation() {
+  if (!navigator.geolocation) { showLocErr('Geolocation not supported by this browser.'); return; }
+  document.getElementById('locScanning').style.display = 'flex';
+  document.getElementById('locCaptured').style.display = 'none';
+  document.getElementById('locErrBox').style.display   = 'none';
+  document.getElementById('locDetails').classList.remove('show');
+  document.getElementById('locBox').className = 'loc-box';
+  document.getElementById('locStatus').textContent = 'Acquiring GPS signal...';
+  document.getElementById('locDetail').textContent = 'Allow location access when prompted';
+  document.getElementById('locDetail').className = 'loc-pulse';
+  locData = {lat:null,lng:null,acc:null,addr:null};
+  bestAcc = Infinity;
+  if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
 
-    // Stop any existing watcher
-    if (watchId !== null) {
-      navigator.geolocation.clearWatch(watchId);
-      watchId = null;
-    }
-
-    // Use watchPosition so the position keeps refining automatically
-    watchId = navigator.geolocation.watchPosition(
-      (pos) => {
-        const lat  = pos.coords.latitude;
-        const lng  = pos.coords.longitude;
-        const acc  = Math.round(pos.coords.accuracy);
-
-        // Only update if this reading is more accurate
-        if (acc < bestAccuracy) {
-          bestAccuracy = acc;
-
-          locationData.latitude  = lat.toFixed(6);
-          locationData.longitude = lng.toFixed(6);
-          locationData.accuracy  = acc;
-
-          // Update chips
-          document.getElementById('dispLat').textContent = locationData.latitude;
-          document.getElementById('dispLng').textContent = locationData.longitude;
-          document.getElementById('dispAcc').textContent = acc;
-          document.getElementById('locationDetails').classList.add('show');
-
-          // Show captured UI
-          document.getElementById('locScanning').style.display = 'none';
-          document.getElementById('locCaptured').style.display  = 'flex';
-          document.getElementById('locationBox').classList.add('locked');
-
-          // Accuracy label
-          let accLabel = acc <= 20 ? 'Excellent accuracy' : acc <= 50 ? 'Good accuracy' : acc <= 100 ? 'Moderate accuracy' : 'Low accuracy — improving...';
-          document.getElementById('locAddress').textContent = 'Accuracy: +/-' + acc + 'm — ' + accLabel;
-
-          // Once we have great accuracy, stop watching to save battery
-          if (acc <= 20) {
-            navigator.geolocation.clearWatch(watchId);
-            watchId = null;
-            document.getElementById('locAddress').textContent = 'Accuracy: +/-' + acc + 'm — Excellent';
-            reverseGeocode(locationData.latitude, locationData.longitude);
-          } else {
-            // Still refining — do reverse geocode but keep watching
-            reverseGeocode(locationData.latitude, locationData.longitude);
-          }
-        }
-      },
-      (err) => {
-        navigator.geolocation.clearWatch(watchId);
-        watchId = null;
-        let msg = 'Could not get your location.';
-        if (err.code === 1) msg = 'Location permission denied. Please go to your phone Settings > Browser > Location and allow access, then tap Retry.';
-        if (err.code === 2) msg = 'GPS signal unavailable. Move to an open area and tap Retry.';
-        if (err.code === 3) msg = 'Location timed out. Tap Retry to try again.';
-        showLocError(msg);
-      },
-      { enableHighAccuracy: true, timeout: 30000, maximumAge: 0 }
-    );
-  }
-
-  function showLocError(msg) {
-    document.getElementById('locScanning').style.display = 'none';
-    document.getElementById('locCaptured').style.display  = 'none';
-    document.getElementById('locErrorBox').style.display  = 'block';
-    document.getElementById('locErrorMsg').textContent    = msg;
-    document.getElementById('locationBox').classList.add('error-state');
-  }
-
-  function retryLocation() {
-    locationData = { latitude: null, longitude: null, accuracy: null, address: null };
-    getLocation();
-  }
-
-  function reverseGeocode(lat, lng) {
-    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`)
-      .then(r => r.json())
-      .then(data => {
-        if (data && data.display_name) {
-          locationData.address = data.display_name;
-          // Show short address in the captured card
-          const short = data.display_name.split(',').slice(0, 3).join(', ');
-          const acc = locationData.accuracy;
-          document.getElementById('locAddress').textContent = short + ' (+/-' + acc + 'm)';
-        }
-      })
-      .catch(() => {});
-  }
-
-  // ═══════════════════════════════════════════════════
-  //  SUBMIT
-  // ═══════════════════════════════════════════════════
-  async function submitForm() {
-    if (!validateStep(4)) return;
-
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span>Saving…';
-
-    // Collect checked products
-    const products = Array.from(document.querySelectorAll('input[name="products"]:checked'))
-      .map(el => el.value).join(', ');
-
-    const payload = {
-      visitDate:       document.getElementById('visitDate').value,
-      region:          document.getElementById('regionValue').value,
-      csrName:         document.getElementById('csrValue').value,
-      outletName:      document.getElementById('outletName').value.trim(),
-      customerStatus:  document.querySelector('input[name="customerStatus"]:checked')?.value || '',
-      contactPerson:   document.getElementById('contactPerson').value.trim(),
-      telephone:       document.getElementById('telephone').value.trim(),
-      distributor:     document.getElementById('distributor').value.trim(),
-      outletType:      document.querySelector('input[name="outletType"]:checked')?.value || '',
-      products:        products,
-      orderGenerated:  document.getElementById('orderGenerated').value.trim(),
-      comment:         document.getElementById('comment').value.trim(),
-      latitude:        locationData.latitude,
-      longitude:       locationData.longitude,
-      accuracy:        locationData.accuracy,
-      locationAddress: locationData.address || '',
-      signedBy:        document.getElementById('signedBy').value.trim(),
-    };
-
-    // Check URL configured
-    if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === "PASTE_YOUR_APPS_SCRIPT_URL_HERE") {
-      // Demo mode: show success without actual submission
-      console.log("Demo mode — payload:", payload);
-      showSuccess();
-      return;
-    }
-
-    try {
-      const response = await fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify(payload),
-        headers: { 'Content-Type': 'application/json' }
-      });
-
-      const result = await response.json();
-      if (result.result === 'success') {
-        showSuccess();
-      } else {
-        throw new Error(result.message || 'Unknown error');
+  watchId = navigator.geolocation.watchPosition(
+    function(pos) {
+      var lat = pos.coords.latitude, lng = pos.coords.longitude, acc = Math.round(pos.coords.accuracy);
+      if (acc < bestAcc) {
+        bestAcc = acc;
+        locData.lat = lat.toFixed(6); locData.lng = lng.toFixed(6); locData.acc = acc;
+        document.getElementById('dLat').textContent = locData.lat;
+        document.getElementById('dLng').textContent = locData.lng;
+        document.getElementById('dAcc').textContent = acc;
+        document.getElementById('locDetails').classList.add('show');
+        document.getElementById('locScanning').style.display = 'none';
+        document.getElementById('locCaptured').style.display = 'flex';
+        document.getElementById('locBox').className = 'loc-box locked';
+        var lbl = acc<=20?'Excellent':acc<=50?'Good':acc<=100?'Moderate':'Improving...';
+        document.getElementById('locAddr').textContent = 'Accuracy: +/-'+acc+'m — '+lbl;
+        reverseGeo(locData.lat, locData.lng);
+        if (acc <= 20) { navigator.geolocation.clearWatch(watchId); watchId = null; }
       }
-    } catch (err) {
-      btn.disabled = false;
-      btn.innerHTML = 'Submit Visit ✓';
-      const errEl = document.getElementById('err-4');
-      errEl.textContent = `⚠ Submission failed: ${err.message}. Please try again.`;
-      errEl.classList.add('show');
-    }
-  }
+    },
+    function(err) {
+      navigator.geolocation.clearWatch(watchId); watchId = null;
+      var msg = 'Could not get your location.';
+      if (err.code===1) msg = 'Permission denied. Go to Settings > Browser > Location, allow access, then tap Retry.';
+      if (err.code===2) msg = 'GPS unavailable. Move to an open area and tap Retry.';
+      if (err.code===3) msg = 'Location timed out. Tap Retry.';
+      showLocErr(msg);
+    },
+    {enableHighAccuracy:true, timeout:30000, maximumAge:0}
+  );
+}
 
-  function showSuccess() {
-    document.getElementById(`step-4`).classList.remove('active');
-    document.getElementById('success-screen').style.display = 'block';
-    document.querySelector('.progress-wrap').style.display = 'none';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+function showLocErr(msg) {
+  document.getElementById('locScanning').style.display = 'none';
+  document.getElementById('locCaptured').style.display = 'none';
+  document.getElementById('locErrBox').style.display = 'block';
+  document.getElementById('locErrMsg').textContent = msg;
+  document.getElementById('locBox').className = 'loc-box loc-err-state';
+}
 
-  function resetForm() {
-    document.getElementById('success-screen').style.display = 'none';
-    document.querySelector('.progress-wrap').style.display = 'block';
+function reverseGeo(lat, lng) {
+  fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lng+'&format=json')
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if (d && d.display_name) {
+        locData.addr = d.display_name;
+        var s = d.display_name.split(',').slice(0,3).join(', ');
+        document.getElementById('locAddr').textContent = s+' (+/-'+locData.acc+'m)';
+      }
+    }).catch(function(){});
+}
 
-    // Reset all inputs
-    document.querySelectorAll('input[type="text"], input[type="tel"], input[type="number"], textarea')
-      .forEach(el => el.value = '');
-    document.querySelectorAll('input[type="radio"], input[type="checkbox"]')
-      .forEach(el => el.checked = false);
-    // Reset search pickers
-    clearPicker('region');
-    clearPicker('csr');
+function submitForm() {
+  if (!validate(4)) return;
+  var btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span>Saving...';
+  var products = Array.from(document.querySelectorAll('input[name="products"]:checked')).map(function(e){return e.value;}).join(', ');
+  var payload = {
+    visitDate:       document.getElementById('visitDate').value,
+    region:          document.getElementById('rgnVal').value,
+    csrName:         document.getElementById('csrVal').value,
+    outletName:      document.getElementById('outletName').value.trim(),
+    customerStatus:  (document.querySelector('input[name="custStatus"]:checked')||{}).value||'',
+    contactPerson:   document.getElementById('contactPerson').value.trim(),
+    telephone:       document.getElementById('telephone').value.trim(),
+    distributor:     document.getElementById('distributor').value.trim(),
+    outletType:      (document.querySelector('input[name="outletType"]:checked')||{}).value||'',
+    products:        products,
+    orderGenerated:  document.getElementById('orderAmt').value.trim(),
+    comment:         document.getElementById('comment').value.trim(),
+    latitude:        locData.lat,
+    longitude:       locData.lng,
+    accuracy:        locData.acc,
+    locationAddress: locData.addr||'',
+    signedBy:        document.getElementById('signedBy').value.trim()
+  };
+  fetch(APPS_SCRIPT_URL, {method:'POST', body:JSON.stringify(payload), headers:{'Content-Type':'application/json'}})
+    .then(function(r){return r.json();})
+    .then(function(res){
+      if (res.result==='success') { showSuccess(); }
+      else { throw new Error(res.message||'Unknown error'); }
+    })
+    .catch(function(err){
+      btn.disabled=false; btn.innerHTML='Submit Visit &#10003;';
+      var e=document.getElementById('err4');
+      e.textContent='Submission failed: '+err.message+'. Please try again.';
+      e.className='err-msg show';
+    });
+}
 
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('visitDate').value = today;
-    document.getElementById('submitBtn').disabled = false;
-    document.getElementById('submitBtn').innerHTML = 'Submit Visit ✓';
+function showSuccess() {
+  document.getElementById('step-4').classList.remove('active');
+  document.getElementById('success').style.display='block';
+  document.querySelector('.prog-wrap').style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
 
-    locationData = { latitude: null, longitude: null, accuracy: null, address: null };
-    bestAccuracy = Infinity;
-    if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
-    document.getElementById('locationDetails').classList.remove('show');
-    document.querySelectorAll('.error-msg').forEach(el => el.classList.remove('show'));
-
-    currentStep = 1;
-    document.getElementById('step-1').classList.add('active');
-    updateProgressUI();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    getLocation();
-  }
+function resetForm() {
+  document.getElementById('success').style.display='none';
+  document.querySelector('.prog-wrap').style.display='block';
+  document.querySelectorAll('input[type=text],input[type=tel],input[type=number],textarea').forEach(function(el){el.value='';});
+  document.querySelectorAll('input[type=radio],input[type=checkbox]').forEach(function(el){el.checked=false;});
+  document.getElementById('visitDate').value=new Date().toISOString().split('T')[0];
+  document.getElementById('submitBtn').disabled=false;
+  document.getElementById('submitBtn').innerHTML='Submit Visit &#10003;';
+  document.querySelectorAll('.err-msg').forEach(function(el){el.className='err-msg';});
+  clearPicker('rgn'); clearPicker('csr');
+  if (watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null;}
+  cur=1;
+  document.getElementById('step-1').classList.add('active');
+  updateProg();
+  window.scrollTo({top:0,behavior:'smooth'});
+  startLocation();
+}
 </script>
 </body>
 </html>
