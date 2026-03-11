@@ -189,6 +189,8 @@ input[type=file].cam-input{display:none}
 .filter-bar select:focus{outline:none;border-color:var(--green)}
 .filter-clear{background:none;border:1.5px solid var(--border);border-radius:8px;padding:6px 10px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
 .filter-clear:hover{border-color:var(--red);color:var(--red)}
+.filter-download{background:var(--green);border:none;border-radius:8px;padding:6px 12px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;color:#fff;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:4px}
+.filter-download:hover{background:var(--green-dark)}
 
 /* STAT CARDS */
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
@@ -439,7 +441,16 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwWwHoOWnt8k3-VQb
           <div class="photo-header-ico">📸</div>
           <div class="photo-header-text">
             <strong>Outlet Photo <span class="req">*</span></strong>
-            <span>Take a clear photo of the outlet or NKCC shelf</span>
+            <span>📌 Stand outside &amp; take a photo of the outlet front/entrance</span>
+          </div>
+        </div>
+
+        <!-- Instruction banner -->
+        <div style="background:#fff8ec;border:1.5px solid #fcd68a;border-radius:9px;padding:10px 13px;margin-bottom:12px;display:flex;gap:9px;align-items:flex-start">
+          <span style="font-size:18px;flex-shrink:0">🏪</span>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:#7a4800;margin-bottom:2px">Photo Instruction</div>
+            <div style="font-size:11px;color:#9a5f00;line-height:1.5">Step outside the outlet and take a clear photo showing the <strong>outlet name/signage and entrance</strong>. The full storefront should be visible so the location can be identified.</div>
           </div>
         </div>
 
@@ -447,19 +458,18 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwWwHoOWnt8k3-VQb
         <div class="photo-zone" id="photoZone">
           <label for="photoInput0" class="photo-zone-label" id="photoZoneLabel">
             <div class="photo-zone-ico" id="pzIco">📷</div>
-            <div class="photo-zone-lbl" id="pzLbl">Tap to take outlet photo</div>
-            <div class="photo-zone-sub" id="pzSub">Uses your rear camera</div>
+            <div class="photo-zone-lbl" id="pzLbl">Tap to photograph outlet exterior</div>
+            <div class="photo-zone-sub" id="pzSub">Stand outside — capture full storefront</div>
           </label>
           <input type="file" class="cam-input" id="photoInput0" accept="image/*" capture="environment" onchange="handlePhoto(event)"/>
         </div>
 
         <!-- Photo guidelines -->
         <div class="photo-guide">
-          <div class="guide-chip"><span class="gc-ico">🏪</span> Outlet front</div>
-          <div class="guide-chip"><span class="gc-ico">🥛</span> NKCC shelf</div>
-          <div class="guide-chip"><span class="gc-ico">🏷️</span> Price tags</div>
-          <div class="guide-chip"><span class="gc-ico">🤝</span> With customer</div>
-          <div class="guide-chip"><span class="gc-ico">📦</span> Competitor shelf</div>
+          <div class="guide-chip"><span class="gc-ico">🏪</span> Full storefront</div>
+          <div class="guide-chip"><span class="gc-ico">🪧</span> Outlet signage</div>
+          <div class="guide-chip"><span class="gc-ico">🚪</span> Entrance visible</div>
+          <div class="guide-chip"><span class="gc-ico">☀️</span> Good lighting</div>
         </div>
       </div>
       <!-- END PHOTO SECTION -->
@@ -532,7 +542,9 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwWwHoOWnt8k3-VQb
       <select id="filterCSR" onchange="applyFilters()"><option value="">All CSRs</option></select>
       <select id="filterRegion" onchange="applyFilters()"><option value="">All Regions</option></select>
       <select id="filterMonth" onchange="applyFilters()"><option value="">All Time</option></select>
+      <input type="date" id="filterDate" onchange="applyFilters()" title="Filter by specific date" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:110px"/>
       <button class="filter-clear" onclick="clearFilters()">&#x2715; Clear</button>
+      <button class="filter-download" onclick="downloadCSV()" title="Download as CSV">&#11015; Export</button>
     </div>
     <div id="dbContent">
       <div class="db-loading"><div class="spin-lg"></div><div>Loading data...</div></div>
@@ -547,7 +559,10 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwWwHoOWnt8k3-VQb
   <div class="wrap">
     <div class="db-header">
       <div><div class="db-title">Visit Records</div><div class="db-subtitle" id="tableCount">All submissions</div></div>
-      <button class="refresh-btn" onclick="loadDashboard()" id="refreshBtn2"><span class="ref-ico">&#8635;</span> Refresh</button>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="filter-download" onclick="downloadCSV()" title="Download as CSV">&#11015; Export</button>
+        <button class="refresh-btn" onclick="loadDashboard()" id="refreshBtn2"><span class="ref-ico">&#8635;</span> Refresh</button>
+      </div>
     </div>
     <div id="tableContent">
       <div class="db-loading"><div class="spin-lg"></div><div>Loading records...</div></div>
@@ -941,29 +956,33 @@ window.allRows = null;
 window.filteredRows = null;
 window.charts = {};
 
+var _retryCount = 0;
+
 function loadDashboard() {
   var btn = document.getElementById('refreshBtn');
   if (btn) { btn.classList.add('spinning'); btn.disabled = true; }
   var btn2 = document.getElementById('refreshBtn2');
   if (btn2) { btn2.classList.add('spinning'); btn2.disabled = true; }
 
-  // Show loading state while fetching
-  document.getElementById('dbContent').innerHTML = '<div class="db-loading"><div class="spin-lg"></div><div>Connecting to Google Sheet...</div></div>';
-  document.getElementById('tableContent').innerHTML = '<div class="db-loading"><div class="spin-lg"></div><div>Loading records...</div></div>';
-  document.getElementById('dbLastUpdated').textContent = 'Fetching live data...';
+  document.getElementById('dbLastUpdated').textContent = 'Syncing...';
+
+  // Only show loading spinner if nothing loaded yet
+  if (!window.allRows) {
+    document.getElementById('dbContent').innerHTML = '<div class="db-loading"><div class="spin-lg"></div><div>Loading visits...</div></div>';
+    document.getElementById('tableContent').innerHTML = '<div class="db-loading"><div class="spin-lg"></div><div>Loading records...</div></div>';
+  }
 
   var cbName = 'nkcc_cb_' + Date.now();
   var script  = document.createElement('script');
   var settled = false;
 
-  // 12 second timeout — gives mobile networks enough time
   var timer = setTimeout(function() {
     if (settled) return;
     settled = true;
     cleanup();
     stopBtns();
-    showConnectionError('Timed out connecting to Google Sheet. Check your internet connection and try refreshing.');
-  }, 12000);
+    handleFetchFailure();
+  }, 15000);
 
   window[cbName] = function(data) {
     if (settled) return;
@@ -971,18 +990,13 @@ function loadDashboard() {
     clearTimeout(timer);
     cleanup();
     stopBtns();
-    if (data.error) {
-      showConnectionError('Google Sheet returned an error: ' + data.error);
-      return;
-    }
-    window.usingDemo = false;
-    window.allRows   = data.rows || [];
-    var existing = document.getElementById('dashBanner');
-    if (existing) existing.remove();
+    _retryCount = 0;
+    if (data.error) { handleFetchFailure(); return; }
+    window.allRows = data.rows || [];
     populateFilters(window.allRows);
     applyFilters();
     var now = new Date().toLocaleTimeString('en-KE', {hour:'2-digit', minute:'2-digit'});
-    document.getElementById('dbLastUpdated').textContent = '✅ Live data — ' + now + ' · ' + window.allRows.length + ' records';
+    document.getElementById('dbLastUpdated').textContent = '✅ Updated ' + now + ' · ' + window.allRows.length + ' records';
   };
 
   script.onerror = function() {
@@ -991,7 +1005,7 @@ function loadDashboard() {
     clearTimeout(timer);
     cleanup();
     stopBtns();
-    showConnectionError('Could not reach Google Sheet. The deployment URL may be incorrect or access is restricted.');
+    handleFetchFailure();
   };
 
   function cleanup() {
@@ -1008,24 +1022,25 @@ function loadDashboard() {
   document.head.appendChild(script);
 }
 
-function showConnectionError(reason) {
-  document.getElementById('dbLastUpdated').textContent = '⚠️ Not connected';
-  var html = '<div class="conn-err-card">'
-    + '<div class="conn-err-ico">🔌</div>'
-    + '<h3 class="conn-err-title">Cannot reach Google Sheet</h3>'
-    + '<p class="conn-err-reason">' + reason + '</p>'
-    + '<div class="conn-err-steps">'
-    + '<p class="conn-err-steps-title">Fix checklist:</p>'
-    + '<div class="conn-step"><span class="conn-step-num">1</span><div><strong>Open your Apps Script project</strong><br>Go to <a href="https://script.google.com" target="_blank">script.google.com</a> and open the NKCC project.</div></div>'
-    + '<div class="conn-step"><span class="conn-step-num">2</span><div><strong>Deploy → Manage deployments</strong><br>Click <em>Deploy</em> then <em>Manage deployments</em>.</div></div>'
-    + '<div class="conn-step"><span class="conn-step-num">3</span><div><strong>Edit the deployment</strong><br>Click the pencil ✏️ icon on your Web App deployment.</div></div>'
-    + '<div class="conn-step"><span class="conn-step-num">4</span><div><strong>Set access to "Anyone"</strong><br>Under <em>Who has access</em>, select <strong>Anyone</strong> (not "Anyone with link" — it must be <em>Anyone</em>).</div></div>'
-    + '<div class="conn-step"><span class="conn-step-num">5</span><div><strong>Click Deploy and copy the new URL</strong><br>Paste the new Web App URL into the <code>APPS_SCRIPT_URL</code> variable at the top of this HTML file.</div></div>'
-    + '</div>'
-    + '<button class="conn-retry-btn" onclick="loadDashboard()">↻ Try Again</button>'
+function handleFetchFailure() {
+  _retryCount = (_retryCount || 0) + 1;
+  // Silently auto-retry up to 3 times before showing anything to user
+  if (_retryCount <= 3) {
+    document.getElementById('dbLastUpdated').textContent = 'Retrying... (' + _retryCount + '/3)';
+    setTimeout(loadDashboard, 3000);
+    return;
+  }
+  // After 3 retries, show a simple friendly message — no technical details
+  _retryCount = 0;
+  document.getElementById('dbLastUpdated').textContent = '⚠️ Could not sync';
+  var friendly = '<div style="text-align:center;padding:40px 20px">'
+    + '<div style="font-size:40px;margin-bottom:12px">📶</div>'
+    + '<div style="font-family:\'Syne\',sans-serif;font-size:16px;font-weight:800;color:var(--text);margin-bottom:8px">No data to display</div>'
+    + '<div style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.6">Check your internet connection<br>and tap Refresh to try again.</div>'
+    + '<button onclick="loadDashboard()" style="background:var(--green);color:#fff;border:none;border-radius:10px;padding:11px 28px;font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:600;cursor:pointer">↻ Refresh</button>'
     + '</div>';
-  document.getElementById('dbContent').innerHTML = html;
-  document.getElementById('tableContent').innerHTML = html;
+  document.getElementById('dbContent').innerHTML = friendly;
+  document.getElementById('tableContent').innerHTML = friendly;
 }
 
 
@@ -1056,10 +1071,12 @@ function applyFilters() {
   var csr = document.getElementById('filterCSR').value;
   var rgn = document.getElementById('filterRegion').value;
   var mon = document.getElementById('filterMonth').value;
+  var dt  = document.getElementById('filterDate') ? document.getElementById('filterDate').value : '';
   window.filteredRows = (window.allRows || []).filter(function(r) {
     if (csr && r['CSR Name'] !== csr) return false;
     if (rgn && r['Region'] !== rgn) return false;
     if (mon && String(r['Date of Market Visit']).substring(0,7) !== mon) return false;
+    if (dt  && String(r['Date of Market Visit']).substring(0,10) !== dt) return false;
     return true;
   });
   renderDashboard(window.filteredRows);
@@ -1070,7 +1087,42 @@ function clearFilters() {
   document.getElementById('filterCSR').value = '';
   document.getElementById('filterRegion').value = '';
   document.getElementById('filterMonth').value = '';
+  if (document.getElementById('filterDate')) document.getElementById('filterDate').value = '';
   applyFilters();
+}
+
+// ════════════════════════════════════════════════════
+//  CSV DOWNLOAD
+// ════════════════════════════════════════════════════
+function downloadCSV() {
+  var rows = window.filteredRows || window.allRows || [];
+  if (!rows.length) { alert('No data to export.'); return; }
+
+  var cols = ['Timestamp','Date of Market Visit','Region','CSR Name','Outlet / Customer Name',
+    'New / Existing Customer','Contact Person','Telephone No.','Distributor Serving Outlet',
+    'Outlet Type','NKCC Products','Order Generated (KSH)','Comment / Market Visit',
+    'Location Name','Signed Out By'];
+
+  function esc(v) {
+    var s = String(v === null || v === undefined ? '' : v);
+    if (s.includes(',') || s.includes('"') || s.includes('\n')) {
+      s = '"' + s.replace(/"/g,'""') + '"';
+    }
+    return s;
+  }
+
+  var csv = cols.map(esc).join(',') + '\n';
+  rows.forEach(function(r) {
+    csv += cols.map(function(c){ return esc(r[c]||''); }).join(',') + '\n';
+  });
+
+  var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  var now  = new Date().toISOString().slice(0,10);
+  a.href = url; a.download = 'NKCC_Visits_' + now + '.csv';
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
 }
 
 // ════════════════════════════════════════════════════
@@ -1108,7 +1160,7 @@ function renderDashboard(rows) {
 
   html += '<div class="stats-grid">';
   html += statCard('green','&#128203;',totalVisits,'Total Visits','All recorded visits');
-  html += statCard('amber','&#128178;','KSH '+fmtNum(Math.round(totalOrder)),'Total Orders','Combined order value');
+  html += statCard('amber','🧾','KSH '+fmtNum(Math.round(totalOrder)),'Total Orders','Combined order value');
   html += statCard('blue','&#128100;',activeCsrs,'Active CSRs','CSRs with visits');
   html += statCard('purple','&#127381;',newCount,'New Customers','First-time outlets');
   html += '</div>';
