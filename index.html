@@ -287,6 +287,16 @@ tbody td:first-child{font-weight:600}
 .lb-bar-fill{height:100%;background:var(--green);border-radius:4px;transition:width .6s ease}
 .lb-count{font-size:12px;font-weight:700;color:var(--green-dark);min-width:28px;text-align:right}
 
+/* CSR TARGET TRACKER */
+.target-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)}
+.target-row:last-child{border-bottom:none}
+.target-name{width:130px;font-size:12px;font-weight:600;color:var(--text);flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.target-bar-wrap{flex:1}
+.target-bar{height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.target-bar-fill{height:100%;border-radius:4px;transition:width .6s ease}
+.target-count{font-size:11px;font-weight:700;min-width:52px;text-align:right;flex-shrink:0}
+.target-pct{font-size:11px;color:var(--muted);min-width:46px;text-align:right;flex-shrink:0}
+
 /* PRODUCT PILLS */
 .product-grid{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
 .prod-pill{background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:8px 12px;font-size:12px;display:flex;flex-direction:column;gap:2px;min-width:80px}
@@ -304,7 +314,7 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxeYz0jxGmLMXJgP-
 
 <!-- ── HEADER ─────────────────────────────────────── -->
 <div class="hdr">
-  <h1>Market Visit Form</h1>
+  <h1>New KCC Market Visit Form</h1>
   <p id="hdrSub">General Trade Field Intelligence</p>
 </div>
 
@@ -1190,6 +1200,63 @@ function renderDashboard(rows) {
   html += statCard('purple','&#127381;',newCount,'New Customers','First-time outlets');
   html += '</div>';
 
+  // ── CSR MONTHLY TARGET TRACKER (target = 100 visits/month) ──
+  var TARGET = 100;
+  // Determine which month(s) to show — use current filter range or current month
+  var today = new Date();
+  var currentMonth = today.getFullYear()+'-'+(String(today.getMonth()+1).padStart(2,'0'));
+  // Collect visits per CSR per month
+  var csrMonthCounts = {}; // { 'CSR Name': { 'YYYY-MM': count } }
+  rows.forEach(function(r) {
+    var name = r['CSR Name']; if (!name) return;
+    var d = String(r['Date of Market Visit']).substring(0,7); if (!d) return;
+    if (!csrMonthCounts[name]) csrMonthCounts[name] = {};
+    csrMonthCounts[name][d] = (csrMonthCounts[name][d]||0) + 1;
+  });
+  // Get all months present in filtered data, sorted descending
+  var allMonthsSet = {};
+  rows.forEach(function(r){ var d=String(r['Date of Market Visit']).substring(0,7); if(d) allMonthsSet[d]=true; });
+  var allMonths = Object.keys(allMonthsSet).sort().reverse();
+  if (!allMonths.length) allMonths = [currentMonth];
+  // Show tracker for the most recent month in filtered data
+  var trackMonth = allMonths[0];
+  var trackLabel = (function(m){ var p=m.split('-'); return new Date(p[0],p[1]-1,1).toLocaleString('default',{month:'long',year:'numeric'}); })(trackMonth);
+
+  // All known CSRs (from dropdown) so even 0-visit CSRs show
+  var ALL_CSRS = ['James Njeru','Evans Bokoo','Philomena Ndunge','Edwin Rono','Ndooci Gitau','Julius Mutura','Dalmas Lechamakanya','Duncan Yegon','Geofreey Too','Rebecca Boit','Lilian Kariuki','Agnes Miano','Francis Koge','Moses Kaburu','Wilfred Bitonja'];
+  var targetRows = ALL_CSRS.map(function(name) {
+    var count = (csrMonthCounts[name] && csrMonthCounts[name][trackMonth]) || 0;
+    return { name: name, count: count };
+  }).sort(function(a,b){ return b.count - a.count; });
+
+  html += '<div class="chart-card" style="margin-top:14px">';
+  html += '<div class="chart-card-header"><div><div class="chart-card-title">📍 CSR Monthly Target</div><div class="chart-card-sub">'+trackLabel+' · Target: '+TARGET+' visits per CSR</div></div>';
+  // Month switcher arrows
+  html += '<div style="display:flex;gap:6px;align-items:center">';
+  if (allMonths.length > 1) {
+    allMonths.forEach(function(m,i) {
+      var p=m.split('-'); var lbl=new Date(p[0],p[1]-1,1).toLocaleString('default',{month:'short',year:'2-digit'});
+      html += '<button onclick="switchTargetMonth(\''+m+'\')" id="tmBtn_'+m.replace('-','_')+'" style="background:'+(m===trackMonth?'var(--green)':'var(--bg)')+';color:'+(m===trackMonth?'#fff':'var(--muted)')+';border:1.5px solid '+(m===trackMonth?'var(--green)':'var(--border)')+';border-radius:6px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer">'+lbl+'</button>';
+    });
+  }
+  html += '</div></div>';
+
+  // Progress rows
+  html += '<div id="targetRows">';
+  targetRows.forEach(function(r) {
+    var pct   = Math.min(100, Math.round((r.count / TARGET) * 100));
+    var over  = r.count > TARGET;
+    var barColor = pct >= 100 ? '#0d6e3f' : pct >= 60 ? '#f5a623' : '#d94f4f';
+    var status = pct >= 100 ? '✅' : pct >= 60 ? '🟡' : '🔴';
+    html += '<div class="target-row">'
+      + '<div class="target-name">'+r.name+'</div>'
+      + '<div class="target-bar-wrap"><div class="target-bar"><div class="target-bar-fill" style="width:'+pct+'%;background:'+barColor+'"></div></div></div>'
+      + '<div class="target-count" style="color:'+barColor+'">'+(over?'<span title="Exceeded target">⭐ </span>':'')+r.count+'/'+TARGET+'</div>'
+      + '<div class="target-pct">'+status+' '+pct+'%</div>'
+      + '</div>';
+  });
+  html += '</div></div>';
+
   var months = Object.keys(monthOrders).sort();
   if (months.length > 0) {
     html += '<div class="chart-card" style="margin-top:14px"><div class="chart-card-header"><div><div class="chart-card-title">Orders by Month</div><div class="chart-card-sub">KSH value trend</div></div></div><div class="chart-wrap"><canvas id="chartMonths"></canvas></div></div>';
@@ -1258,6 +1325,45 @@ function renderDashboard(rows) {
 
 function destroyChart(id) {
   if (window.charts[id]) { window.charts[id].destroy(); delete window.charts[id]; }
+}
+
+function switchTargetMonth(month) {
+  var TARGET = 100;
+  var ALL_CSRS = ['James Njeru','Evans Bokoo','Philomena Ndunge','Edwin Rono','Ndooci Gitau','Julius Mutura','Dalmas Lechamakanya','Duncan Yegon','Geofreey Too','Rebecca Boit','Lilian Kariuki','Agnes Miano','Francis Koge','Moses Kaburu','Wilfred Bitonja'];
+  var rows = window.filteredRows || window.allRows || [];
+  var csrMonthCounts = {};
+  rows.forEach(function(r) {
+    var name=r['CSR Name']; if(!name) return;
+    var d=String(r['Date of Market Visit']).substring(0,7); if(!d) return;
+    if(!csrMonthCounts[name]) csrMonthCounts[name]={};
+    csrMonthCounts[name][d]=(csrMonthCounts[name][d]||0)+1;
+  });
+  var targetRows = ALL_CSRS.map(function(name){
+    return {name:name, count:(csrMonthCounts[name]&&csrMonthCounts[name][month])||0};
+  }).sort(function(a,b){return b.count-a.count;});
+
+  var html = '';
+  targetRows.forEach(function(r) {
+    var pct=Math.min(100,Math.round((r.count/TARGET)*100));
+    var over=r.count>TARGET;
+    var barColor=pct>=100?'#0d6e3f':pct>=60?'#f5a623':'#d94f4f';
+    var status=pct>=100?'✅':pct>=60?'🟡':'🔴';
+    html+='<div class="target-row">'
+      +'<div class="target-name">'+r.name+'</div>'
+      +'<div class="target-bar-wrap"><div class="target-bar"><div class="target-bar-fill" style="width:'+pct+'%;background:'+barColor+'"></div></div></div>'
+      +'<div class="target-count" style="color:'+barColor+'">'+(over?'<span title="Exceeded">⭐ </span>':'')+r.count+'/'+TARGET+'</div>'
+      +'<div class="target-pct">'+status+' '+pct+'%</div>'
+      +'</div>';
+  });
+  if(document.getElementById('targetRows')) document.getElementById('targetRows').innerHTML = html;
+
+  // Update button styles
+  document.querySelectorAll('[id^="tmBtn_"]').forEach(function(btn){
+    var isActive = btn.id === 'tmBtn_'+month.replace('-','_');
+    btn.style.background = isActive?'var(--green)':'var(--bg)';
+    btn.style.color = isActive?'#fff':'var(--muted)';
+    btn.style.borderColor = isActive?'var(--green)':'var(--border)';
+  });
 }
 
 function statCard(color, ico, val, label, sub) {
