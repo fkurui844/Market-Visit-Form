@@ -1490,9 +1490,9 @@ function renderPhotos(rows) {
     var url    = r['Photo URL'];
     var meta   = encodeURIComponent(JSON.stringify({outlet:outlet,csr:csr,date:date,ts:ts,loc:loc,url:url}));
 
-    // Extract file ID and build a direct-load image URL
-    var fileId = (url.match(/\/d\/([^\/\?]+)/) || [])[1] || '';
-    var imgSrc = fileId ? 'https://drive.google.com/uc?export=view&id=' + fileId : '';
+    // Extract file ID and build thumbnail URL (works without auth, no CORS issues)
+    var fileId = (url.match(/\/d\/([^\/\?]+)/) || url.match(/id=([^&]+)/) || [])[1] || '';
+    var imgSrc = fileId ? 'https://drive.google.com/thumbnail?id=' + fileId + '&sz=w400' : '';
 
     // Fallback avatar colour
     var colours = ['#0d6e3f','#2563eb','#7c3aed','#0891b2','#d97706','#dc2626'];
@@ -1532,10 +1532,17 @@ function openLightbox(encodedSrc, encodedMeta) {
   var meta = {};
   try { meta = JSON.parse(decodeURIComponent(encodedMeta)); } catch(e){}
 
+  // Use larger thumbnail for lightbox
+  var lbImgSrc = imgSrc.replace('sz=w400', 'sz=w800');
+
   var lbImg = document.getElementById('lbImg');
-  if (imgSrc) {
-    lbImg.src = imgSrc;
+  if (lbImgSrc) {
+    lbImg.src = lbImgSrc;
     lbImg.style.display = 'block';
+    lbImg.onerror = function() {
+      // If thumbnail fails, hide image and show Drive link prominently
+      lbImg.style.display = 'none';
+    };
   } else {
     lbImg.style.display = 'none';
   }
