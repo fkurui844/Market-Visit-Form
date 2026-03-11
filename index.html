@@ -2,127 +2,225 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-<title>NKCC Market Visit Form</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+<title>NKCC Market Visit</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
-:root{--green:#0d6e3f;--green-dark:#094d2c;--green-lt:#e6f4ed;--accent:#f5a623;--red:#d94f4f;--text:#1a1a2e;--muted:#6b7280;--border:#d1d5db;--surface:#fff;--bg:#f0f4f1;--radius:14px;--shadow:0 2px 12px rgba(0,0,0,0.08)}
+/* ── TOKENS ─────────────────────────── */
+:root{
+  --green:#0d6e3f;--green-dark:#094d2c;--green-lt:#e6f4ed;
+  --accent:#f5a623;--accent-lt:#fff8ec;
+  --blue:#2563eb;--purple:#7c3aed;--teal:#0891b2;
+  --red:#d94f4f;--text:#1a1a2e;--muted:#6b7280;
+  --border:#e5e7eb;--surface:#fff;--bg:#f0f4f1;
+  --radius:14px;--shadow:0 2px 12px rgba(0,0,0,.08);
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:60px}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:80px}
 
-.hdr{background:linear-gradient(135deg,var(--green-dark),var(--green));padding:22px 20px 30px;text-align:center;position:relative;overflow:hidden}
-.hdr::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.06)}
-.hdr-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:4px 12px;font-size:11px;color:rgba(255,255,255,.85);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+/* ── HEADER ─────────────────────────── */
+.hdr{background:linear-gradient(135deg,var(--green-dark),var(--green));padding:18px 20px 22px;text-align:center;position:relative;overflow:hidden}
+.hdr::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.05)}
+.hdr::after{content:'';position:absolute;bottom:-30px;left:-20px;width:120px;height:120px;border-radius:50%;background:rgba(245,166,35,.1)}
+.hdr-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:4px 12px;font-size:11px;color:rgba(255,255,255,.85);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
 .hdr-badge .dot{width:6px;height:6px;background:var(--accent);border-radius:50%}
-.hdr h1{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1.2}
-.hdr p{font-size:13px;color:rgba(255,255,255,.7);margin-top:4px}
+.hdr h1{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1.2}
+.hdr p{font-size:12px;color:rgba(255,255,255,.65);margin-top:3px}
 
-.prog-wrap{background:var(--surface);padding:14px 20px;box-shadow:var(--shadow);position:sticky;top:0;z-index:100}
-.prog-steps{display:flex;gap:6px;align-items:center;justify-content:center;margin-bottom:8px}
-.sdot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;border:2px solid var(--border);color:var(--muted);background:var(--surface);transition:all .3s;cursor:pointer}
+/* ── BOTTOM NAV ─────────────────────── */
+.bnav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:flex;z-index:200;box-shadow:0 -4px 16px rgba(0,0,0,.08)}
+.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:10px 8px;cursor:pointer;border:none;background:none;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;color:var(--muted);transition:color .2s;-webkit-tap-highlight-color:transparent}
+.bnav-btn.active{color:var(--green)}
+.bnav-ico{font-size:20px;line-height:1}
+.bnav-btn.active .bnav-ico{transform:scale(1.15)}
+
+/* ── PAGES ──────────────────────────── */
+.page{display:none;animation:fu .3s ease}
+.page.active{display:block}
+@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── FORM PROGRESS ──────────────────── */
+.prog-wrap{background:var(--surface);padding:12px 20px;box-shadow:var(--shadow);position:sticky;top:0;z-index:100}
+.prog-steps{display:flex;gap:6px;align-items:center;justify-content:center;margin-bottom:6px}
+.sdot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;border:2px solid var(--border);color:var(--muted);background:var(--surface);transition:all .3s;cursor:pointer}
 .sdot.active{border-color:var(--green);background:var(--green);color:#fff;box-shadow:0 0 0 3px rgba(13,110,63,.15)}
 .sdot.done{border-color:var(--green);background:var(--green-lt);color:var(--green)}
 .sline{flex:1;height:2px;background:var(--border);border-radius:2px;transition:background .3s}
 .sline.done{background:var(--green)}
-.prog-label{text-align:center;font-size:12px;color:var(--muted)}
+.prog-label{text-align:center;font-size:11px;color:var(--muted)}
 .prog-label strong{color:var(--green)}
 
-.wrap{max-width:540px;margin:0 auto;padding:20px 16px 0}
-.step{display:none;animation:fu .35s ease}
-.step.active{display:block}
-@keyframes fu{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-.step-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--green-dark);margin-bottom:4px}
-.step-sub{font-size:13px;color:var(--muted);margin-bottom:18px}
-
-.card{background:var(--surface);border-radius:var(--radius);padding:18px;margin-bottom:14px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.04)}
-.field{margin-bottom:16px}
-.field:last-child{margin-bottom:0}
-label{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
+/* ── SHARED ─────────────────────────── */
+.wrap{max-width:600px;margin:0 auto;padding:18px 14px 0}
+.card{background:var(--surface);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.04)}
+.field{margin-bottom:14px}.field:last-child{margin-bottom:0}
+label{display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:5px}
 .req{color:var(--red);margin-left:2px}
-
-input[type=text],input[type=tel],input[type=date],input[type=number],textarea{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);background:var(--surface);transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none}
+input[type=text],input[type=tel],input[type=date],input[type=number],textarea{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);background:var(--surface);transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none}
 input:focus,textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(13,110,63,.1)}
 input::placeholder,textarea::placeholder{color:#b0b8c1}
 textarea{resize:vertical;min-height:80px}
 
-/* SEARCH PICKER */
-.picker-wrap{position:relative}
-.pi-row{display:flex;align-items:center;gap:8px;border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;background:var(--surface);transition:border-color .2s,box-shadow .2s}
-.pi-row:focus-within{border-color:var(--green);box-shadow:0 0 0 3px rgba(13,110,63,.1)}
-.pi-ico{font-size:15px;opacity:.45;flex-shrink:0}
-.pi-input{flex:1;border:none!important;padding:0!important;font-size:14px;background:transparent;color:var(--text);outline:none!important;box-shadow:none!important;-webkit-appearance:none;appearance:none}
-.pi-input::placeholder{color:#b0b8c1}
-.pi-x{background:none;border:none;cursor:pointer;font-size:14px;color:var(--muted);padding:0 2px;flex-shrink:0;line-height:1;display:none}
-.pi-x:hover{color:var(--red)}
-.pi-badge{display:none;align-items:center;gap:8px;margin-top:8px;background:var(--green-lt);border:1.5px solid #b6dfc9;border-radius:8px;padding:9px 12px;font-size:13px;font-weight:600;color:var(--green-dark)}
-.pi-badge.show{display:flex}
-.pi-chk{color:var(--green);font-weight:800;font-size:15px;flex-shrink:0}
-.pi-change{margin-left:auto;background:none;border:none;font-size:11px;color:var(--green);cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;text-decoration:underline;flex-shrink:0}
-.pi-drop{display:none;margin-top:6px;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;background:var(--surface);box-shadow:0 4px 16px rgba(0,0,0,.1);max-height:220px;overflow-y:auto}
-.pi-drop.open{display:block}
-.pi-opt{padding:12px 14px;font-size:14px;color:var(--text);cursor:pointer;border-bottom:1px solid #f0f0f0;transition:background .15s}
-.pi-opt:last-of-type{border-bottom:none}
-.pi-opt:hover,.pi-opt:active{background:var(--green-lt);color:var(--green-dark)}
-.pi-opt mark{background:#fff3b0;color:inherit;border-radius:2px;padding:0 1px}
-.pi-empty{padding:14px;font-size:13px;color:var(--muted);text-align:center;display:none}
+/* FORM STEPS */
+.step{display:none;animation:fu .3s ease}.step.active{display:block}
+.step-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--green-dark);margin-bottom:3px}
+.step-sub{font-size:12px;color:var(--muted);margin-bottom:16px}
 
-/* RADIO / CHECKBOX */
-.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+/* OPTIONS */
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 .opt{position:relative}
 .opt input[type=radio],.opt input[type=checkbox]{position:absolute;opacity:0;width:0;height:0}
-.opt label{display:flex;align-items:center;gap:8px;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text);transition:all .2s;background:#fafafa;margin:0;user-select:none}
-.opt label::before{content:'';width:16px;height:16px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;transition:all .2s}
+.opt label{display:flex;align-items:center;gap:7px;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;font-size:12px;font-weight:500;color:var(--text);transition:all .2s;background:#fafafa;margin:0;user-select:none}
+.opt label::before{content:'';width:15px;height:15px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;transition:all .2s}
 .opt.cb label::before{border-radius:4px}
 .opt input:checked+label{border-color:var(--green);background:var(--green-lt);color:var(--green-dark)}
 .opt input:checked+label::before{background:var(--green);border-color:var(--green)}
 .opt.cb input:checked+label::before{background:var(--green) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='8'%3E%3Cpath d='M1 4l3 3 5-6' stroke='white' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/10px no-repeat;border-color:var(--green)}
 
+/* SEARCH PICKER */
+.picker-wrap{position:relative}
+.pi-row{display:flex;align-items:center;gap:7px;border:1.5px solid var(--border);border-radius:10px;padding:9px 12px;background:var(--surface);transition:border-color .2s,box-shadow .2s}
+.pi-row:focus-within{border-color:var(--green);box-shadow:0 0 0 3px rgba(13,110,63,.1)}
+.pi-ico{font-size:14px;opacity:.4;flex-shrink:0}
+.pi-input{flex:1;border:none!important;padding:0!important;font-size:14px;background:transparent;color:var(--text);outline:none!important;box-shadow:none!important;-webkit-appearance:none;appearance:none}
+.pi-input::placeholder{color:#b0b8c1}
+.pi-x{background:none;border:none;cursor:pointer;font-size:13px;color:var(--muted);padding:0 2px;flex-shrink:0;line-height:1;display:none}
+.pi-x:hover{color:var(--red)}
+.pi-badge{display:none;align-items:center;gap:7px;margin-top:7px;background:var(--green-lt);border:1.5px solid #b6dfc9;border-radius:8px;padding:8px 12px;font-size:13px;font-weight:600;color:var(--green-dark)}
+.pi-badge.show{display:flex}
+.pi-chk{color:var(--green);font-weight:800;font-size:14px;flex-shrink:0}
+.pi-change{margin-left:auto;background:none;border:none;font-size:11px;color:var(--green);cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;text-decoration:underline}
+.pi-drop{display:none;margin-top:5px;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;background:var(--surface);box-shadow:0 4px 16px rgba(0,0,0,.1);max-height:200px;overflow-y:auto}
+.pi-drop.open{display:block}
+.pi-opt{padding:11px 13px;font-size:13px;color:var(--text);cursor:pointer;border-bottom:1px solid #f0f0f0;transition:background .15s}
+.pi-opt:last-of-type{border-bottom:none}
+.pi-opt:hover,.pi-opt:active{background:var(--green-lt);color:var(--green-dark)}
+.pi-opt mark{background:#fff3b0;color:inherit;border-radius:2px;padding:0 1px}
+.pi-empty{padding:12px;font-size:12px;color:var(--muted);text-align:center;display:none}
+
 /* LOCATION */
-.loc-box{background:var(--green-lt);border:1.5px solid #b6dfc9;border-radius:10px;padding:14px;transition:all .3s}
+.loc-box{background:var(--green-lt);border:1.5px solid #b6dfc9;border-radius:10px;padding:13px;transition:all .3s}
 .loc-box.locked{border-color:var(--green);background:#d4edd9}
 .loc-box.loc-err-state{border-color:#fca5a5;background:#fef9f9}
-.loc-row{display:flex;align-items:center;gap:12px}
-.loc-radar{position:relative;width:44px;height:44px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.loc-row{display:flex;align-items:center;gap:11px}
+.loc-radar{position:relative;width:42px;height:42px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .rring{position:absolute;border-radius:50%;border:2px solid var(--green);opacity:0;animation:rp 2s ease-out infinite}
-.r1{width:44px;height:44px;animation-delay:0s}.r2{width:30px;height:30px;animation-delay:.6s}.r3{width:18px;height:18px;animation-delay:1.2s}
+.r1{width:42px;height:42px;animation-delay:0s}.r2{width:28px;height:28px;animation-delay:.6s}.r3{width:16px;height:16px;animation-delay:1.2s}
 @keyframes rp{0%{opacity:.7;transform:scale(.5)}100%{opacity:0;transform:scale(1.5)}}
-.radar-ico{font-size:18px;position:relative;z-index:1}
-.loc-ok-ico{font-size:28px;flex-shrink:0}
-.loc-txt strong{display:block;font-size:13px;font-weight:600;color:var(--green-dark)}
-.loc-txt span{font-size:12px;color:var(--muted)}
+.radar-ico{font-size:17px;position:relative;z-index:1}
+.loc-ok-ico{font-size:26px;flex-shrink:0}
+.loc-txt strong{display:block;font-size:12px;font-weight:600;color:var(--green-dark)}
+.loc-txt span{font-size:11px;color:var(--muted)}
 .loc-pulse{animation:lp 1.5s infinite}
 @keyframes lp{0%,100%{opacity:1}50%{opacity:.4}}
-.loc-details{margin-top:10px;padding-top:10px;border-top:1px solid #b6dfc9;display:none}
+.loc-details{margin-top:9px;padding-top:9px;border-top:1px solid #b6dfc9;display:none}
 .loc-details.show{display:block}
-.loc-chips{display:flex;flex-wrap:wrap;gap:6px}
-.lchip{background:rgba(13,110,63,.1);border:1px solid #b6dfc9;border-radius:20px;padding:3px 10px;font-size:11px;color:var(--green-dark)}
+.loc-chips{display:flex;flex-wrap:wrap;gap:5px}
+.lchip{background:rgba(13,110,63,.1);border:1px solid #b6dfc9;border-radius:20px;padding:3px 9px;font-size:10px;color:var(--green-dark)}
 .lchip b{font-weight:700}
-.loc-err-box{display:none;margin-top:8px;background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:10px 14px}
-.loc-err-msg{font-size:13px;color:var(--red);margin-bottom:6px}
-.btn-retry{background:none;border:1.5px solid var(--red);color:var(--red);border-radius:8px;padding:6px 14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer}
+.loc-err-box{display:none;margin-top:8px;background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:10px 13px}
+.loc-err-msg{font-size:12px;color:var(--red);margin-bottom:6px}
+.btn-retry{background:none;border:1.5px solid var(--red);color:var(--red);border-radius:8px;padding:5px 13px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer}
 
-/* BUTTONS */
-.btn-row{display:flex;gap:10px;margin-top:22px;padding-bottom:10px}
-.btn{flex:1;padding:14px;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;border:none;transition:all .2s}
+/* FORM BUTTONS */
+.btn-row{display:flex;gap:8px;margin-top:20px;padding-bottom:10px}
+.btn{flex:1;padding:13px;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .2s}
 .btn-pri{background:var(--green);color:#fff;box-shadow:0 4px 14px rgba(13,110,63,.3)}
-.btn-pri:hover{background:var(--green-dark);transform:translateY(-1px)}
+.btn-pri:hover{background:var(--green-dark)}
 .btn-sec{background:var(--surface);color:var(--text);border:1.5px solid var(--border)}
-.btn-sec:hover{background:var(--bg)}
-.btn-sub{background:linear-gradient(135deg,var(--accent),#e8930a);color:#fff;box-shadow:0 4px 14px rgba(245,166,35,.35);font-size:16px}
-.btn-sub:hover{transform:translateY(-1px)}
-.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
-
-.err-msg{background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:12px;display:none}
+.btn-sub{background:linear-gradient(135deg,var(--accent),#e8930a);color:#fff;box-shadow:0 4px 14px rgba(245,166,35,.35);font-size:15px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.err-msg{background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:9px 13px;font-size:12px;color:var(--red);margin-bottom:12px;display:none}
 .err-msg.show{display:block}
-
-.spin{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:6px}
+.spin{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:5px}
 @keyframes sp{to{transform:rotate(360deg)}}
 
-#success{display:none;text-align:center;padding:50px 20px}
-.suc-ico{width:80px;height:80px;background:var(--green-lt);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 20px;border:3px solid var(--green)}
-#success h2{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--green-dark);margin-bottom:8px}
-#success p{font-size:14px;color:var(--muted);margin-bottom:24px}
+/* SUCCESS */
+#success-screen{display:none;text-align:center;padding:40px 20px}
+.suc-ico{width:72px;height:72px;background:var(--green-lt);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 16px;border:3px solid var(--green)}
+#success-screen h2{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--green-dark);margin-bottom:6px}
+#success-screen p{font-size:13px;color:var(--muted);margin-bottom:20px}
+
+/* ══════════════════════════════════════
+   DASHBOARD STYLES
+══════════════════════════════════════ */
+.db-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-top:4px}
+.db-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--green-dark)}
+.db-subtitle{font-size:12px;color:var(--muted);margin-top:1px}
+.refresh-btn{background:var(--green-lt);border:1.5px solid #b6dfc9;color:var(--green-dark);border-radius:8px;padding:7px 12px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px}
+.refresh-btn:hover{background:#c8e6d0}
+.refresh-btn.spinning .ref-ico{animation:sp .7s linear infinite}
+
+/* FILTER BAR */
+.filter-bar{background:var(--surface);border-radius:12px;padding:12px 14px;margin-bottom:14px;box-shadow:var(--shadow);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.filter-bar label{font-size:11px;font-weight:600;color:var(--muted);margin-bottom:0;white-space:nowrap}
+.filter-bar select{padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:100px}
+.filter-bar select:focus{outline:none;border-color:var(--green)}
+.filter-clear{background:none;border:1.5px solid var(--border);border-radius:8px;padding:6px 10px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
+.filter-clear:hover{border-color:var(--red);color:var(--red)}
+
+/* STAT CARDS */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.stat-card{background:var(--surface);border-radius:12px;padding:14px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.04);position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:-10px;right:-10px;width:60px;height:60px;border-radius:50%;opacity:.08}
+.stat-card.green::before{background:var(--green)}
+.stat-card.amber::before{background:var(--accent)}
+.stat-card.blue::before{background:var(--blue)}
+.stat-card.purple::before{background:var(--purple)}
+.stat-ico{font-size:22px;margin-bottom:6px}
+.stat-val{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--text);line-height:1}
+.stat-label{font-size:11px;color:var(--muted);margin-top:3px}
+.stat-change{font-size:10px;font-weight:600;margin-top:4px;display:inline-flex;align-items:center;gap:2px;padding:2px 6px;border-radius:10px}
+.stat-change.up{color:#16a34a;background:#dcfce7}
+.stat-change.down{color:var(--red);background:#fee2e2}
+
+/* CHART CARDS */
+.chart-card{background:var(--surface);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.04)}
+.chart-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.chart-card-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text)}
+.chart-card-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.chart-wrap{position:relative;height:200px}
+.chart-wrap.tall{height:240px}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;margin-top:8px}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:500px}
+thead th{background:var(--green-lt);color:var(--green-dark);font-weight:700;padding:9px 11px;text-align:left;white-space:nowrap;border-bottom:2px solid #b6dfc9}
+tbody tr{border-bottom:1px solid var(--border);transition:background .15s}
+tbody tr:hover{background:#f8fffe}
+tbody td{padding:9px 11px;color:var(--text);vertical-align:middle}
+tbody td:first-child{font-weight:600}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+.badge-new{background:#dbeafe;color:#1e40af}
+.badge-existing{background:var(--green-lt);color:var(--green-dark)}
+.badge-out{background:#f3e8ff;color:#6b21a8}
+
+/* LOADING / EMPTY */
+.db-loading{text-align:center;padding:40px 20px;color:var(--muted)}
+.db-loading .spin-lg{display:inline-block;width:36px;height:36px;border:3px solid var(--green-lt);border-top-color:var(--green);border-radius:50%;animation:sp .8s linear infinite;margin-bottom:12px}
+.db-empty{text-align:center;padding:40px 20px;color:var(--muted)}
+.db-empty-ico{font-size:40px;margin-bottom:10px}
+
+/* CSR LEADERBOARD */
+.lb-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.lb-row:last-child{border-bottom:none}
+.lb-rank{width:22px;height:22px;border-radius:50%;background:var(--green-lt);color:var(--green-dark);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.lb-rank.gold{background:#fef3c7;color:#92400e}
+.lb-rank.silver{background:#f1f5f9;color:#475569}
+.lb-rank.bronze{background:#fef9ee;color:#9a3412}
+.lb-name{flex:1;font-size:13px;font-weight:600;color:var(--text)}
+.lb-bar-wrap{flex:2}
+.lb-bar{height:7px;background:var(--border);border-radius:4px;overflow:hidden}
+.lb-bar-fill{height:100%;background:var(--green);border-radius:4px;transition:width .6s ease}
+.lb-count{font-size:12px;font-weight:700;color:var(--green-dark);min-width:28px;text-align:right}
+
+/* PRODUCT PILLS */
+.product-grid{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
+.prod-pill{background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:8px 12px;font-size:12px;display:flex;flex-direction:column;gap:2px;min-width:80px}
+.prod-pill-name{font-weight:700;color:var(--text)}
+.prod-pill-count{font-size:11px;color:var(--green);font-weight:600}
 </style>
 </head>
 <body>
@@ -131,277 +229,292 @@ textarea{resize:vertical;min-height:80px}
 var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzTAU6tveoetle7zHNQZYuCK-OQM21XhfDqe5Iiku97E-rEWo8_0gSwz8LYWftmrLw/exec";
 </script>
 
+<!-- ── HEADER ─────────────────────────────────────── -->
 <div class="hdr">
-  <div class="hdr-badge"><span class="dot"></span> CSR Field Tool</div>
-  <h1>General Trade<br>Market Visit Form</h1>
-  <p>Fill out after every customer visit</p>
+  <div class="hdr-badge"><span class="dot"></span> NKCC CSR Tool</div>
+  <h1>Market Visit System</h1>
+  <p id="hdrSub">General Trade Field Intelligence</p>
 </div>
 
-<div class="prog-wrap">
-  <div class="prog-steps">
-    <div class="sdot active" id="d1" onclick="goTo(1)">1</div>
-    <div class="sline" id="l1"></div>
-    <div class="sdot" id="d2" onclick="goTo(2)">2</div>
-    <div class="sline" id="l2"></div>
-    <div class="sdot" id="d3" onclick="goTo(3)">3</div>
-    <div class="sline" id="l3"></div>
-    <div class="sdot" id="d4" onclick="goTo(4)">4</div>
-  </div>
-  <div class="prog-label" id="plab">Step <strong>1</strong> of 4 &mdash; Visit Info</div>
-</div>
+<!-- ── BOTTOM NAV ─────────────────────────────────── -->
+<nav class="bnav">
+  <button class="bnav-btn active" id="nav-form" onclick="switchPage('form')">
+    <span class="bnav-ico">📝</span>New Visit
+  </button>
+  <button class="bnav-btn" id="nav-dashboard" onclick="switchPage('dashboard')">
+    <span class="bnav-ico">📊</span>Dashboard
+  </button>
+  <button class="bnav-btn" id="nav-table" onclick="switchPage('table')">
+    <span class="bnav-ico">📋</span>Records
+  </button>
+</nav>
 
-<div class="wrap">
+<!-- ════════════════════════════════════════════════
+     PAGE: FORM
+════════════════════════════════════════════════ -->
+<div class="page active" id="page-form">
 
-<!-- STEP 1 -->
-<div class="step active" id="step-1">
-  <h2 class="step-title">Visit Information</h2>
-  <p class="step-sub">When and where is this visit taking place?</p>
-
-  <div class="card">
-    <div class="field">
-      <label for="visitDate">Date of Market Visit <span class="req">*</span></label>
-      <input type="date" id="visitDate"/>
+  <div class="prog-wrap" id="progWrap">
+    <div class="prog-steps">
+      <div class="sdot active" id="d1" onclick="goTo(1)">1</div>
+      <div class="sline" id="l1"></div>
+      <div class="sdot" id="d2" onclick="goTo(2)">2</div>
+      <div class="sline" id="l2"></div>
+      <div class="sdot" id="d3" onclick="goTo(3)">3</div>
+      <div class="sline" id="l3"></div>
+      <div class="sdot" id="d4" onclick="goTo(4)">4</div>
     </div>
+    <div class="prog-label" id="plab">Step <strong>1</strong> of 4 &mdash; Visit Info</div>
   </div>
 
-  <div class="card">
-    <div class="field">
-      <label>Region <span class="req">*</span></label>
-      <div class="picker-wrap" id="rgnWrap">
-        <div class="pi-row">
-          <span class="pi-ico">&#128269;</span>
-          <input class="pi-input" id="rgnInput" type="text" placeholder="Search region..." autocomplete="off"/>
-          <button class="pi-x" id="rgnX" onclick="clearPicker('rgn')">&#x2715;</button>
-        </div>
-        <div class="pi-badge" id="rgnBadge">
-          <span class="pi-chk">&#x2713;</span>
-          <span id="rgnBadgeTxt"></span>
-          <button class="pi-change" onclick="changePicker('rgn')">Change</button>
-        </div>
-        <div class="pi-drop" id="rgnDrop">
-          <div class="pi-opt" data-v="Nairobi North">Nairobi North</div>
-          <div class="pi-opt" data-v="Nairobi South">Nairobi South</div>
-          <div class="pi-opt" data-v="Eastern">Eastern</div>
-          <div class="pi-opt" data-v="Nairobi Tier I">Nairobi Tier I</div>
-          <div class="pi-opt" data-v="Nairobi Tier II">Nairobi Tier II</div>
-          <div class="pi-opt" data-v="Institutions / Exports">Institutions / Exports</div>
-          <div class="pi-empty">No results found</div>
+  <div class="wrap">
+
+    <!-- STEP 1 -->
+    <div class="step active" id="step-1">
+      <h2 class="step-title">Visit Information</h2>
+      <p class="step-sub">When and where is this visit taking place?</p>
+      <div class="card">
+        <div class="field">
+          <label for="visitDate">Date of Market Visit <span class="req">*</span></label>
+          <input type="date" id="visitDate"/>
         </div>
       </div>
-      <input type="hidden" id="rgnVal"/>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="field">
-      <label>CSR Name <span class="req">*</span></label>
-      <div class="picker-wrap" id="csrWrap">
-        <div class="pi-row">
-          <span class="pi-ico">&#128269;</span>
-          <input class="pi-input" id="csrInput" type="text" placeholder="Search your name..." autocomplete="off"/>
-          <button class="pi-x" id="csrX" onclick="clearPicker('csr')">&#x2715;</button>
-        </div>
-        <div class="pi-badge" id="csrBadge">
-          <span class="pi-chk">&#x2713;</span>
-          <span id="csrBadgeTxt"></span>
-          <button class="pi-change" onclick="changePicker('csr')">Change</button>
-        </div>
-        <div class="pi-drop" id="csrDrop">
-          <div class="pi-opt" data-v="James Njeru">James Njeru</div>
-          <div class="pi-opt" data-v="Evans Bokoo">Evans Bokoo</div>
-          <div class="pi-opt" data-v="Philomena Ndunge">Philomena Ndunge</div>
-          <div class="pi-opt" data-v="Edwin Rono">Edwin Rono</div>
-          <div class="pi-opt" data-v="Ndooci Gitau">Ndooci Gitau</div>
-          <div class="pi-opt" data-v="Julius Mutura">Julius Mutura</div>
-          <div class="pi-opt" data-v="Dalmas Lechamakanya">Dalmas Lechamakanya</div>
-          <div class="pi-opt" data-v="Duncan Yegon">Duncan Yegon</div>
-          <div class="pi-opt" data-v="Geofreey Too">Geofreey Too</div>
-          <div class="pi-opt" data-v="Rebecca Boit">Rebecca Boit</div>
-          <div class="pi-opt" data-v="Lilian Kariuki">Lilian Kariuki</div>
-          <div class="pi-opt" data-v="Agnes Miano">Agnes Miano</div>
-          <div class="pi-opt" data-v="Francis Koge">Francis Koge</div>
-          <div class="pi-opt" data-v="Moses Kaburu">Moses Kaburu</div>
-          <div class="pi-opt" data-v="Wilfred Bitonja">Wilfred Bitonja</div>
-          <div class="pi-empty">No results found</div>
-        </div>
-      </div>
-      <input type="hidden" id="csrVal"/>
-    </div>
-  </div>
-
-  <div class="err-msg" id="err1">Please fill in all required fields before continuing.</div>
-  <div class="btn-row">
-    <button class="btn btn-pri" onclick="next(1)">Continue &rarr;</button>
-  </div>
-</div>
-
-<!-- STEP 2 -->
-<div class="step" id="step-2">
-  <h2 class="step-title">Customer Details</h2>
-  <p class="step-sub">Tell us about the outlet you are visiting.</p>
-
-  <div class="card">
-    <div class="field">
-      <label for="outletName">Outlet / Customer Name <span class="req">*</span></label>
-      <input type="text" id="outletName" placeholder="e.g. Mama Pima Shop"/>
-    </div>
-    <div class="field">
-      <label>New / Existing Customer <span class="req">*</span></label>
-      <div class="opts">
-        <div class="opt"><input type="radio" name="custStatus" id="cs1" value="New"/><label for="cs1">New</label></div>
-        <div class="opt"><input type="radio" name="custStatus" id="cs2" value="Existing"/><label for="cs2">Existing</label></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="field">
-      <label for="contactPerson">Contact Person Name <span class="req">*</span></label>
-      <input type="text" id="contactPerson" placeholder="Full name"/>
-    </div>
-    <div class="field">
-      <label for="telephone">Telephone No. <span class="req">*</span></label>
-      <input type="tel" id="telephone" placeholder="e.g. 0712 345 678"/>
-    </div>
-    <div class="field">
-      <label for="distributor">Distributor Serving Outlet <span class="req">*</span></label>
-      <input type="text" id="distributor" placeholder="Distributor name"/>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="field">
-      <label>Outlet Type <span class="req">*</span></label>
-      <div class="opts">
-        <div class="opt"><input type="radio" name="outletType" id="ot1" value="Wholesale"/><label for="ot1">Wholesale</label></div>
-        <div class="opt"><input type="radio" name="outletType" id="ot2" value="Retail"/><label for="ot2">Retail</label></div>
-        <div class="opt"><input type="radio" name="outletType" id="ot3" value="Agent"/><label for="ot3">Agent</label></div>
-        <div class="opt"><input type="radio" name="outletType" id="ot4" value="Street Vendors"/><label for="ot4">Street Vendors</label></div>
-        <div class="opt"><input type="radio" name="outletType" id="ot5" value="Supermarkets"/><label for="ot5">Supermarkets</label></div>
-        <div class="opt"><input type="radio" name="outletType" id="ot6" value="Petrol Station"/><label for="ot6">Petrol Station</label></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="err-msg" id="err2">Please fill in all required fields before continuing.</div>
-  <div class="btn-row">
-    <button class="btn btn-sec" onclick="prev(2)">&larr; Back</button>
-    <button class="btn btn-pri" onclick="next(2)">Continue &rarr;</button>
-  </div>
-</div>
-
-<!-- STEP 3 -->
-<div class="step" id="step-3">
-  <h2 class="step-title">Products &amp; Order</h2>
-  <p class="step-sub">Which NKCC products are stocked? What was ordered?</p>
-
-  <div class="card">
-    <div class="field">
-      <label>NKCC Products <span class="req">*</span></label>
-      <div class="opts">
-        <div class="opt cb"><input type="checkbox" name="products" id="p1" value="Fresh Milk"/><label for="p1">Fresh Milk</label></div>
-        <div class="opt cb"><input type="checkbox" name="products" id="p2" value="TFA"/><label for="p2">TFA</label></div>
-        <div class="opt cb"><input type="checkbox" name="products" id="p3" value="TCA"/><label for="p3">TCA</label></div>
-        <div class="opt cb"><input type="checkbox" name="products" id="p4" value="ESL"/><label for="p4">ESL</label></div>
-        <div class="opt cb"><input type="checkbox" name="products" id="p5" value="Mala"/><label for="p5">Mala</label></div>
-        <div class="opt cb"><input type="checkbox" name="products" id="p6" value="Yoghurts"/><label for="p6">Yoghurts</label></div>
-        <div class="opt cb"><input type="checkbox" name="products" id="p7" value="Butter"/><label for="p7">Butter</label></div>
-        <div class="opt cb"><input type="checkbox" name="products" id="p8" value="Ghee"/><label for="p8">Ghee</label></div>
-        <div class="opt cb"><input type="checkbox" name="products" id="p9" value="None"/><label for="p9">None</label></div>
-        <div class="opt cb"><input type="checkbox" name="products" id="p10" value="Other"/><label for="p10">Other</label></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="field">
-      <label for="orderAmt">Order Generated (KSH) <span class="req">*</span></label>
-      <input type="number" id="orderAmt" placeholder="e.g. 5000" min="0"/>
-    </div>
-  </div>
-
-  <div class="err-msg" id="err3">Please fill in all required fields before continuing.</div>
-  <div class="btn-row">
-    <button class="btn btn-sec" onclick="prev(3)">&larr; Back</button>
-    <button class="btn btn-pri" onclick="next(3)">Continue &rarr;</button>
-  </div>
-</div>
-
-<!-- STEP 4 -->
-<div class="step" id="step-4">
-  <h2 class="step-title">Notes &amp; Sign-Off</h2>
-  <p class="step-sub">Final details before submitting your visit report.</p>
-
-  <div class="card">
-    <div class="field">
-      <label for="comment">Comment / Market Visit Notes</label>
-      <textarea id="comment" placeholder="Any observations, challenges, or highlights..."></textarea>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="field">
-      <label>GPS Location <span class="req">*</span> <span style="font-weight:400;color:var(--muted);font-size:11px;">&#8212; captured automatically</span></label>
-      <div class="loc-box" id="locBox">
-        <div id="locScanning" class="loc-row">
-          <div class="loc-radar">
-            <div class="rring r1"></div>
-            <div class="rring r2"></div>
-            <div class="rring r3"></div>
-            <span class="radar-ico">&#128225;</span>
+      <div class="card">
+        <div class="field">
+          <label>Region <span class="req">*</span></label>
+          <div class="picker-wrap" id="rgnWrap">
+            <div class="pi-row">
+              <span class="pi-ico">&#128269;</span>
+              <input class="pi-input" id="rgnInput" type="text" placeholder="Search region..." autocomplete="off"/>
+              <button class="pi-x" id="rgnX" onclick="clearPicker('rgn')">&#x2715;</button>
+            </div>
+            <div class="pi-badge" id="rgnBadge"><span class="pi-chk">&#x2713;</span><span id="rgnBadgeTxt"></span><button class="pi-change" onclick="changePicker('rgn')">Change</button></div>
+            <div class="pi-drop" id="rgnDrop">
+              <div class="pi-opt" data-v="Nairobi North">Nairobi North</div>
+              <div class="pi-opt" data-v="Nairobi South">Nairobi South</div>
+              <div class="pi-opt" data-v="Eastern">Eastern</div>
+              <div class="pi-opt" data-v="Nairobi Tier I">Nairobi Tier I</div>
+              <div class="pi-opt" data-v="Nairobi Tier II">Nairobi Tier II</div>
+              <div class="pi-opt" data-v="Institutions / Exports">Institutions / Exports</div>
+              <div class="pi-empty">No results found</div>
+            </div>
           </div>
-          <div class="loc-txt">
-            <strong id="locStatus">Acquiring GPS signal...</strong>
-            <span id="locDetail" class="loc-pulse">Allow location access when prompted</span>
-          </div>
+          <input type="hidden" id="rgnVal"/>
         </div>
-        <div id="locCaptured" class="loc-row" style="display:none">
-          <div class="loc-ok-ico">&#9989;</div>
-          <div class="loc-txt" style="flex:1">
-            <strong>Location Locked</strong>
-            <span id="locAddr" style="font-size:11px;color:var(--green-dark)"></span>
+      </div>
+      <div class="card">
+        <div class="field">
+          <label>CSR Name <span class="req">*</span></label>
+          <div class="picker-wrap" id="csrWrap">
+            <div class="pi-row">
+              <span class="pi-ico">&#128269;</span>
+              <input class="pi-input" id="csrInput" type="text" placeholder="Search your name..." autocomplete="off"/>
+              <button class="pi-x" id="csrX" onclick="clearPicker('csr')">&#x2715;</button>
+            </div>
+            <div class="pi-badge" id="csrBadge"><span class="pi-chk">&#x2713;</span><span id="csrBadgeTxt"></span><button class="pi-change" onclick="changePicker('csr')">Change</button></div>
+            <div class="pi-drop" id="csrDrop">
+              <div class="pi-opt" data-v="James Njeru">James Njeru</div>
+              <div class="pi-opt" data-v="Evans Bokoo">Evans Bokoo</div>
+              <div class="pi-opt" data-v="Philomena Ndunge">Philomena Ndunge</div>
+              <div class="pi-opt" data-v="Edwin Rono">Edwin Rono</div>
+              <div class="pi-opt" data-v="Ndooci Gitau">Ndooci Gitau</div>
+              <div class="pi-opt" data-v="Julius Mutura">Julius Mutura</div>
+              <div class="pi-opt" data-v="Dalmas Lechamakanya">Dalmas Lechamakanya</div>
+              <div class="pi-opt" data-v="Duncan Yegon">Duncan Yegon</div>
+              <div class="pi-opt" data-v="Geofreey Too">Geofreey Too</div>
+              <div class="pi-opt" data-v="Rebecca Boit">Rebecca Boit</div>
+              <div class="pi-opt" data-v="Lilian Kariuki">Lilian Kariuki</div>
+              <div class="pi-opt" data-v="Agnes Miano">Agnes Miano</div>
+              <div class="pi-opt" data-v="Francis Koge">Francis Koge</div>
+              <div class="pi-opt" data-v="Moses Kaburu">Moses Kaburu</div>
+              <div class="pi-opt" data-v="Wilfred Bitonja">Wilfred Bitonja</div>
+              <div class="pi-empty">No results found</div>
+            </div>
           </div>
+          <input type="hidden" id="csrVal"/>
         </div>
-        <div class="loc-details" id="locDetails">
-          <div class="loc-chips">
-            <span class="lchip">Lat: <b id="dLat">--</b></span>
-            <span class="lchip">Lng: <b id="dLng">--</b></span>
-            <span class="lchip">Acc: <b id="dAcc">--</b>m</span>
+      </div>
+      <div class="err-msg" id="err1">Please fill in all required fields before continuing.</div>
+      <div class="btn-row"><button class="btn btn-pri" onclick="next(1)">Continue &rarr;</button></div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step" id="step-2">
+      <h2 class="step-title">Customer Details</h2>
+      <p class="step-sub">Tell us about the outlet you are visiting.</p>
+      <div class="card">
+        <div class="field">
+          <label for="outletName">Outlet / Customer Name <span class="req">*</span></label>
+          <input type="text" id="outletName" placeholder="e.g. Mama Pima Shop"/>
+        </div>
+        <div class="field">
+          <label>New / Existing Customer <span class="req">*</span></label>
+          <div class="opts">
+            <div class="opt"><input type="radio" name="custStatus" id="cs1" value="New"/><label for="cs1">New</label></div>
+            <div class="opt"><input type="radio" name="custStatus" id="cs2" value="Existing"/><label for="cs2">Existing</label></div>
           </div>
         </div>
       </div>
-      <div class="loc-err-box" id="locErrBox">
-        <p class="loc-err-msg" id="locErrMsg">Location access denied.</p>
-        <button class="btn-retry" onclick="startLocation()">&#8635; Retry location</button>
+      <div class="card">
+        <div class="field"><label for="contactPerson">Contact Person <span class="req">*</span></label><input type="text" id="contactPerson" placeholder="Full name"/></div>
+        <div class="field"><label for="telephone">Telephone No. <span class="req">*</span></label><input type="tel" id="telephone" placeholder="e.g. 0712 345 678"/></div>
+        <div class="field"><label for="distributor">Distributor Serving Outlet <span class="req">*</span></label><input type="text" id="distributor" placeholder="Distributor name"/></div>
+      </div>
+      <div class="card">
+        <div class="field">
+          <label>Outlet Type <span class="req">*</span></label>
+          <div class="opts">
+            <div class="opt"><input type="radio" name="outletType" id="ot1" value="Wholesale"/><label for="ot1">Wholesale</label></div>
+            <div class="opt"><input type="radio" name="outletType" id="ot2" value="Retail"/><label for="ot2">Retail</label></div>
+            <div class="opt"><input type="radio" name="outletType" id="ot3" value="Agent"/><label for="ot3">Agent</label></div>
+            <div class="opt"><input type="radio" name="outletType" id="ot4" value="Street Vendors"/><label for="ot4">Street Vendors</label></div>
+            <div class="opt"><input type="radio" name="outletType" id="ot5" value="Supermarkets"/><label for="ot5">Supermarkets</label></div>
+            <div class="opt"><input type="radio" name="outletType" id="ot6" value="Petrol Station"/><label for="ot6">Petrol Station</label></div>
+          </div>
+        </div>
+      </div>
+      <div class="err-msg" id="err2">Please fill in all required fields before continuing.</div>
+      <div class="btn-row"><button class="btn btn-sec" onclick="prev(2)">&larr; Back</button><button class="btn btn-pri" onclick="next(2)">Continue &rarr;</button></div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step" id="step-3">
+      <h2 class="step-title">Products &amp; Order</h2>
+      <p class="step-sub">Which NKCC products are stocked? What was ordered?</p>
+      <div class="card">
+        <div class="field">
+          <label>NKCC Products <span class="req">*</span></label>
+          <div class="opts">
+            <div class="opt cb"><input type="checkbox" name="products" id="p1" value="Fresh Milk"/><label for="p1">Fresh Milk</label></div>
+            <div class="opt cb"><input type="checkbox" name="products" id="p2" value="TFA"/><label for="p2">TFA</label></div>
+            <div class="opt cb"><input type="checkbox" name="products" id="p3" value="TCA"/><label for="p3">TCA</label></div>
+            <div class="opt cb"><input type="checkbox" name="products" id="p4" value="ESL"/><label for="p4">ESL</label></div>
+            <div class="opt cb"><input type="checkbox" name="products" id="p5" value="Mala"/><label for="p5">Mala</label></div>
+            <div class="opt cb"><input type="checkbox" name="products" id="p6" value="Yoghurts"/><label for="p6">Yoghurts</label></div>
+            <div class="opt cb"><input type="checkbox" name="products" id="p7" value="Butter"/><label for="p7">Butter</label></div>
+            <div class="opt cb"><input type="checkbox" name="products" id="p8" value="Ghee"/><label for="p8">Ghee</label></div>
+            <div class="opt cb"><input type="checkbox" name="products" id="p9" value="None"/><label for="p9">None</label></div>
+            <div class="opt cb"><input type="checkbox" name="products" id="p10" value="Other"/><label for="p10">Other</label></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="field"><label for="orderAmt">Order Generated (KSH) <span class="req">*</span></label><input type="number" id="orderAmt" placeholder="e.g. 5000" min="0"/></div>
+      </div>
+      <div class="err-msg" id="err3">Please fill in all required fields before continuing.</div>
+      <div class="btn-row"><button class="btn btn-sec" onclick="prev(3)">&larr; Back</button><button class="btn btn-pri" onclick="next(3)">Continue &rarr;</button></div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step" id="step-4">
+      <h2 class="step-title">Notes &amp; Sign-Off</h2>
+      <p class="step-sub">Final details before submitting your visit report.</p>
+      <div class="card">
+        <div class="field"><label for="comment">Comment / Market Visit Notes</label><textarea id="comment" placeholder="Any observations, challenges, or highlights..."></textarea></div>
+      </div>
+      <div class="card">
+        <div class="field">
+          <label>GPS Location <span class="req">*</span> <span style="font-weight:400;color:var(--muted);font-size:10px;">&#8212; auto-captured</span></label>
+          <div class="loc-box" id="locBox">
+            <div id="locScanning" class="loc-row">
+              <div class="loc-radar"><div class="rring r1"></div><div class="rring r2"></div><div class="rring r3"></div><span class="radar-ico">&#128225;</span></div>
+              <div class="loc-txt"><strong id="locStatus">Acquiring GPS signal...</strong><span id="locDetail" class="loc-pulse">Allow location access when prompted</span></div>
+            </div>
+            <div id="locCaptured" class="loc-row" style="display:none">
+              <div class="loc-ok-ico">&#9989;</div>
+              <div class="loc-txt" style="flex:1"><strong>Location Locked</strong><span id="locAddr" style="font-size:10px;color:var(--green-dark)"></span></div>
+            </div>
+            <div class="loc-details" id="locDetails">
+              <div class="loc-chips"><span class="lchip">Lat: <b id="dLat">--</b></span><span class="lchip">Lng: <b id="dLng">--</b></span><span class="lchip">Acc: <b id="dAcc">--</b>m</span></div>
+            </div>
+          </div>
+          <div class="loc-err-box" id="locErrBox">
+            <p class="loc-err-msg" id="locErrMsg">Location access denied.</p>
+            <button class="btn-retry" onclick="startLocation()">&#8635; Retry</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="field"><label for="signedBy">Sign Out with Your Name <span class="req">*</span></label><input type="text" id="signedBy" placeholder="Type your full name to confirm accuracy"/></div>
+      </div>
+      <div class="err-msg" id="err4">Please fill in all fields and allow location access.</div>
+      <div class="btn-row">
+        <button class="btn btn-sec" onclick="prev(4)">&larr; Back</button>
+        <button class="btn btn-sub" id="submitBtn" onclick="submitForm()">Submit Visit &#10003;</button>
       </div>
     </div>
-  </div>
 
-  <div class="card">
-    <div class="field">
-      <label for="signedBy">Sign Out with Your Name <span class="req">*</span></label>
-      <input type="text" id="signedBy" placeholder="Type your full name to confirm accuracy"/>
+    <!-- SUCCESS -->
+    <div id="success-screen">
+      <div class="suc-ico">&#9989;</div>
+      <h2>Visit Recorded!</h2>
+      <p>Saved to the NKCC Google Sheet successfully.</p>
+      <button class="btn btn-pri" onclick="resetForm()" style="max-width:220px;margin:0 auto;display:block">+ Record Another Visit</button>
+    </div>
+
+  </div><!-- /wrap -->
+</div><!-- /page-form -->
+
+<!-- ════════════════════════════════════════════════
+     PAGE: DASHBOARD
+════════════════════════════════════════════════ -->
+<div class="page" id="page-dashboard">
+  <div class="wrap">
+    <div class="db-header">
+      <div><div class="db-title">Dashboard</div><div class="db-subtitle" id="dbLastUpdated">Pull data from Google Sheet</div></div>
+      <button class="refresh-btn" onclick="loadDashboard()" id="refreshBtn"><span class="ref-ico">&#8635;</span> Refresh</button>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="filter-bar">
+      <label>Filter:</label>
+      <select id="filterCSR" onchange="applyFilters()"><option value="">All CSRs</option></select>
+      <select id="filterRegion" onchange="applyFilters()"><option value="">All Regions</option></select>
+      <select id="filterMonth" onchange="applyFilters()"><option value="">All Time</option></select>
+      <button class="filter-clear" onclick="clearFilters()">&#x2715; Clear</button>
+    </div>
+
+    <div id="dbContent">
+      <div class="db-loading"><div class="spin-lg"></div><div>Loading data...</div></div>
     </div>
   </div>
+</div>
 
-  <div class="err-msg" id="err4">Please fill in all fields and allow location access.</div>
-  <div class="btn-row">
-    <button class="btn btn-sec" onclick="prev(4)">&larr; Back</button>
-    <button class="btn btn-sub" id="submitBtn" onclick="submitForm()">Submit Visit &#10003;</button>
+<!-- ════════════════════════════════════════════════
+     PAGE: RECORDS TABLE
+════════════════════════════════════════════════ -->
+<div class="page" id="page-table">
+  <div class="wrap">
+    <div class="db-header">
+      <div><div class="db-title">Visit Records</div><div class="db-subtitle" id="tableCount">All submissions</div></div>
+      <button class="refresh-btn" onclick="loadDashboard()" id="refreshBtn2"><span class="ref-ico">&#8635;</span> Refresh</button>
+    </div>
+    <div id="tableContent">
+      <div class="db-loading"><div class="spin-lg"></div><div>Loading records...</div></div>
+    </div>
   </div>
-</div>
-
-<!-- SUCCESS -->
-<div id="success">
-  <div class="suc-ico">&#9989;</div>
-  <h2>Visit Recorded!</h2>
-  <p>Your market visit has been saved to the NKCC Google Sheet successfully.</p>
-  <button class="btn btn-pri" onclick="resetForm()" style="max-width:240px;margin:0 auto;display:block">+ Record Another Visit</button>
-</div>
-
 </div>
 
 <script>
+// ════════════════════════════════════════════════════
+//  PAGE NAVIGATION
+// ════════════════════════════════════════════════════
+function switchPage(p) {
+  ['form','dashboard','table'].forEach(function(id) {
+    document.getElementById('page-'+id).classList.remove('active');
+    document.getElementById('nav-'+id).classList.remove('active');
+  });
+  document.getElementById('page-'+p).classList.add('active');
+  document.getElementById('nav-'+p).classList.add('active');
+  if (p === 'dashboard' || p === 'table') {
+    if (!window.allRows) loadDashboard();
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ════════════════════════════════════════════════════
+//  FORM STATE
+// ════════════════════════════════════════════════════
 var cur = 1;
 var locData = {lat:null,lng:null,acc:null,addr:null};
 var watchId = null;
@@ -415,278 +528,350 @@ window.addEventListener('DOMContentLoaded', function() {
   startLocation();
 });
 
+// ════════════════════════════════════════════════════
+//  PROGRESS
+// ════════════════════════════════════════════════════
 function updateProg() {
-  for (var i = 1; i <= 4; i++) {
-    var d = document.getElementById('d'+i);
-    var l = document.getElementById('l'+i);
-    d.className = 'sdot';
-    if (i < cur)       { d.className += ' done'; d.textContent = String.fromCharCode(10003); }
-    else if (i === cur){ d.className += ' active'; d.textContent = i; }
-    else               { d.textContent = i; }
-    if (l) l.className = 'sline' + (i < cur ? ' done' : '');
+  for (var i=1;i<=4;i++) {
+    var d=document.getElementById('d'+i), l=document.getElementById('l'+i);
+    d.className='sdot';
+    if(i<cur){d.className+=' done';d.textContent='\u2713';}
+    else if(i===cur){d.className+=' active';d.textContent=i;}
+    else{d.textContent=i;}
+    if(l) l.className='sline'+(i<cur?' done':'');
   }
-  document.getElementById('plab').innerHTML = 'Step <strong>'+cur+'</strong> of 4 &mdash; '+stepLabels[cur-1];
+  document.getElementById('plab').innerHTML='Step <strong>'+cur+'</strong> of 4 &mdash; '+stepLabels[cur-1];
 }
+function goTo(n){if(n>=cur)return;document.getElementById('step-'+cur).classList.remove('active');cur=n;document.getElementById('step-'+cur).classList.add('active');updateProg();window.scrollTo({top:0,behavior:'smooth'});}
+function next(from){if(!validate(from))return;document.getElementById('step-'+from).classList.remove('active');cur=from+1;document.getElementById('step-'+cur).classList.add('active');updateProg();window.scrollTo({top:0,behavior:'smooth'});}
+function prev(from){document.getElementById('step-'+from).classList.remove('active');cur=from-1;document.getElementById('step-'+cur).classList.add('active');updateProg();window.scrollTo({top:0,behavior:'smooth'});}
 
-function goTo(n) {
-  if (n >= cur) return;
-  document.getElementById('step-'+cur).classList.remove('active');
-  cur = n;
-  document.getElementById('step-'+cur).classList.add('active');
-  updateProg();
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-function next(from) {
-  if (!validate(from)) return;
-  document.getElementById('step-'+from).classList.remove('active');
-  cur = from + 1;
-  document.getElementById('step-'+cur).classList.add('active');
-  updateProg();
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-function prev(from) {
-  document.getElementById('step-'+from).classList.remove('active');
-  cur = from - 1;
-  document.getElementById('step-'+cur).classList.add('active');
-  updateProg();
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
+// ════════════════════════════════════════════════════
+//  VALIDATION
+// ════════════════════════════════════════════════════
 function validate(step) {
-  var ok = true;
-  if (step===1) {
-    if (!document.getElementById('visitDate').value) ok=false;
-    if (!document.getElementById('rgnVal').value) ok=false;
-    if (!document.getElementById('csrVal').value) ok=false;
-  }
-  if (step===2) {
-    if (!document.getElementById('outletName').value.trim()) ok=false;
-    if (!document.querySelector('input[name="custStatus"]:checked')) ok=false;
-    if (!document.getElementById('contactPerson').value.trim()) ok=false;
-    if (!document.getElementById('telephone').value.trim()) ok=false;
-    if (!document.getElementById('distributor').value.trim()) ok=false;
-    if (!document.querySelector('input[name="outletType"]:checked')) ok=false;
-  }
-  if (step===3) {
-    if (!document.querySelectorAll('input[name="products"]:checked').length) ok=false;
-    if (!document.getElementById('orderAmt').value.trim()) ok=false;
-  }
-  if (step===4) {
-    if (!document.getElementById('signedBy').value.trim()) ok=false;
-    if (!locData.lat) ok=false;
-  }
-  var e = document.getElementById('err'+step);
-  e.className = ok ? 'err-msg' : 'err-msg show';
+  var ok=true;
+  if(step===1){if(!document.getElementById('visitDate').value)ok=false;if(!document.getElementById('rgnVal').value)ok=false;if(!document.getElementById('csrVal').value)ok=false;}
+  if(step===2){if(!document.getElementById('outletName').value.trim())ok=false;if(!document.querySelector('input[name="custStatus"]:checked'))ok=false;if(!document.getElementById('contactPerson').value.trim())ok=false;if(!document.getElementById('telephone').value.trim())ok=false;if(!document.getElementById('distributor').value.trim())ok=false;if(!document.querySelector('input[name="outletType"]:checked'))ok=false;}
+  if(step===3){if(!document.querySelectorAll('input[name="products"]:checked').length)ok=false;if(!document.getElementById('orderAmt').value.trim())ok=false;}
+  if(step===4){if(!document.getElementById('signedBy').value.trim())ok=false;if(!locData.lat)ok=false;}
+  var e=document.getElementById('err'+step);
+  e.className=ok?'err-msg':'err-msg show';
   return ok;
 }
 
+// ════════════════════════════════════════════════════
+//  SEARCH PICKERS
+// ════════════════════════════════════════════════════
 function initPicker(key) {
-  var input = document.getElementById(key+'Input');
-  var drop  = document.getElementById(key+'Drop');
-  var opts  = drop.querySelectorAll('.pi-opt');
-  var empty = drop.querySelector('.pi-empty');
-  var xBtn  = document.getElementById(key+'X');
-
-  function filter() {
-    var q = input.value.trim().toLowerCase();
-    xBtn.style.display = q ? 'inline' : 'none';
-    var any = false;
-    opts.forEach(function(o) {
-      var txt = o.getAttribute('data-v');
-      var match = txt.toLowerCase().indexOf(q) > -1;
-      o.style.display = match ? '' : 'none';
-      if (match) {
-        any = true;
-        if (q) {
-          var re = new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
-          o.innerHTML = txt.replace(re,'<mark>$1</mark>');
-        } else {
-          o.textContent = txt;
-        }
-      }
+  var input=document.getElementById(key+'Input'),drop=document.getElementById(key+'Drop'),opts=drop.querySelectorAll('.pi-opt'),empty=drop.querySelector('.pi-empty'),xBtn=document.getElementById(key+'X');
+  function filter(){
+    var q=input.value.trim().toLowerCase();
+    xBtn.style.display=q?'inline':'none';
+    var any=false;
+    opts.forEach(function(o){
+      var txt=o.getAttribute('data-v'),match=txt.toLowerCase().indexOf(q)>-1;
+      o.style.display=match?'':'none';
+      if(match){any=true;if(q){var re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');o.innerHTML=txt.replace(re,'<mark>$1</mark>');}else{o.textContent=txt;}}
     });
-    empty.style.display = any ? 'none' : 'block';
+    empty.style.display=any?'none':'block';
     drop.classList.add('open');
   }
-
-  input.addEventListener('input', filter);
-  input.addEventListener('focus', function() {
-    opts.forEach(function(o){ o.style.display=''; o.textContent=o.getAttribute('data-v'); });
-    empty.style.display = 'none';
-    drop.classList.add('open');
-  });
-
-  opts.forEach(function(o) {
-    o.addEventListener('mousedown', function(e) {
-      e.preventDefault();
-      var v = this.getAttribute('data-v');
-      document.getElementById(key+'Val').value = v;
-      input.value = '';
-      xBtn.style.display = 'none';
-      document.getElementById(key+'BadgeTxt').textContent = v;
-      document.getElementById(key+'Badge').classList.add('show');
-      drop.classList.remove('open');
-    });
-  });
+  input.addEventListener('input',filter);
+  input.addEventListener('focus',function(){opts.forEach(function(o){o.style.display='';o.textContent=o.getAttribute('data-v');});empty.style.display='none';drop.classList.add('open');});
+  opts.forEach(function(o){o.addEventListener('mousedown',function(e){e.preventDefault();var v=this.getAttribute('data-v');document.getElementById(key+'Val').value=v;input.value='';xBtn.style.display='none';document.getElementById(key+'BadgeTxt').textContent=v;document.getElementById(key+'Badge').classList.add('show');drop.classList.remove('open');});});
 }
+function clearPicker(key){document.getElementById(key+'Val').value='';document.getElementById(key+'Input').value='';document.getElementById(key+'X').style.display='none';document.getElementById(key+'Badge').classList.remove('show');var drop=document.getElementById(key+'Drop');drop.classList.remove('open');drop.querySelectorAll('.pi-opt').forEach(function(o){o.style.display='';o.textContent=o.getAttribute('data-v');});drop.querySelector('.pi-empty').style.display='none';}
+function changePicker(key){document.getElementById(key+'Badge').classList.remove('show');document.getElementById(key+'Val').value='';document.getElementById(key+'Input').focus();}
+document.addEventListener('click',function(e){['rgn','csr'].forEach(function(key){var w=document.getElementById(key+'Wrap');if(w&&!w.contains(e.target))document.getElementById(key+'Drop').classList.remove('open');});});
 
-function clearPicker(key) {
-  document.getElementById(key+'Val').value = '';
-  document.getElementById(key+'Input').value = '';
-  document.getElementById(key+'X').style.display = 'none';
-  document.getElementById(key+'Badge').classList.remove('show');
-  var drop = document.getElementById(key+'Drop');
-  drop.classList.remove('open');
-  drop.querySelectorAll('.pi-opt').forEach(function(o){ o.style.display=''; o.textContent=o.getAttribute('data-v'); });
-  drop.querySelector('.pi-empty').style.display = 'none';
-}
-
-function changePicker(key) {
-  document.getElementById(key+'Badge').classList.remove('show');
-  document.getElementById(key+'Val').value = '';
-  document.getElementById(key+'Input').focus();
-}
-
-document.addEventListener('click', function(e) {
-  ['rgn','csr'].forEach(function(key) {
-    var wrap = document.getElementById(key+'Wrap');
-    if (wrap && !wrap.contains(e.target)) {
-      document.getElementById(key+'Drop').classList.remove('open');
-    }
-  });
-});
-
-function startLocation() {
-  if (!navigator.geolocation) { showLocErr('Geolocation not supported by this browser.'); return; }
-  document.getElementById('locScanning').style.display = 'flex';
-  document.getElementById('locCaptured').style.display = 'none';
-  document.getElementById('locErrBox').style.display   = 'none';
-  document.getElementById('locDetails').classList.remove('show');
-  document.getElementById('locBox').className = 'loc-box';
-  document.getElementById('locStatus').textContent = 'Acquiring GPS signal...';
-  document.getElementById('locDetail').textContent = 'Allow location access when prompted';
-  document.getElementById('locDetail').className = 'loc-pulse';
-  locData = {lat:null,lng:null,acc:null,addr:null};
-  bestAcc = Infinity;
-  if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
-
-  watchId = navigator.geolocation.watchPosition(
-    function(pos) {
-      var lat = pos.coords.latitude, lng = pos.coords.longitude, acc = Math.round(pos.coords.accuracy);
-      if (acc < bestAcc) {
-        bestAcc = acc;
-        locData.lat = lat.toFixed(6); locData.lng = lng.toFixed(6); locData.acc = acc;
-        document.getElementById('dLat').textContent = locData.lat;
-        document.getElementById('dLng').textContent = locData.lng;
-        document.getElementById('dAcc').textContent = acc;
-        document.getElementById('locDetails').classList.add('show');
-        document.getElementById('locScanning').style.display = 'none';
-        document.getElementById('locCaptured').style.display = 'flex';
-        document.getElementById('locBox').className = 'loc-box locked';
-        var lbl = acc<=20?'Excellent':acc<=50?'Good':acc<=100?'Moderate':'Improving...';
-        document.getElementById('locAddr').textContent = 'Accuracy: +/-'+acc+'m — '+lbl;
-        reverseGeo(locData.lat, locData.lng);
-        if (acc <= 20) { navigator.geolocation.clearWatch(watchId); watchId = null; }
-      }
+// ════════════════════════════════════════════════════
+//  LOCATION
+// ════════════════════════════════════════════════════
+function startLocation(){
+  if(!navigator.geolocation){showLocErr('Geolocation not supported.');return;}
+  document.getElementById('locScanning').style.display='flex';document.getElementById('locCaptured').style.display='none';document.getElementById('locErrBox').style.display='none';document.getElementById('locDetails').classList.remove('show');document.getElementById('locBox').className='loc-box';document.getElementById('locStatus').textContent='Acquiring GPS signal...';document.getElementById('locDetail').textContent='Allow location access when prompted';document.getElementById('locDetail').className='loc-pulse';
+  locData={lat:null,lng:null,acc:null,addr:null};bestAcc=Infinity;
+  if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null;}
+  watchId=navigator.geolocation.watchPosition(
+    function(pos){
+      var lat=pos.coords.latitude,lng=pos.coords.longitude,acc=Math.round(pos.coords.accuracy);
+      if(acc<bestAcc){bestAcc=acc;locData.lat=lat.toFixed(6);locData.lng=lng.toFixed(6);locData.acc=acc;document.getElementById('dLat').textContent=locData.lat;document.getElementById('dLng').textContent=locData.lng;document.getElementById('dAcc').textContent=acc;document.getElementById('locDetails').classList.add('show');document.getElementById('locScanning').style.display='none';document.getElementById('locCaptured').style.display='flex';document.getElementById('locBox').className='loc-box locked';var lbl=acc<=20?'Excellent':acc<=50?'Good':acc<=100?'Moderate':'Improving...';document.getElementById('locAddr').textContent='Accuracy: +/-'+acc+'m \u2014 '+lbl;reverseGeo(locData.lat,locData.lng);if(acc<=20){navigator.geolocation.clearWatch(watchId);watchId=null;}}
     },
-    function(err) {
-      navigator.geolocation.clearWatch(watchId); watchId = null;
-      var msg = 'Could not get your location.';
-      if (err.code===1) msg = 'Permission denied. Go to Settings > Browser > Location, allow access, then tap Retry.';
-      if (err.code===2) msg = 'GPS unavailable. Move to an open area and tap Retry.';
-      if (err.code===3) msg = 'Location timed out. Tap Retry.';
-      showLocErr(msg);
-    },
-    {enableHighAccuracy:true, timeout:30000, maximumAge:0}
+    function(err){navigator.geolocation.clearWatch(watchId);watchId=null;var msg='Could not get location.';if(err.code===1)msg='Permission denied. Go to phone Settings > Browser > Location and allow access, then tap Retry.';if(err.code===2)msg='GPS unavailable. Move to an open area and tap Retry.';if(err.code===3)msg='Timed out. Tap Retry.';showLocErr(msg);},
+    {enableHighAccuracy:true,timeout:30000,maximumAge:0}
   );
 }
+function showLocErr(msg){document.getElementById('locScanning').style.display='none';document.getElementById('locCaptured').style.display='none';document.getElementById('locErrBox').style.display='block';document.getElementById('locErrMsg').textContent=msg;document.getElementById('locBox').className='loc-box loc-err-state';}
+function reverseGeo(lat,lng){fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lng+'&format=json').then(function(r){return r.json();}).then(function(d){if(d&&d.display_name){locData.addr=d.display_name;var s=d.display_name.split(',').slice(0,3).join(', ');document.getElementById('locAddr').textContent=s+' (+/-'+locData.acc+'m)';}}).catch(function(){});}
 
-function showLocErr(msg) {
-  document.getElementById('locScanning').style.display = 'none';
-  document.getElementById('locCaptured').style.display = 'none';
-  document.getElementById('locErrBox').style.display = 'block';
-  document.getElementById('locErrMsg').textContent = msg;
-  document.getElementById('locBox').className = 'loc-box loc-err-state';
+// ════════════════════════════════════════════════════
+//  SUBMIT
+// ════════════════════════════════════════════════════
+function submitForm(){
+  if(!validate(4))return;
+  var btn=document.getElementById('submitBtn');btn.disabled=true;btn.innerHTML='<span class="spin"></span>Saving...';
+  var products=Array.from(document.querySelectorAll('input[name="products"]:checked')).map(function(e){return e.value;}).join(', ');
+  var payload={visitDate:document.getElementById('visitDate').value,region:document.getElementById('rgnVal').value,csrName:document.getElementById('csrVal').value,outletName:document.getElementById('outletName').value.trim(),customerStatus:(document.querySelector('input[name="custStatus"]:checked')||{}).value||'',contactPerson:document.getElementById('contactPerson').value.trim(),telephone:document.getElementById('telephone').value.trim(),distributor:document.getElementById('distributor').value.trim(),outletType:(document.querySelector('input[name="outletType"]:checked')||{}).value||'',products:products,orderGenerated:document.getElementById('orderAmt').value.trim(),comment:document.getElementById('comment').value.trim(),latitude:locData.lat,longitude:locData.lng,accuracy:locData.acc,locationAddress:locData.addr||'',signedBy:document.getElementById('signedBy').value.trim()};
+  fetch(APPS_SCRIPT_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload),headers:{'Content-Type':'application/json'}}).then(function(){showSuccess();}).catch(function(){btn.disabled=false;btn.innerHTML='Submit Visit &#10003;';var e=document.getElementById('err4');e.textContent='Network error. Check connection and try again.';e.className='err-msg show';});
+}
+function showSuccess(){document.getElementById('step-4').classList.remove('active');document.getElementById('success-screen').style.display='block';document.getElementById('progWrap').style.display='none';window.scrollTo({top:0,behavior:'smooth'});}
+function resetForm(){document.getElementById('success-screen').style.display='none';document.getElementById('progWrap').style.display='block';document.querySelectorAll('input[type=text],input[type=tel],input[type=number],textarea').forEach(function(el){el.value='';});document.querySelectorAll('input[type=radio],input[type=checkbox]').forEach(function(el){el.checked=false;});document.getElementById('visitDate').value=new Date().toISOString().split('T')[0];document.getElementById('submitBtn').disabled=false;document.getElementById('submitBtn').innerHTML='Submit Visit &#10003;';document.querySelectorAll('.err-msg').forEach(function(el){el.className='err-msg';});clearPicker('rgn');clearPicker('csr');if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null;}cur=1;document.getElementById('step-1').classList.add('active');updateProg();window.scrollTo({top:0,behavior:'smooth'});startLocation();}
+
+// ════════════════════════════════════════════════════
+//  DASHBOARD DATA
+// ════════════════════════════════════════════════════
+window.allRows = null;
+window.filteredRows = null;
+window.charts = {};
+
+function loadDashboard() {
+  var btn = document.getElementById('refreshBtn');
+  if (btn) { btn.classList.add('spinning'); btn.disabled = true; }
+  var btn2 = document.getElementById('refreshBtn2');
+  if (btn2) { btn2.classList.add('spinning'); btn2.disabled = true; }
+  document.getElementById('dbContent').innerHTML = '<div class="db-loading"><div class="spin-lg"></div><div>Fetching data from Google Sheet...</div></div>';
+  document.getElementById('tableContent').innerHTML = '<div class="db-loading"><div class="spin-lg"></div><div>Fetching records...</div></div>';
+
+  fetch(APPS_SCRIPT_URL + '?action=getData')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
+      if (btn2) { btn2.classList.remove('spinning'); btn2.disabled = false; }
+      if (data.error) { showDbError(data.error); return; }
+      window.allRows = data.rows || [];
+      populateFilters(window.allRows);
+      applyFilters();
+      var now = new Date().toLocaleTimeString('en-KE',{hour:'2-digit',minute:'2-digit'});
+      document.getElementById('dbLastUpdated').textContent = 'Last updated: ' + now + ' \u2014 ' + window.allRows.length + ' total records';
+    })
+    .catch(function(err) {
+      if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
+      if (btn2) { btn2.classList.remove('spinning'); btn2.disabled = false; }
+      showDbError('Could not fetch data. Make sure the Apps Script is deployed correctly and the URL is correct.');
+    });
 }
 
-function reverseGeo(lat, lng) {
-  fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lng+'&format=json')
-    .then(function(r){return r.json();})
-    .then(function(d){
-      if (d && d.display_name) {
-        locData.addr = d.display_name;
-        var s = d.display_name.split(',').slice(0,3).join(', ');
-        document.getElementById('locAddr').textContent = s+' (+/-'+locData.acc+'m)';
-      }
-    }).catch(function(){});
+function showDbError(msg) {
+  var html = '<div class="db-empty"><div class="db-empty-ico">⚠️</div><div style="font-weight:600;color:var(--red);margin-bottom:6px">Could not load data</div><div style="font-size:12px;color:var(--muted);max-width:300px;margin:0 auto">'+msg+'</div></div>';
+  document.getElementById('dbContent').innerHTML = html;
+  document.getElementById('tableContent').innerHTML = html;
 }
 
-function submitForm() {
-  if (!validate(4)) return;
-  var btn = document.getElementById('submitBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spin"></span>Saving...';
-  var products = Array.from(document.querySelectorAll('input[name="products"]:checked')).map(function(e){return e.value;}).join(', ');
-  var payload = {
-    visitDate:       document.getElementById('visitDate').value,
-    region:          document.getElementById('rgnVal').value,
-    csrName:         document.getElementById('csrVal').value,
-    outletName:      document.getElementById('outletName').value.trim(),
-    customerStatus:  (document.querySelector('input[name="custStatus"]:checked')||{}).value||'',
-    contactPerson:   document.getElementById('contactPerson').value.trim(),
-    telephone:       document.getElementById('telephone').value.trim(),
-    distributor:     document.getElementById('distributor').value.trim(),
-    outletType:      (document.querySelector('input[name="outletType"]:checked')||{}).value||'',
-    products:        products,
-    orderGenerated:  document.getElementById('orderAmt').value.trim(),
-    comment:         document.getElementById('comment').value.trim(),
-    latitude:        locData.lat,
-    longitude:       locData.lng,
-    accuracy:        locData.acc,
-    locationAddress: locData.addr||'',
-    signedBy:        document.getElementById('signedBy').value.trim()
-  };
-  fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    body: JSON.stringify(payload),
-    headers: {'Content-Type': 'application/json'}
-  })
-  .then(function() {
-    showSuccess();
-  })
-  .catch(function() {
-    btn.disabled = false;
-    btn.innerHTML = 'Submit Visit &#10003;';
-    var e = document.getElementById('err4');
-    e.textContent = 'Network error. Check your internet connection and try again.';
-    e.className = 'err-msg show';
+function populateFilters(rows) {
+  var csrs = {}, regions = {}, months = {};
+  rows.forEach(function(r) {
+    if (r['CSR Name']) csrs[r['CSR Name']] = true;
+    if (r['Region'])   regions[r['Region']] = true;
+    var d = r['Date of Market Visit'];
+    if (d) { var m = String(d).substring(0,7); if (m) months[m] = true; }
+  });
+  var fCsr = document.getElementById('filterCSR');
+  var fRgn = document.getElementById('filterRegion');
+  var fMon = document.getElementById('filterMonth');
+  fCsr.innerHTML = '<option value="">All CSRs</option>';
+  Object.keys(csrs).sort().forEach(function(c){ fCsr.innerHTML += '<option>'+c+'</option>'; });
+  fRgn.innerHTML = '<option value="">All Regions</option>';
+  Object.keys(regions).sort().forEach(function(r){ fRgn.innerHTML += '<option>'+r+'</option>'; });
+  fMon.innerHTML = '<option value="">All Time</option>';
+  Object.keys(months).sort().reverse().forEach(function(m){
+    var parts = m.split('-');
+    var label = new Date(parts[0], parts[1]-1, 1).toLocaleString('default',{month:'long',year:'numeric'});
+    fMon.innerHTML += '<option value="'+m+'">'+label+'</option>';
   });
 }
 
-function showSuccess() {
-  document.getElementById('step-4').classList.remove('active');
-  document.getElementById('success').style.display='block';
-  document.querySelector('.prog-wrap').style.display='none';
-  window.scrollTo({top:0,behavior:'smooth'});
+function applyFilters() {
+  var csr = document.getElementById('filterCSR').value;
+  var rgn = document.getElementById('filterRegion').value;
+  var mon = document.getElementById('filterMonth').value;
+  window.filteredRows = (window.allRows || []).filter(function(r) {
+    if (csr && r['CSR Name'] !== csr) return false;
+    if (rgn && r['Region'] !== rgn) return false;
+    if (mon && String(r['Date of Market Visit']).substring(0,7) !== mon) return false;
+    return true;
+  });
+  renderDashboard(window.filteredRows);
+  renderTable(window.filteredRows);
 }
 
-function resetForm() {
-  document.getElementById('success').style.display='none';
-  document.querySelector('.prog-wrap').style.display='block';
-  document.querySelectorAll('input[type=text],input[type=tel],input[type=number],textarea').forEach(function(el){el.value='';});
-  document.querySelectorAll('input[type=radio],input[type=checkbox]').forEach(function(el){el.checked=false;});
-  document.getElementById('visitDate').value=new Date().toISOString().split('T')[0];
-  document.getElementById('submitBtn').disabled=false;
-  document.getElementById('submitBtn').innerHTML='Submit Visit &#10003;';
-  document.querySelectorAll('.err-msg').forEach(function(el){el.className='err-msg';});
-  clearPicker('rgn'); clearPicker('csr');
-  if (watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null;}
-  cur=1;
-  document.getElementById('step-1').classList.add('active');
-  updateProg();
-  window.scrollTo({top:0,behavior:'smooth'});
-  startLocation();
+function clearFilters() {
+  document.getElementById('filterCSR').value = '';
+  document.getElementById('filterRegion').value = '';
+  document.getElementById('filterMonth').value = '';
+  applyFilters();
+}
+
+// ════════════════════════════════════════════════════
+//  RENDER DASHBOARD
+// ════════════════════════════════════════════════════
+function renderDashboard(rows) {
+  if (!rows || rows.length === 0) {
+    document.getElementById('dbContent').innerHTML = '<div class="db-empty"><div class="db-empty-ico">📭</div><div style="font-weight:600;margin-bottom:6px">No data yet</div><div style="font-size:12px;color:var(--muted)">Submit your first market visit using the form to see analytics here.</div></div>';
+    return;
+  }
+
+  // ── Compute stats
+  var totalVisits = rows.length;
+  var totalOrder = 0;
+  var csrCounts = {}, regionCounts = {}, outletCounts = {}, productCounts = {}, monthOrders = {}, newCount = 0;
+
+  rows.forEach(function(r) {
+    var amt = parseFloat(String(r['Order Generated (KSH)']).replace(/,/g,'')) || 0;
+    totalOrder += amt;
+    if (r['CSR Name']) csrCounts[r['CSR Name']] = (csrCounts[r['CSR Name']]||0) + 1;
+    if (r['Region'])   regionCounts[r['Region']] = (regionCounts[r['Region']]||0) + 1;
+    if (r['Outlet Type']) outletCounts[r['Outlet Type']] = (outletCounts[r['Outlet Type']]||0) + 1;
+    if (r['NKCC Products']) {
+      r['NKCC Products'].split(',').forEach(function(p) {
+        var t = p.trim();
+        if (t && t !== 'None') productCounts[t] = (productCounts[t]||0) + 1;
+      });
+    }
+    var d = String(r['Date of Market Visit']).substring(0,7);
+    if (d) monthOrders[d] = (monthOrders[d]||0) + amt;
+    if (r['New / Existing Customer'] === 'New') newCount++;
+  });
+
+  var activeCsrs = Object.keys(csrCounts).length;
+  var avgOrder = totalVisits > 0 ? Math.round(totalOrder / totalVisits) : 0;
+
+  // ── Build HTML
+  var html = '';
+
+  // Stat cards
+  html += '<div class="stats-grid">';
+  html += statCard('green','&#128203;',totalVisits,'Total Visits','All recorded visits');
+  html += statCard('amber','&#128178;','KSH '+fmtNum(Math.round(totalOrder)),'Total Orders','Combined order value');
+  html += statCard('blue','&#128100;',activeCsrs,'Active CSRs','CSRs with visits');
+  html += statCard('purple','&#127381;',newCount,'New Customers','First-time outlets');
+  html += '</div>';
+
+  // Orders by Month
+  var months = Object.keys(monthOrders).sort();
+  if (months.length > 0) {
+    html += '<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title">Orders by Month</div><div class="chart-card-sub">KSH value trend</div></div></div><div class="chart-wrap"><canvas id="chartMonths"></canvas></div></div>';
+  }
+
+  // Visits by Region + Outlet type (side by side feel)
+  html += '<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title">Visits by Region</div><div class="chart-card-sub">Distribution across territories</div></div></div><div class="chart-wrap"><canvas id="chartRegion"></canvas></div></div>';
+  html += '<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title">Outlet Types</div><div class="chart-card-sub">Channel breakdown</div></div></div><div class="chart-wrap"><canvas id="chartOutlet"></canvas></div></div>';
+
+  // CSR Leaderboard
+  var csrSorted = Object.entries(csrCounts).sort(function(a,b){return b[1]-a[1];});
+  var maxCount = csrSorted.length > 0 ? csrSorted[0][1] : 1;
+  html += '<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title">CSR Leaderboard</div><div class="chart-card-sub">Visits per representative</div></div></div>';
+  csrSorted.forEach(function(pair, i) {
+    var rankCls = i===0?'gold':i===1?'silver':i===2?'bronze':'';
+    var pct = Math.round((pair[1]/maxCount)*100);
+    html += '<div class="lb-row"><div class="lb-rank '+rankCls+'">'+(i+1)+'</div><div class="lb-name">'+pair[0]+'</div><div class="lb-bar-wrap"><div class="lb-bar"><div class="lb-bar-fill" style="width:'+pct+'%"></div></div></div><div class="lb-count">'+pair[1]+'</div></div>';
+  });
+  html += '</div>';
+
+  // Product popularity
+  var prodSorted = Object.entries(productCounts).sort(function(a,b){return b[1]-a[1];});
+  if (prodSorted.length > 0) {
+    html += '<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title">Product Presence</div><div class="chart-card-sub">How often each product appears</div></div></div><div class="product-grid">';
+    prodSorted.forEach(function(pair) {
+      html += '<div class="prod-pill"><div class="prod-pill-name">'+pair[0]+'</div><div class="prod-pill-count">'+pair[1]+' visits</div></div>';
+    });
+    html += '</div></div>';
+  }
+
+  document.getElementById('dbContent').innerHTML = html;
+
+  // ── Draw charts (after HTML is injected)
+  setTimeout(function() {
+    var COLORS = ['#0d6e3f','#f5a623','#2563eb','#7c3aed','#0891b2','#d94f4f','#16a34a','#ea580c'];
+
+    // Monthly orders chart
+    if (months.length > 0) {
+      destroyChart('chartMonths');
+      var ctx = document.getElementById('chartMonths').getContext('2d');
+      window.charts['chartMonths'] = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: months.map(function(m){ var p=m.split('-');return new Date(p[0],p[1]-1,1).toLocaleString('default',{month:'short',year:'2-digit'}); }),
+          datasets: [{label:'KSH',data:months.map(function(m){return monthOrders[m];}),backgroundColor:'rgba(13,110,63,0.8)',borderRadius:6,borderSkipped:false}]
+        },
+        options: {responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return 'KSH '+fmtNum(v);}}}}}
+      });
+    }
+
+    // Region donut
+    var rKeys = Object.keys(regionCounts), rVals = rKeys.map(function(k){return regionCounts[k];});
+    destroyChart('chartRegion');
+    var ctx2 = document.getElementById('chartRegion').getContext('2d');
+    window.charts['chartRegion'] = new Chart(ctx2, {
+      type:'doughnut',
+      data:{labels:rKeys,datasets:[{data:rVals,backgroundColor:COLORS,borderWidth:2,borderColor:'#fff'}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:12,font:{size:11}}}}}
+    });
+
+    // Outlet bar
+    var oKeys = Object.keys(outletCounts).sort(function(a,b){return outletCounts[b]-outletCounts[a];});
+    var oVals = oKeys.map(function(k){return outletCounts[k];});
+    destroyChart('chartOutlet');
+    var ctx3 = document.getElementById('chartOutlet').getContext('2d');
+    window.charts['chartOutlet'] = new Chart(ctx3, {
+      type:'bar',
+      data:{labels:oKeys,datasets:[{label:'Visits',data:oVals,backgroundColor:oKeys.map(function(_,i){return COLORS[i%COLORS.length];}),borderRadius:6,borderSkipped:false}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}}},indexAxis:'y'}
+    });
+  }, 50);
+}
+
+function destroyChart(id) {
+  if (window.charts[id]) { window.charts[id].destroy(); delete window.charts[id]; }
+}
+
+function statCard(color, ico, val, label, sub) {
+  return '<div class="stat-card '+color+'"><div class="stat-ico">'+ico+'</div><div class="stat-val">'+val+'</div><div class="stat-label">'+label+'</div><div style="font-size:10px;color:var(--muted);margin-top:2px">'+sub+'</div></div>';
+}
+
+function fmtNum(n) {
+  return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
+}
+
+// ════════════════════════════════════════════════════
+//  RENDER TABLE
+// ════════════════════════════════════════════════════
+function renderTable(rows) {
+  document.getElementById('tableCount').textContent = rows.length + ' records';
+  if (!rows || rows.length === 0) {
+    document.getElementById('tableContent').innerHTML = '<div class="db-empty"><div class="db-empty-ico">📭</div><div style="font-weight:600;margin-bottom:6px">No records found</div><div style="font-size:12px;color:var(--muted)">No visits match the selected filters.</div></div>';
+    return;
+  }
+  var sorted = rows.slice().sort(function(a,b){ return String(b['Timestamp']||'').localeCompare(String(a['Timestamp']||'')); });
+  var html = '<div class="card"><div class="table-wrap"><table><thead><tr><th>Date</th><th>CSR</th><th>Outlet</th><th>Region</th><th>Type</th><th>Status</th><th>Order (KSH)</th></tr></thead><tbody>';
+  sorted.forEach(function(r) {
+    var status = r['New / Existing Customer']||'';
+    var badgeCls = status==='New'?'badge-new':'badge-existing';
+    html += '<tr>'
+      +'<td>'+fmtDate(r['Date of Market Visit'])+'</td>'
+      +'<td>'+shortName(r['CSR Name']||'')+'</td>'
+      +'<td style="max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+((r['Outlet / Customer Name']||'').substring(0,20))+'</td>'
+      +'<td>'+((r['Region']||'').replace('Nairobi ',''))+'</td>'
+      +'<td><span class="badge badge-out">'+((r['Outlet Type']||'').substring(0,10))+'</span></td>'
+      +'<td><span class="badge '+badgeCls+'">'+status+'</span></td>'
+      +'<td style="font-weight:700;color:var(--green-dark)">'+fmtNum(parseFloat(String(r['Order Generated (KSH)']||0).replace(/,/g,''))||0)+'</td>'
+      +'</tr>';
+  });
+  html += '</tbody></table></div></div>';
+  document.getElementById('tableContent').innerHTML = html;
+}
+
+function fmtDate(d) {
+  if (!d) return '--';
+  var s = String(d);
+  if (s.length >= 10) return s.substring(0,10);
+  return s;
+}
+
+function shortName(n) {
+  var parts = n.split(' ');
+  if (parts.length >= 2) return parts[0]+' '+parts[1].charAt(0)+'.';
+  return n;
 }
 </script>
 </body>
