@@ -147,19 +147,22 @@ select.form-select option[value=""]{color:#b0b8c1}
 .photo-header-text span{font-size:11px;color:var(--muted)}
 
 /* Single photo zone */
-.photo-zone{position:relative;width:100%;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#f4f6f4;border:2px dashed var(--border);cursor:pointer;transition:all .25s;-webkit-tap-highlight-color:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.photo-zone{position:relative;width:100%;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#f4f6f4;border:2px dashed var(--border);transition:all .25s}
 .photo-zone:hover{border-color:var(--green);background:var(--green-lt)}
 .photo-zone.has-photo{border-style:solid;border-color:var(--green);background:#000}
-.photo-zone-ico{font-size:32px;line-height:1;pointer-events:none}
-.photo-zone-lbl{font-size:13px;font-weight:600;color:var(--muted);pointer-events:none}
-.photo-zone-sub{font-size:11px;color:#b0b8c1;pointer-events:none}
-.photo-zone img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.photo-zone .photo-remove{position:absolute;top:8px;right:8px;width:28px;height:28px;background:rgba(217,79,79,.9);border-radius:50%;color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center;z-index:2;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .15s;backdrop-filter:blur(4px)}
+.photo-zone-label{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;width:100%;height:100%;cursor:pointer;-webkit-tap-highlight-color:transparent;position:relative;z-index:1}
+.photo-zone-ico{font-size:32px;line-height:1}
+.photo-zone-lbl{font-size:13px;font-weight:600;color:var(--muted)}
+.photo-zone-sub{font-size:11px;color:#b0b8c1}
+.photo-zone img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.photo-zone .photo-remove{position:absolute;top:8px;right:8px;width:32px;height:32px;background:rgba(217,79,79,.92);border-radius:50%;color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center;z-index:3;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .15s;backdrop-filter:blur(4px);border:none}
 .photo-zone .photo-remove:hover{transform:scale(1.1)}
-.photo-zone .photo-ok-badge{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:rgba(9,77,44,.8);color:#fff;font-size:11px;font-weight:600;border-radius:20px;padding:4px 12px;backdrop-filter:blur(4px);white-space:nowrap}
+.photo-zone .photo-ok-badge{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:rgba(9,77,44,.85);color:#fff;font-size:11px;font-weight:600;border-radius:20px;padding:5px 14px;backdrop-filter:blur(4px);white-space:nowrap;z-index:3}
+.photo-zone .retake-label{position:absolute;inset:0;z-index:2;cursor:pointer;display:none}
+.photo-zone.has-photo .retake-label{display:block}
 
 /* Camera input hidden */
-input[type=file].cam-input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer}
+input[type=file].cam-input{display:none}
 
 /* Photo guidelines strip */
 .photo-guide{display:flex;gap:6px;margin-top:10px;overflow-x:auto;padding-bottom:2px}
@@ -439,10 +442,12 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlpEUQFTD7nVF2-M
         </div>
 
         <!-- Single photo zone -->
-        <div class="photo-zone" id="photoZone" onclick="triggerPhoto()">
-          <div class="photo-zone-ico">📷</div>
-          <div class="photo-zone-lbl">Tap to take outlet photo</div>
-          <div class="photo-zone-sub">Uses your rear camera</div>
+        <div class="photo-zone" id="photoZone">
+          <label for="photoInput0" class="photo-zone-label" id="photoZoneLabel">
+            <div class="photo-zone-ico" id="pzIco">📷</div>
+            <div class="photo-zone-lbl" id="pzLbl">Tap to take outlet photo</div>
+            <div class="photo-zone-sub" id="pzSub">Uses your rear camera</div>
+          </label>
           <input type="file" class="cam-input" id="photoInput0" accept="image/*" capture="environment" onchange="handlePhoto(event)"/>
         </div>
 
@@ -599,30 +604,38 @@ window.addEventListener('DOMContentLoaded', function() {
 // ════════════════════════════════════════════════════
 var photoData = null; // single base64 string or null
 
-function triggerPhoto() {
-  document.getElementById('photoInput0').click();
-}
-
 function handlePhoto(event) {
   var file = event.target.files && event.target.files[0];
   if (!file) return;
+
+  // Show processing state
+  var zone = document.getElementById('photoZone');
+  zone.style.opacity = '0.6';
+
   var reader = new FileReader();
   reader.onload = function(e) {
     var img = new Image();
     img.onload = function() {
+      // Compress to max 1024px
       var canvas = document.createElement('canvas');
-      var maxW = 800, maxH = 800;
+      var maxW = 1024, maxH = 1024;
       var w = img.width, h = img.height;
       if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
       if (h > maxH) { w = Math.round(w * maxH / h); h = maxH; }
       canvas.width = w; canvas.height = h;
       canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      photoData = canvas.toDataURL('image/jpeg', 0.75);
+      photoData = canvas.toDataURL('image/jpeg', 0.78);
+      zone.style.opacity = '1';
       renderPhotoZone(photoData);
       updatePhotoSummary();
-      // Clear required error highlight if it was shown
       document.getElementById('photoSection').classList.remove('photo-required-err');
+
+      // Scroll photo into view so CSR can see confirmation, then they continue
+      setTimeout(function() {
+        zone.scrollIntoView({behavior:'smooth', block:'center'});
+      }, 120);
     };
+    img.onerror = function() { zone.style.opacity = '1'; };
     img.src = e.target.result;
   };
   reader.readAsDataURL(file);
@@ -630,46 +643,77 @@ function handlePhoto(event) {
 
 function renderPhotoZone(src) {
   var zone = document.getElementById('photoZone');
-  // Remove placeholder content
-  zone.querySelector('.photo-zone-ico').style.display = 'none';
-  zone.querySelector('.photo-zone-lbl').style.display = 'none';
-  zone.querySelector('.photo-zone-sub').style.display = 'none';
-  // Remove old overlays
-  var oldImg = zone.querySelector('img'); if (oldImg) oldImg.remove();
-  var oldBadge = zone.querySelector('.photo-ok-badge'); if (oldBadge) oldBadge.remove();
-  var oldRemove = zone.querySelector('.photo-remove'); if (oldRemove) oldRemove.remove();
-  // Insert photo
+
+  // Hide the initial label prompt
+  document.getElementById('pzIco').style.display = 'none';
+  document.getElementById('pzLbl').style.display = 'none';
+  document.getElementById('pzSub').style.display = 'none';
+  document.getElementById('photoZoneLabel').style.display = 'none';
+
+  // Remove any previous overlays
+  ['pzImg','pzOkBadge','pzRetakeLabel','pzRemoveBtn'].forEach(function(id) {
+    var el = document.getElementById(id); if (el) el.remove();
+  });
+
+  // Photo image
   var imgEl = document.createElement('img');
+  imgEl.id = 'pzImg';
   imgEl.src = src;
   zone.appendChild(imgEl);
-  // OK badge
+
+  // ✅ Confirmation badge
   var badge = document.createElement('div');
+  badge.id = 'pzOkBadge';
   badge.className = 'photo-ok-badge';
-  badge.textContent = '✅ Photo captured — tap to retake';
+  badge.textContent = '✅ Photo saved — tap to retake';
   zone.appendChild(badge);
-  // Remove button
-  var removeBtn = document.createElement('div');
+
+  // Retake label (invisible overlay, linked to file input)
+  var retakeLabel = document.createElement('label');
+  retakeLabel.id = 'pzRetakeLabel';
+  retakeLabel.className = 'retake-label';
+  retakeLabel.setAttribute('for', 'photoInput0');
+  retakeLabel.title = 'Tap to retake photo';
+  zone.appendChild(retakeLabel);
+
+  // ✕ Remove button
+  var removeBtn = document.createElement('button');
+  removeBtn.id = 'pzRemoveBtn';
   removeBtn.className = 'photo-remove';
+  removeBtn.type = 'button';
   removeBtn.innerHTML = '&#x2715;';
-  removeBtn.onclick = function(e) { e.stopPropagation(); removePhoto(); };
+  removeBtn.setAttribute('aria-label', 'Remove photo');
+  removeBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    removePhoto();
+  });
   zone.appendChild(removeBtn);
+
   zone.classList.add('has-photo');
-  // Keep onclick for retake
-  zone.onclick = function() { triggerPhoto(); };
 }
 
 function removePhoto() {
   photoData = null;
   var zone = document.getElementById('photoZone');
   zone.classList.remove('has-photo');
-  zone.querySelector('.photo-zone-ico').style.display = '';
-  zone.querySelector('.photo-zone-lbl').style.display = '';
-  zone.querySelector('.photo-zone-sub').style.display = '';
-  var img = zone.querySelector('img'); if (img) img.remove();
-  var badge = zone.querySelector('.photo-ok-badge'); if (badge) badge.remove();
-  var rb = zone.querySelector('.photo-remove'); if (rb) rb.remove();
-  document.getElementById('photoInput0').value = '';
-  zone.onclick = function() { triggerPhoto(); };
+  zone.style.opacity = '1';
+
+  // Restore prompt
+  document.getElementById('pzIco').style.display = '';
+  document.getElementById('pzLbl').style.display = '';
+  document.getElementById('pzSub').style.display = '';
+  document.getElementById('photoZoneLabel').style.display = '';
+
+  // Remove overlays
+  ['pzImg','pzOkBadge','pzRetakeLabel','pzRemoveBtn'].forEach(function(id) {
+    var el = document.getElementById(id); if (el) el.remove();
+  });
+
+  // Reset file input so same photo can be re-selected
+  var inp = document.getElementById('photoInput0');
+  inp.value = '';
+
   updatePhotoSummary();
 }
 
