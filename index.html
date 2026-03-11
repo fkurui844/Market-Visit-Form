@@ -137,6 +137,54 @@ select.form-select option[value=""]{color:#b0b8c1}
 #success-screen p{font-size:13px;color:var(--muted);margin-bottom:20px}
 
 /* ══════════════════════════════════════
+   PHOTO CAPTURE STYLES
+══════════════════════════════════════ */
+.photo-section{background:var(--surface);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.04)}
+.photo-header{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.photo-header-ico{width:36px;height:36px;background:linear-gradient(135deg,#0d6e3f,#16a34a);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.photo-header-text strong{display:block;font-size:13px;font-weight:700;color:var(--text)}
+.photo-header-text span{font-size:11px;color:var(--muted)}
+.photo-optional-badge{display:inline-block;background:var(--accent-lt);border:1px solid #fcd68a;border-radius:6px;padding:2px 7px;font-size:10px;font-weight:600;color:#7a4800;margin-left:6px;vertical-align:middle}
+
+/* Photo slots */
+.photo-slots{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px}
+.photo-slot{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;background:#f4f6f4;border:2px dashed var(--border);cursor:pointer;transition:all .25s;-webkit-tap-highlight-color:transparent}
+.photo-slot:hover{border-color:var(--green);background:var(--green-lt)}
+.photo-slot.has-photo{border-style:solid;border-color:var(--green)}
+.photo-slot-inner{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;pointer-events:none}
+.photo-slot-ico{font-size:22px;line-height:1}
+.photo-slot-lbl{font-size:9px;font-weight:600;color:var(--muted);text-align:center;line-height:1.2;padding:0 4px}
+.photo-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.photo-slot .photo-remove{position:absolute;top:4px;right:4px;width:20px;height:20px;background:rgba(217,79,79,.9);border-radius:50%;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;z-index:2;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .15s}
+.photo-slot .photo-remove:hover{transform:scale(1.15)}
+.photo-slot .photo-type-badge{position:absolute;bottom:0;left:0;right:0;background:rgba(9,77,44,.75);color:#fff;font-size:9px;font-weight:600;text-align:center;padding:3px 4px;backdrop-filter:blur(4px)}
+
+/* Camera input hidden */
+input[type=file].cam-input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer}
+
+/* Photo counter */
+.photo-counter{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding:8px 12px;background:var(--bg);border-radius:8px}
+.photo-counter-left{display:flex;align-items:center;gap:6px}
+.photo-counter-dots{display:flex;gap:4px}
+.pcdot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:background .3s}
+.pcdot.filled{background:var(--green)}
+.photo-counter-text{font-size:11px;color:var(--muted)}
+.photo-counter-text strong{color:var(--green-dark)}
+.photo-tip{font-size:10px;color:var(--muted);font-style:italic}
+
+/* Camera permission prompt */
+.cam-prompt{background:linear-gradient(135deg,#e6f4ed,#d4edd9);border:1.5px solid #b6dfc9;border-radius:10px;padding:13px;text-align:center;margin-top:14px}
+.cam-prompt-ico{font-size:28px;margin-bottom:6px}
+.cam-prompt p{font-size:12px;color:var(--green-dark);margin-bottom:10px;font-weight:500}
+.btn-cam-start{display:inline-flex;align-items:center;gap:6px;background:var(--green);color:#fff;border:none;border-radius:8px;padding:9px 18px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 12px rgba(13,110,63,.3);transition:all .2s}
+.btn-cam-start:hover{background:var(--green-dark)}
+
+/* Photo guidelines strip */
+.photo-guide{display:flex;gap:6px;margin-top:10px;overflow-x:auto;padding-bottom:2px}
+.guide-chip{display:flex;align-items:center;gap:5px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:5px 10px;font-size:10px;color:var(--muted);white-space:nowrap;flex-shrink:0}
+.guide-chip .gc-ico{font-size:12px}
+
+/* ══════════════════════════════════════
    DASHBOARD STYLES
 ══════════════════════════════════════ */
 .db-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-top:4px}
@@ -354,7 +402,7 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlpEUQFTD7nVF2-M
         </div>
       </div>
 
-      <!-- ── CUSTOMERS SEEN ── NEW FIELD ── -->
+      <!-- CUSTOMERS SEEN -->
       <div class="card">
         <div class="field">
           <label>Customers Seen at this Outlet <span class="req">*</span></label>
@@ -395,6 +443,71 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlpEUQFTD7nVF2-M
       <div class="card">
         <div class="field"><label for="orderAmt">Order Generated (KSH) <span class="req">*</span></label><input type="number" id="orderAmt" placeholder="e.g. 5000" min="0"/></div>
       </div>
+
+      <!-- ══════════════════════════════════════
+           OUTLET PHOTO CAPTURE SECTION
+      ══════════════════════════════════════ -->
+      <div class="photo-section">
+        <div class="photo-header">
+          <div class="photo-header-ico">📸</div>
+          <div class="photo-header-text">
+            <strong>Outlet Photos <span class="photo-optional-badge">Optional</span></strong>
+            <span>Take up to 3 photos — shelf, signage, or outlet front</span>
+          </div>
+        </div>
+
+        <!-- Photo guidelines -->
+        <div class="photo-guide">
+          <div class="guide-chip"><span class="gc-ico">🏪</span> Outlet front</div>
+          <div class="guide-chip"><span class="gc-ico">🥛</span> NKCC shelf</div>
+          <div class="guide-chip"><span class="gc-ico">🏷️</span> Price tags</div>
+          <div class="guide-chip"><span class="gc-ico">🤝</span> With customer</div>
+          <div class="guide-chip"><span class="gc-ico">📦</span> Competitor shelf</div>
+        </div>
+
+        <!-- Photo slots grid -->
+        <div class="photo-slots" id="photoSlots">
+          <!-- Slot 1 -->
+          <div class="photo-slot" id="slot-0" onclick="triggerPhoto(0)">
+            <div class="photo-slot-inner">
+              <div class="photo-slot-ico">📷</div>
+              <div class="photo-slot-lbl">Tap to<br>take photo</div>
+            </div>
+            <input type="file" class="cam-input" id="photoInput0" accept="image/*" capture="environment" onchange="handlePhoto(event,0)"/>
+          </div>
+          <!-- Slot 2 -->
+          <div class="photo-slot" id="slot-1" onclick="triggerPhoto(1)" style="opacity:.5;pointer-events:none">
+            <div class="photo-slot-inner">
+              <div class="photo-slot-ico">➕</div>
+              <div class="photo-slot-lbl">Photo 2</div>
+            </div>
+            <input type="file" class="cam-input" id="photoInput1" accept="image/*" capture="environment" onchange="handlePhoto(event,1)"/>
+          </div>
+          <!-- Slot 3 -->
+          <div class="photo-slot" id="slot-2" onclick="triggerPhoto(2)" style="opacity:.5;pointer-events:none">
+            <div class="photo-slot-inner">
+              <div class="photo-slot-ico">➕</div>
+              <div class="photo-slot-lbl">Photo 3</div>
+            </div>
+            <input type="file" class="cam-input" id="photoInput2" accept="image/*" capture="environment" onchange="handlePhoto(event,2)"/>
+          </div>
+        </div>
+
+        <!-- Progress dots + count -->
+        <div class="photo-counter">
+          <div class="photo-counter-left">
+            <div class="photo-counter-dots">
+              <div class="pcdot" id="pcdot0"></div>
+              <div class="pcdot" id="pcdot1"></div>
+              <div class="pcdot" id="pcdot2"></div>
+            </div>
+            <div class="photo-counter-text"><strong id="photoCountTxt">0</strong> of 3 captured</div>
+          </div>
+          <div class="photo-tip" id="photoTip">Photos attach to the visit record</div>
+        </div>
+      </div>
+      <!-- END PHOTO SECTION -->
+
       <div class="err-msg" id="err3">Please fill in all required fields before continuing.</div>
       <div class="btn-row"><button class="btn btn-sec" onclick="prev(3)">&larr; Back</button><button class="btn btn-pri" onclick="next(3)">Continue &rarr;</button></div>
     </div>
@@ -428,6 +541,16 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlpEUQFTD7nVF2-M
           </div>
         </div>
       </div>
+
+      <!-- Photo summary on step 4 -->
+      <div id="photoSummaryCard" style="display:none" class="card">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <span style="font-size:16px">📸</span>
+          <span style="font-size:12px;font-weight:600;color:var(--text)">Photos attached to this visit</span>
+        </div>
+        <div id="photoSummaryGrid" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+      </div>
+
       <div class="card">
         <div class="field"><label for="signedBy">Sign Out with Your Name <span class="req">*</span></label><input type="text" id="signedBy" placeholder="Type your full name to confirm accuracy"/></div>
       </div>
@@ -458,8 +581,6 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlpEUQFTD7nVF2-M
       <div><div class="db-title">Dashboard</div><div class="db-subtitle" id="dbLastUpdated">Pull data from Google Sheet</div></div>
       <button class="refresh-btn" onclick="loadDashboard()" id="refreshBtn"><span class="ref-ico">&#8635;</span> Refresh</button>
     </div>
-
-    <!-- FILTERS -->
     <div class="filter-bar">
       <label>Filter:</label>
       <select id="filterCSR" onchange="applyFilters()"><option value="">All CSRs</option></select>
@@ -467,7 +588,6 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlpEUQFTD7nVF2-M
       <select id="filterMonth" onchange="applyFilters()"><option value="">All Time</option></select>
       <button class="filter-clear" onclick="clearFilters()">&#x2715; Clear</button>
     </div>
-
     <div id="dbContent">
       <div class="db-loading"><div class="spin-lg"></div><div>Loading data...</div></div>
     </div>
@@ -503,6 +623,8 @@ function switchPage(p) {
   if (p === 'dashboard' || p === 'table') {
     if (!window.allRows) loadDashboard();
   }
+  // Show photo summary on step 4 when navigating back
+  if (p === 'form') updatePhotoSummary();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -515,10 +637,162 @@ var watchId = null;
 var bestAcc = Infinity;
 var stepLabels = ['Visit Info','Customer Details','Products & Order','Notes & Sign-Off'];
 
+// Photo state — up to 3 photos stored as base64
+var photoData = [null, null, null];
+var photoLabels = ['Outlet / Shelf', 'Additional View', 'Extra Photo'];
+
 window.addEventListener('DOMContentLoaded', function() {
   document.getElementById('visitDate').value = new Date().toISOString().split('T')[0];
   startLocation();
 });
+
+// ════════════════════════════════════════════════════
+//  PHOTO CAPTURE
+// ════════════════════════════════════════════════════
+function triggerPhoto(index) {
+  document.getElementById('photoInput'+index).click();
+}
+
+function handlePhoto(event, index) {
+  var file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  // Compress & convert to base64
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var img = new Image();
+    img.onload = function() {
+      // Resize to max 800px wide to keep payload manageable
+      var canvas = document.createElement('canvas');
+      var maxW = 800, maxH = 800;
+      var w = img.width, h = img.height;
+      if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
+      if (h > maxH) { w = Math.round(w * maxH / h); h = maxH; }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      var compressed = canvas.toDataURL('image/jpeg', 0.75);
+      photoData[index] = compressed;
+      renderSlot(index, compressed);
+      updatePhotoCounter();
+      unlockNextSlot(index);
+      updatePhotoSummary();
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderSlot(index, src) {
+  var slot = document.getElementById('slot-'+index);
+  // Clear inner content
+  slot.querySelector('.photo-slot-inner').style.display = 'none';
+  // Remove old img if any
+  var oldImg = slot.querySelector('img');
+  if (oldImg) oldImg.remove();
+  var oldBadge = slot.querySelector('.photo-type-badge');
+  if (oldBadge) oldBadge.remove();
+  var oldRemove = slot.querySelector('.photo-remove');
+  if (oldRemove) oldRemove.remove();
+  // Add image
+  var img = document.createElement('img');
+  img.src = src;
+  slot.appendChild(img);
+  // Add label badge
+  var badge = document.createElement('div');
+  badge.className = 'photo-type-badge';
+  badge.textContent = photoLabels[index];
+  slot.appendChild(badge);
+  // Add remove button
+  var removeBtn = document.createElement('div');
+  removeBtn.className = 'photo-remove';
+  removeBtn.innerHTML = '&#x2715;';
+  removeBtn.onclick = function(e) { e.stopPropagation(); removePhoto(index); };
+  slot.appendChild(removeBtn);
+  slot.classList.add('has-photo');
+  // Prevent re-trigger of file input by removing onclick delegation
+  slot.onclick = function() {}; // photo already set; click does nothing
+}
+
+function removePhoto(index) {
+  photoData[index] = null;
+  var slot = document.getElementById('slot-'+index);
+  slot.classList.remove('has-photo');
+  // Restore inner
+  slot.querySelector('.photo-slot-inner').style.display = '';
+  var img = slot.querySelector('img'); if (img) img.remove();
+  var badge = slot.querySelector('.photo-type-badge'); if (badge) badge.remove();
+  var rb = slot.querySelector('.photo-remove'); if (rb) rb.remove();
+  // Reset file input
+  document.getElementById('photoInput'+index).value = '';
+  // Re-enable click
+  slot.onclick = function() { triggerPhoto(index); };
+  updatePhotoCounter();
+  recomputeSlotLocks();
+  updatePhotoSummary();
+}
+
+function unlockNextSlot(justFilled) {
+  // Unlock the next empty slot after the one just filled
+  for (var i = 0; i < 3; i++) {
+    var slot = document.getElementById('slot-'+i);
+    if (!photoData[i]) {
+      slot.style.opacity = '1';
+      slot.style.pointerEvents = 'auto';
+      slot.onclick = (function(idx){ return function(){ triggerPhoto(idx); }; })(i);
+      break; // only unlock one at a time
+    }
+  }
+}
+
+function recomputeSlotLocks() {
+  var foundEmpty = false;
+  for (var i = 0; i < 3; i++) {
+    var slot = document.getElementById('slot-'+i);
+    if (!photoData[i]) {
+      if (!foundEmpty) {
+        // First empty slot — unlock
+        slot.style.opacity = '1';
+        slot.style.pointerEvents = 'auto';
+        slot.onclick = (function(idx){ return function(){ triggerPhoto(idx); }; })(i);
+        foundEmpty = true;
+      } else {
+        // Subsequent empty slots — lock
+        slot.style.opacity = '0.5';
+        slot.style.pointerEvents = 'none';
+      }
+    }
+  }
+}
+
+function updatePhotoCounter() {
+  var count = photoData.filter(function(p){ return p !== null; }).length;
+  document.getElementById('photoCountTxt').textContent = count;
+  for (var i = 0; i < 3; i++) {
+    document.getElementById('pcdot'+i).className = 'pcdot' + (photoData[i] ? ' filled' : '');
+  }
+  var tip = document.getElementById('photoTip');
+  if (count === 0) tip.textContent = 'Photos attach to the visit record';
+  else if (count === 1) tip.textContent = 'Great! Add more if needed';
+  else if (count === 2) tip.textContent = 'One more slot available';
+  else tip.textContent = '✅ All 3 photos captured!';
+}
+
+function updatePhotoSummary() {
+  var filled = photoData.filter(function(p){ return p !== null; });
+  var card = document.getElementById('photoSummaryCard');
+  var grid = document.getElementById('photoSummaryGrid');
+  if (!card || !grid) return;
+  if (filled.length === 0) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+  grid.innerHTML = '';
+  photoData.forEach(function(src, i) {
+    if (!src) return;
+    var thumb = document.createElement('img');
+    thumb.src = src;
+    thumb.style.cssText = 'width:72px;height:72px;object-fit:cover;border-radius:8px;border:2px solid var(--green)';
+    grid.appendChild(thumb);
+  });
+}
 
 // ════════════════════════════════════════════════════
 //  CUSTOMERS SEEN COUNTER
@@ -545,7 +819,15 @@ function updateProg() {
   document.getElementById('plab').innerHTML='Step <strong>'+cur+'</strong> of 4 &mdash; '+stepLabels[cur-1];
 }
 function goTo(n){if(n>=cur)return;document.getElementById('step-'+cur).classList.remove('active');cur=n;document.getElementById('step-'+cur).classList.add('active');updateProg();window.scrollTo({top:0,behavior:'smooth'});}
-function next(from){if(!validate(from))return;document.getElementById('step-'+from).classList.remove('active');cur=from+1;document.getElementById('step-'+cur).classList.add('active');updateProg();window.scrollTo({top:0,behavior:'smooth'});}
+function next(from){
+  if(!validate(from))return;
+  document.getElementById('step-'+from).classList.remove('active');
+  cur=from+1;
+  document.getElementById('step-'+cur).classList.add('active');
+  updateProg();
+  if(cur===4) updatePhotoSummary();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
 function prev(from){document.getElementById('step-'+from).classList.remove('active');cur=from-1;document.getElementById('step-'+cur).classList.add('active');updateProg();window.scrollTo({top:0,behavior:'smooth'});}
 
 // ════════════════════════════════════════════════════
@@ -598,6 +880,10 @@ function submitForm(){
   if(!validate(4))return;
   var btn=document.getElementById('submitBtn');btn.disabled=true;btn.innerHTML='<span class="spin"></span>Saving...';
   var products=Array.from(document.querySelectorAll('input[name="products"]:checked')).map(function(e){return e.value;}).join(', ');
+
+  // Build photo entries (only non-null ones, stripped of data URI prefix for brevity in sheet)
+  var photos = photoData.filter(function(p){ return p !== null; });
+
   var payload={
     visitDate:document.getElementById('visitDate').value,
     region:document.getElementById('rgnVal').value,
@@ -616,7 +902,11 @@ function submitForm(){
     longitude:locData.lng,
     accuracy:locData.acc,
     locationAddress:locData.addr||'',
-    signedBy:document.getElementById('signedBy').value.trim()
+    signedBy:document.getElementById('signedBy').value.trim(),
+    photoCount: photos.length,
+    photo1: photos[0] || '',
+    photo2: photos[1] || '',
+    photo3: photos[2] || ''
   };
   fetch(APPS_SCRIPT_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload),headers:{'Content-Type':'application/json'}}).then(function(){showSuccess();}).catch(function(){btn.disabled=false;btn.innerHTML='Submit Visit &#10003;';var e=document.getElementById('err4');e.textContent='Network error. Check connection and try again.';e.className='err-msg show';});
 }
@@ -633,6 +923,16 @@ function resetForm(){
   document.getElementById('submitBtn').disabled=false;
   document.getElementById('submitBtn').innerHTML='Submit Visit &#10003;';
   document.querySelectorAll('.err-msg').forEach(function(el){el.className='err-msg';});
+  // Reset photos
+  photoData = [null, null, null];
+  for (var i = 0; i < 3; i++) { removePhoto(i); }
+  // Re-lock slots 1 and 2
+  for (var j = 1; j < 3; j++) {
+    var s = document.getElementById('slot-'+j);
+    s.style.opacity = '0.5';
+    s.style.pointerEvents = 'none';
+  }
+  updatePhotoCounter();
   if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null;}
   cur=1;document.getElementById('step-1').classList.add('active');updateProg();window.scrollTo({top:0,behavior:'smooth'});startLocation();
 }
@@ -645,7 +945,6 @@ window.filteredRows = null;
 window.charts = {};
 window.usingDemo = false;
 
-// ── Demo data shown when live sheet is unreachable ──
 var DEMO_ROWS = [
   {'Timestamp':'2026-03-10 08:12','Date of Market Visit':'2026-03-10','Region':'Nairobi North','CSR Name':'James Njeru','Outlet / Customer Name':'Mama Pima Shop','New / Existing Customer':'Existing','Contact Person':'Grace Wanjiku','Telephone No.':'0712345678','Distributor Serving Outlet':'Twiga Foods','Outlet Type':'Retail','Customers Seen':4,'NKCC Products':'Fresh Milk, Mala, Yoghurts','Order Generated (KSH)':8500,'Comment / Market Visit':'Good reception','Signed Out By':'James Njeru'},
   {'Timestamp':'2026-03-10 09:30','Date of Market Visit':'2026-03-10','Region':'Nairobi South','CSR Name':'Evans Bokoo','Outlet / Customer Name':'Quickmart Langata','New / Existing Customer':'Existing','Contact Person':'Peter Otieno','Telephone No.':'0733222111','Distributor Serving Outlet':'Bidco','Outlet Type':'Supermarkets','Customers Seen':2,'NKCC Products':'Fresh Milk, ESL, Butter, Ghee','Order Generated (KSH)':32000,'Comment / Market Visit':'Shelf space increased','Signed Out By':'Evans Bokoo'},
@@ -665,7 +964,6 @@ function loadDashboard() {
   var btn2 = document.getElementById('refreshBtn2');
   if (btn2) { btn2.classList.add('spinning'); btn2.disabled = true; }
 
-  // ── 1. Show demo data immediately so dashboard is never blank ──
   if (!window.allRows) {
     window.usingDemo = true;
     window.allRows = DEMO_ROWS;
@@ -674,7 +972,6 @@ function loadDashboard() {
     document.getElementById('dbLastUpdated').textContent = 'Connecting to sheet...';
   }
 
-  // ── 2. Try fetching live data in background (5s timeout) ──
   var cbName = 'nkcc_cb_' + Date.now();
   var script  = document.createElement('script');
   var settled = false;
@@ -687,7 +984,7 @@ function loadDashboard() {
     if (btn2) { btn2.classList.remove('spinning'); btn2.disabled = false; }
     if (window.usingDemo) {
       document.getElementById('dbLastUpdated').textContent = '⚠️ Demo data — sheet unreachable';
-      showBanner('Could not reach Google Sheet (timed out). Showing demo data. Check your deployment has access set to "Anyone".', 'warn');
+      showBanner('Could not reach Google Sheet (timed out). Showing demo data.', 'warn');
     }
   }, 5000);
 
@@ -703,7 +1000,6 @@ function loadDashboard() {
       showBanner('Sheet error: ' + data.error, 'warn');
       return;
     }
-    // ✅ Live data received — replace demo
     window.usingDemo = false;
     window.allRows   = data.rows || [];
     var existing = document.getElementById('dashBanner');
@@ -722,7 +1018,7 @@ function loadDashboard() {
     if (btn)  { btn.classList.remove('spinning');  btn.disabled  = false; }
     if (btn2) { btn2.classList.remove('spinning'); btn2.disabled = false; }
     document.getElementById('dbLastUpdated').textContent = '⚠️ Demo data — sheet unreachable';
-    showBanner('Could not reach Google Sheet. Showing demo data. Check your deployment URL and access settings.', 'warn');
+    showBanner('Could not reach Google Sheet. Showing demo data.', 'warn');
   };
 
   function cleanup() {
@@ -732,19 +1028,6 @@ function loadDashboard() {
 
   script.src = APPS_SCRIPT_URL + '?action=getData&callback=' + cbName;
   document.head.appendChild(script);
-}
-
-function useDemoData(msg) {
-  var btn  = document.getElementById('refreshBtn');
-  var btn2 = document.getElementById('refreshBtn2');
-  if (btn)  { btn.classList.remove('spinning');  btn.disabled  = false; }
-  if (btn2) { btn2.classList.remove('spinning'); btn2.disabled = false; }
-  window.usingDemo = true;
-  window.allRows   = DEMO_ROWS;
-  populateFilters(window.allRows);
-  applyFilters();
-  document.getElementById('dbLastUpdated').textContent = '⚠️ Demo data — sheet not connected';
-  showBanner(msg, 'warn');
 }
 
 function showBanner(msg, type) {
@@ -810,7 +1093,7 @@ function clearFilters() {
 // ════════════════════════════════════════════════════
 function renderDashboard(rows) {
   if (!rows || rows.length === 0) {
-    document.getElementById('dbContent').innerHTML = '<div class="db-empty"><div class="db-empty-ico">📭</div><div style="font-weight:600;margin-bottom:6px">No data yet</div><div style="font-size:12px;color:var(--muted)">Submit your first market visit using the form to see analytics here.</div></div>';
+    document.getElementById('dbContent').innerHTML = '<div class="db-empty"><div class="db-empty-ico">📭</div><div style="font-weight:600;margin-bottom:6px">No data yet</div><div style="font-size:12px;color:var(--muted)">Submit your first market visit to see analytics here.</div></div>';
     return;
   }
 
@@ -821,7 +1104,6 @@ function renderDashboard(rows) {
   rows.forEach(function(r) {
     var amt = parseFloat(String(r['Order Generated (KSH)']).replace(/,/g,'')) || 0;
     totalOrder += amt;
-    // Support both column name variants
     var seen = parseInt(r['Customers Seen'] || r['customersSeen'] || 0) || 0;
     totalSeen += seen;
     if (r['CSR Name']) csrCounts[r['CSR Name']] = (csrCounts[r['CSR Name']]||0) + 1;
@@ -839,10 +1121,8 @@ function renderDashboard(rows) {
   });
 
   var activeCsrs = Object.keys(csrCounts).length;
-
   var html = '';
 
-  // ── Stat cards — now 5: adds Customers Seen
   html += '<div class="stats-grid">';
   html += statCard('green','&#128203;',totalVisits,'Total Visits','All recorded visits');
   html += statCard('amber','&#128178;','KSH '+fmtNum(Math.round(totalOrder)),'Total Orders','Combined order value');
@@ -850,10 +1130,8 @@ function renderDashboard(rows) {
   html += statCard('purple','&#127381;',newCount,'New Customers','First-time outlets');
   html += '</div>';
 
-  // Customers Seen highlight banner
   html += '<div class="seen-stat"><div class="seen-stat-ico">&#128064;</div><div class="seen-stat-text"><strong>'+totalSeen.toLocaleString()+' Customers Seen</strong><span>Total individuals recorded across all visits</span></div></div>';
 
-  // Orders by Month
   var months = Object.keys(monthOrders).sort();
   if (months.length > 0) {
     html += '<div class="chart-card" style="margin-top:14px"><div class="chart-card-header"><div><div class="chart-card-title">Orders by Month</div><div class="chart-card-sub">KSH value trend</div></div></div><div class="chart-wrap"><canvas id="chartMonths"></canvas></div></div>';
@@ -862,7 +1140,6 @@ function renderDashboard(rows) {
   html += '<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title">Visits by Region</div><div class="chart-card-sub">Distribution across territories</div></div></div><div class="chart-wrap"><canvas id="chartRegion"></canvas></div></div>';
   html += '<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title">Outlet Types</div><div class="chart-card-sub">Channel breakdown</div></div></div><div class="chart-wrap"><canvas id="chartOutlet"></canvas></div></div>';
 
-  // CSR Leaderboard
   var csrSorted = Object.entries(csrCounts).sort(function(a,b){return b[1]-a[1];});
   var maxCount = csrSorted.length > 0 ? csrSorted[0][1] : 1;
   html += '<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title">CSR Leaderboard</div><div class="chart-card-sub">Visits per representative</div></div></div>';
@@ -873,7 +1150,6 @@ function renderDashboard(rows) {
   });
   html += '</div>';
 
-  // Product popularity
   var prodSorted = Object.entries(productCounts).sort(function(a,b){return b[1]-a[1];});
   if (prodSorted.length > 0) {
     html += '<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title">Product Presence</div><div class="chart-card-sub">How often each product appears</div></div></div><div class="product-grid">';
