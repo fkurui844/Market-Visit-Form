@@ -224,7 +224,7 @@ tbody td:first-child{font-weight:600}
 <body>
 
 <script>
-var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0fntf9RICUGtgTOtLXXaio09l6YQjK6-S1rwqLahu9t8F945vIyNvwi_oeUoon8RS/exec";
+var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxx4iuBJdt7jRH7d235_Y7Hqt1hzLJ2bCyxbQVt_s9VO3tKqoB35JykrD_rnO1ZpAvI/exec";
 </script>
 
 <!-- ── HEADER ─────────────────────────────────────── -->
@@ -643,6 +643,21 @@ function resetForm(){
 window.allRows = null;
 window.filteredRows = null;
 window.charts = {};
+window.usingDemo = false;
+
+// ── Demo data shown when live sheet is unreachable ──
+var DEMO_ROWS = [
+  {'Timestamp':'2026-03-10 08:12','Date of Market Visit':'2026-03-10','Region':'Nairobi North','CSR Name':'James Njeru','Outlet / Customer Name':'Mama Pima Shop','New / Existing Customer':'Existing','Contact Person':'Grace Wanjiku','Telephone No.':'0712345678','Distributor Serving Outlet':'Twiga Foods','Outlet Type':'Retail','Customers Seen':4,'NKCC Products':'Fresh Milk, Mala, Yoghurts','Order Generated (KSH)':8500,'Comment / Market Visit':'Good reception','Signed Out By':'James Njeru'},
+  {'Timestamp':'2026-03-10 09:30','Date of Market Visit':'2026-03-10','Region':'Nairobi South','CSR Name':'Evans Bokoo','Outlet / Customer Name':'Quickmart Langata','New / Existing Customer':'Existing','Contact Person':'Peter Otieno','Telephone No.':'0733222111','Distributor Serving Outlet':'Bidco','Outlet Type':'Supermarkets','Customers Seen':2,'NKCC Products':'Fresh Milk, ESL, Butter, Ghee','Order Generated (KSH)':32000,'Comment / Market Visit':'Shelf space increased','Signed Out By':'Evans Bokoo'},
+  {'Timestamp':'2026-03-09 10:15','Date of Market Visit':'2026-03-09','Region':'Eastern','CSR Name':'Philomena Ndunge','Outlet / Customer Name':'Kama Stores','New / Existing Customer':'New','Contact Person':'Joseph Kamau','Telephone No.':'0705888999','Distributor Serving Outlet':'Kapa Oil','Outlet Type':'Wholesale','Customers Seen':6,'NKCC Products':'Fresh Milk, TFA, TCA','Order Generated (KSH)':15000,'Comment / Market Visit':'First order placed','Signed Out By':'Philomena Ndunge'},
+  {'Timestamp':'2026-03-09 11:00','Date of Market Visit':'2026-03-09','Region':'Nairobi Tier I','CSR Name':'Edwin Rono','Outlet / Customer Name':'Shell Petrol Karen','New / Existing Customer':'New','Contact Person':'Sarah Njeri','Telephone No.':'0722444555','Distributor Serving Outlet':'Total','Outlet Type':'Petrol Station','Customers Seen':3,'NKCC Products':'ESL, Yoghurts','Order Generated (KSH)':6200,'Comment / Market Visit':'Trial order','Signed Out By':'Edwin Rono'},
+  {'Timestamp':'2026-03-08 08:45','Date of Market Visit':'2026-03-08','Region':'Nairobi Tier II','CSR Name':'Rebecca Boit','Outlet / Customer Name':'Carrefour Thika Rd','New / Existing Customer':'Existing','Contact Person':'Daniel Korir','Telephone No.':'0700999888','Distributor Serving Outlet':'Nakumatt','Outlet Type':'Supermarkets','Customers Seen':5,'NKCC Products':'Fresh Milk, ESL, Yoghurts, Butter, Ghee','Order Generated (KSH)':62000,'Comment / Market Visit':'Top performer','Signed Out By':'Rebecca Boit'},
+  {'Timestamp':'2026-03-08 09:20','Date of Market Visit':'2026-03-08','Region':'Nairobi North','CSR Name':'Julius Mutura','Outlet / Customer Name':'City Mart Westlands','New / Existing Customer':'Existing','Contact Person':'Susan Kamau','Telephone No.':'0711100200','Distributor Serving Outlet':'Naivas','Outlet Type':'Supermarkets','Customers Seen':3,'NKCC Products':'Fresh Milk, ESL, Ghee, Butter','Order Generated (KSH)':44500,'Comment / Market Visit':'End-cap secured','Signed Out By':'Julius Mutura'},
+  {'Timestamp':'2026-03-07 10:00','Date of Market Visit':'2026-03-07','Region':'Institutions / Exports','CSR Name':'Dalmas Lechamakanya','Outlet / Customer Name':'KU Cafeteria','New / Existing Customer':'New','Contact Person':'Dr. Mwangi','Telephone No.':'0720500600','Distributor Serving Outlet':'Direct','Outlet Type':'Agent','Customers Seen':8,'NKCC Products':'Fresh Milk, TCA, Mala','Order Generated (KSH)':18000,'Comment / Market Visit':'Tender in progress','Signed Out By':'Dalmas Lechamakanya'},
+  {'Timestamp':'2026-03-07 11:30','Date of Market Visit':'2026-03-07','Region':'Nairobi South','CSR Name':'Duncan Yegon','Outlet / Customer Name':'Njuguna General Traders','New / Existing Customer':'Existing','Contact Person':'Njuguna Mwangi','Telephone No.':'0734667889','Distributor Serving Outlet':'Twiga Foods','Outlet Type':'Wholesale','Customers Seen':2,'NKCC Products':'Fresh Milk, TFA','Order Generated (KSH)':9000,'Comment / Market Visit':'Price sensitivity noted','Signed Out By':'Duncan Yegon'},
+  {'Timestamp':'2026-03-06 09:10','Date of Market Visit':'2026-03-06','Region':'Nairobi Tier II','CSR Name':'Agnes Miano','Outlet / Customer Name':'Kimbo Street Vendors','New / Existing Customer':'Existing','Contact Person':'Mary Wambui','Telephone No.':'0722888000','Distributor Serving Outlet':'Twiga Foods','Outlet Type':'Street Vendors','Customers Seen':7,'NKCC Products':'Fresh Milk','Order Generated (KSH)':1800,'Comment / Market Visit':'Weekly repeat','Signed Out By':'Agnes Miano'},
+  {'Timestamp':'2026-03-06 10:45','Date of Market Visit':'2026-03-06','Region':'Eastern','CSR Name':'Wilfred Bitonja','Outlet / Customer Name':'Machakos Junction','New / Existing Customer':'Existing','Contact Person':'Winnie Muli','Telephone No.':'0760200300','Distributor Serving Outlet':'Eastlands Dist.','Outlet Type':'Wholesale','Customers Seen':4,'NKCC Products':'Fresh Milk, TFA, TCA, Mala','Order Generated (KSH)':12500,'Comment / Market Visit':'Growth trend','Signed Out By':'Wilfred Bitonja'}
+];
 
 function loadDashboard() {
   var btn = document.getElementById('refreshBtn');
@@ -652,29 +667,78 @@ function loadDashboard() {
   document.getElementById('dbContent').innerHTML = '<div class="db-loading"><div class="spin-lg"></div><div>Fetching data from Google Sheet...</div></div>';
   document.getElementById('tableContent').innerHTML = '<div class="db-loading"><div class="spin-lg"></div><div>Fetching records...</div></div>';
 
-  fetch(APPS_SCRIPT_URL + '?action=getData')
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
-      if (btn2) { btn2.classList.remove('spinning'); btn2.disabled = false; }
-      if (data.error) { showDbError(data.error); return; }
-      window.allRows = data.rows || [];
-      populateFilters(window.allRows);
-      applyFilters();
-      var now = new Date().toLocaleTimeString('en-KE',{hour:'2-digit',minute:'2-digit'});
-      document.getElementById('dbLastUpdated').textContent = 'Last updated: ' + now + ' \u2014 ' + window.allRows.length + ' total records';
-    })
-    .catch(function(err) {
-      if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
-      if (btn2) { btn2.classList.remove('spinning'); btn2.disabled = false; }
-      showDbError('Could not fetch data. Make sure the Apps Script is deployed correctly and the URL is correct.');
-    });
+  // JSONP — injects a <script> tag to bypass CORS entirely
+  var cbName = 'nkcc_cb_' + Date.now();
+  var script  = document.createElement('script');
+  var settled = false;
+
+  var timer = setTimeout(function() {
+    if (settled) return;
+    settled = true;
+    cleanup();
+    useDemoData('Request timed out. Showing demo data.');
+  }, 10000);
+
+  window[cbName] = function(data) {
+    if (settled) return;
+    settled = true;
+    clearTimeout(timer);
+    cleanup();
+    if (btn)  { btn.classList.remove('spinning');  btn.disabled  = false; }
+    if (btn2) { btn2.classList.remove('spinning'); btn2.disabled = false; }
+    if (data.error) { useDemoData('Sheet error: ' + data.error); return; }
+    window.usingDemo = false;
+    window.allRows   = data.rows || [];
+    populateFilters(window.allRows);
+    applyFilters();
+    var existing = document.getElementById('dashBanner');
+    if (existing) existing.remove();
+    var now = new Date().toLocaleTimeString('en-KE', {hour:'2-digit', minute:'2-digit'});
+    document.getElementById('dbLastUpdated').textContent = 'Live \u2014 ' + now + ' \u2014 ' + window.allRows.length + ' records';
+  };
+
+  script.onerror = function() {
+    if (settled) return;
+    settled = true;
+    clearTimeout(timer);
+    cleanup();
+    useDemoData('Could not reach Google Sheet. Showing demo data.');
+  };
+
+  function cleanup() {
+    if (script.parentNode) script.parentNode.removeChild(script);
+    try { delete window[cbName]; } catch(e) { window[cbName] = undefined; }
+  }
+
+  script.src = APPS_SCRIPT_URL + '?action=getData&callback=' + cbName;
+  document.head.appendChild(script);
 }
 
-function showDbError(msg) {
-  var html = '<div class="db-empty"><div class="db-empty-ico">⚠️</div><div style="font-weight:600;color:var(--red);margin-bottom:6px">Could not load data</div><div style="font-size:12px;color:var(--muted);max-width:300px;margin:0 auto">'+msg+'</div></div>';
-  document.getElementById('dbContent').innerHTML = html;
-  document.getElementById('tableContent').innerHTML = html;
+function useDemoData(msg) {
+  var btn  = document.getElementById('refreshBtn');
+  var btn2 = document.getElementById('refreshBtn2');
+  if (btn)  { btn.classList.remove('spinning');  btn.disabled  = false; }
+  if (btn2) { btn2.classList.remove('spinning'); btn2.disabled = false; }
+  window.usingDemo = true;
+  window.allRows   = DEMO_ROWS;
+  populateFilters(window.allRows);
+  applyFilters();
+  document.getElementById('dbLastUpdated').textContent = '\u26a0\ufe0f Demo data \u2014 sheet not connected';
+  showBanner(msg, 'warn');
+}
+
+function showBanner(msg, type) {
+  var existing = document.getElementById('dashBanner');
+  if (existing) existing.remove();
+  var color  = type === 'warn' ? '#b36900' : '#0d6e3f';
+  var bg     = type === 'warn' ? '#fff8ec' : '#e6f4ed';
+  var border = type === 'warn' ? '#fcd68a' : '#b6dfc9';
+  var el = document.createElement('div');
+  el.id = 'dashBanner';
+  el.style.cssText = 'background:'+bg+';border:1.5px solid '+border+';border-radius:10px;padding:10px 14px;font-size:12px;color:'+color+';margin-bottom:14px;line-height:1.5;';
+  el.textContent = msg;
+  var content = document.getElementById('dbContent');
+  content.parentNode.insertBefore(el, content);
 }
 
 function populateFilters(rows) {
