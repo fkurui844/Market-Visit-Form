@@ -603,7 +603,7 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxeYz0jxGmLMXJgP-
 <div class="page" id="page-dashboard">
   <div class="wrap">
     <div class="db-header">
-      <div><div class="db-title">Dashboard</div><div class="db-subtitle" id="dbLastUpdated">Pull data from Google Sheet</div></div>
+      <div><div class="db-title">Dashboard</div><div class="db-subtitle" id="dbLastUpdated">Syncing...</div></div>
       <button class="refresh-btn" onclick="loadDashboard()" id="refreshBtn"><span class="ref-ico">&#8635;</span> Refresh</button>
     </div>
 
@@ -667,7 +667,7 @@ function switchPage(p) {
   document.getElementById('page-'+p).classList.add('active');
   document.getElementById('nav-'+p).classList.add('active');
   if (p === 'dashboard') {
-    if (!window.allRows) loadDashboard();
+    loadDashboard();
   }
   if (p === 'form') updatePhotoSummary();
   window.scrollTo({top:0,behavior:'smooth'});
@@ -688,6 +688,10 @@ var photoData = null;
 window.addEventListener('DOMContentLoaded', function() {
   document.getElementById('visitDate').value = new Date().toISOString().split('T')[0];
   startLocation();
+  // Auto-sync dashboard silently on load
+  loadDashboard();
+  // Auto-refresh every 5 minutes
+  setInterval(loadDashboard, 5 * 60 * 1000);
 });
 
 // ════════════════════════════════════════════════════
