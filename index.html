@@ -117,6 +117,18 @@ select.form-select option[value=""]{color:#b0b8c1}
 .loc-err-msg{font-size:12px;color:var(--red);margin-bottom:6px}
 .btn-retry{background:none;border:1.5px solid var(--red);color:var(--red);border-radius:8px;padding:5px 13px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer}
 
+/* LOCATION — name only */
+.loc-simple{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:10px;border:1.5px solid var(--border);background:#fafafa;min-height:46px;transition:all .3s}
+.loc-simple.loc-scanning{border-color:#b6dfc9;background:var(--green-lt)}
+.loc-simple.loc-ok{border-color:var(--green);background:#d4edd9}
+.loc-simple.loc-err{border-color:#fca5a5;background:#fef2f2}
+.loc-simple-icon{font-size:18px;flex-shrink:0}
+.loc-simple-text{font-size:13px;font-weight:500;color:var(--text);flex:1}
+.loc-simple.loc-scanning .loc-simple-text{color:var(--green-dark)}
+.loc-simple.loc-ok .loc-simple-text{color:var(--green-dark);font-weight:600}
+.loc-simple.loc-err .loc-simple-text{color:var(--red)}
+.loc-retry-btn{background:none;border:1.5px solid var(--red);color:var(--red);border-radius:7px;padding:4px 11px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;flex-shrink:0}
+
 /* FORM BUTTONS */
 .btn-row{display:flex;gap:8px;margin-top:20px;padding-bottom:10px}
 .btn{flex:1;padding:13px;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .2s}
@@ -473,25 +485,15 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlpEUQFTD7nVF2-M
       <div class="card">
         <div class="field"><label for="comment">Comment / Market Visit Notes</label><textarea id="comment" placeholder="Any observations, challenges, or highlights..."></textarea></div>
       </div>
+
+      <!-- Location name only -->
       <div class="card">
         <div class="field">
-          <label>GPS Location <span class="req">*</span> <span style="font-weight:400;color:var(--muted);font-size:10px;">&#8212; auto-captured</span></label>
-          <div class="loc-box" id="locBox">
-            <div id="locScanning" class="loc-row">
-              <div class="loc-radar"><div class="rring r1"></div><div class="rring r2"></div><div class="rring r3"></div><span class="radar-ico">&#128225;</span></div>
-              <div class="loc-txt"><strong id="locStatus">Acquiring GPS signal...</strong><span id="locDetail" class="loc-pulse">Allow location access when prompted</span></div>
-            </div>
-            <div id="locCaptured" class="loc-row" style="display:none">
-              <div class="loc-ok-ico">&#9989;</div>
-              <div class="loc-txt" style="flex:1"><strong>Location Locked</strong><span id="locAddr" style="font-size:10px;color:var(--green-dark)"></span></div>
-            </div>
-            <div class="loc-details" id="locDetails">
-              <div class="loc-chips"><span class="lchip">Lat: <b id="dLat">--</b></span><span class="lchip">Lng: <b id="dLng">--</b></span><span class="lchip">Acc: <b id="dAcc">--</b>m</span></div>
-            </div>
-          </div>
-          <div class="loc-err-box" id="locErrBox">
-            <p class="loc-err-msg" id="locErrMsg">Location access denied.</p>
-            <button class="btn-retry" onclick="startLocation()">&#8635; Retry</button>
+          <label>Visit Location <span style="font-weight:400;color:var(--muted);font-size:10px;">— auto-detected</span></label>
+          <div class="loc-simple loc-scanning" id="locBox">
+            <span class="loc-simple-icon" id="locIcon">📡</span>
+            <span class="loc-simple-text loc-pulse" id="locText">Detecting location...</span>
+            <button type="button" class="loc-retry-btn" id="locRetry" onclick="startLocation()" style="display:none">Retry</button>
           </div>
         </div>
       </div>
@@ -508,7 +510,7 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlpEUQFTD7nVF2-M
       <div class="card">
         <div class="field"><label for="signedBy">Sign Out with Your Name <span class="req">*</span></label><input type="text" id="signedBy" placeholder="Type your full name to confirm accuracy"/></div>
       </div>
-      <div class="err-msg" id="err4">Please fill in all fields and allow location access.</div>
+      <div class="err-msg" id="err4">Please sign out with your full name before submitting.</div>
       <div class="btn-row">
         <button class="btn btn-sec" onclick="prev(4)">&larr; Back</button>
         <button class="btn btn-sub" id="submitBtn" onclick="submitForm()">Submit Visit &#10003;</button>
@@ -792,31 +794,86 @@ function validate(step) {
       document.getElementById('photoSection').classList.remove('photo-required-err');
     }
   }
-  if(step===4){if(!document.getElementById('signedBy').value.trim())ok=false;if(!locData.lat)ok=false;}
+  if(step===4){if(!document.getElementById('signedBy').value.trim())ok=false;}
   var e=document.getElementById('err'+step);
   e.className=ok?'err-msg':'err-msg show';
   return ok;
 }
 
 // ════════════════════════════════════════════════════
-//  LOCATION
+//  LOCATION — name only (no lat/lng/accuracy shown)
 // ════════════════════════════════════════════════════
 function startLocation(){
-  if(!navigator.geolocation){showLocErr('Geolocation not supported.');return;}
-  document.getElementById('locScanning').style.display='flex';document.getElementById('locCaptured').style.display='none';document.getElementById('locErrBox').style.display='none';document.getElementById('locDetails').classList.remove('show');document.getElementById('locBox').className='loc-box';document.getElementById('locStatus').textContent='Acquiring GPS signal...';document.getElementById('locDetail').textContent='Allow location access when prompted';document.getElementById('locDetail').className='loc-pulse';
-  locData={lat:null,lng:null,acc:null,addr:null};bestAcc=Infinity;
+  if(!navigator.geolocation){showLocStatus('error','Location not supported on this device.');return;}
+  showLocStatus('scanning','Detecting location...');
+  locData={lat:null,lng:null,acc:null,addr:null};
+  bestAcc=Infinity;
   if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null;}
   watchId=navigator.geolocation.watchPosition(
     function(pos){
       var lat=pos.coords.latitude,lng=pos.coords.longitude,acc=Math.round(pos.coords.accuracy);
-      if(acc<bestAcc){bestAcc=acc;locData.lat=lat.toFixed(6);locData.lng=lng.toFixed(6);locData.acc=acc;document.getElementById('dLat').textContent=locData.lat;document.getElementById('dLng').textContent=locData.lng;document.getElementById('dAcc').textContent=acc;document.getElementById('locDetails').classList.add('show');document.getElementById('locScanning').style.display='none';document.getElementById('locCaptured').style.display='flex';document.getElementById('locBox').className='loc-box locked';var lbl=acc<=20?'Excellent':acc<=50?'Good':acc<=100?'Moderate':'Improving...';document.getElementById('locAddr').textContent='Accuracy: +/-'+acc+'m \u2014 '+lbl;reverseGeo(locData.lat,locData.lng);if(acc<=20){navigator.geolocation.clearWatch(watchId);watchId=null;}}
+      if(acc<bestAcc){
+        bestAcc=acc;
+        locData.lat=lat.toFixed(6);locData.lng=lng.toFixed(6);locData.acc=acc;
+        reverseGeo(lat,lng);
+        if(acc<=40){navigator.geolocation.clearWatch(watchId);watchId=null;}
+      }
     },
-    function(err){navigator.geolocation.clearWatch(watchId);watchId=null;var msg='Could not get location.';if(err.code===1)msg='Permission denied. Go to phone Settings > Browser > Location and allow access, then tap Retry.';if(err.code===2)msg='GPS unavailable. Move to an open area and tap Retry.';if(err.code===3)msg='Timed out. Tap Retry.';showLocErr(msg);},
+    function(err){
+      navigator.geolocation.clearWatch(watchId);watchId=null;
+      var msg='Could not detect location. Tap Retry.';
+      if(err.code===1)msg='Location access denied. Enable in browser settings, then tap Retry.';
+      showLocStatus('error',msg);
+    },
     {enableHighAccuracy:true,timeout:30000,maximumAge:0}
   );
 }
-function showLocErr(msg){document.getElementById('locScanning').style.display='none';document.getElementById('locCaptured').style.display='none';document.getElementById('locErrBox').style.display='block';document.getElementById('locErrMsg').textContent=msg;document.getElementById('locBox').className='loc-box loc-err-state';}
-function reverseGeo(lat,lng){fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lng+'&format=json').then(function(r){return r.json();}).then(function(d){if(d&&d.display_name){locData.addr=d.display_name;var s=d.display_name.split(',').slice(0,3).join(', ');document.getElementById('locAddr').textContent=s+' (+/-'+locData.acc+'m)';}}).catch(function(){});}
+
+function reverseGeo(lat,lng){
+  fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lng+'&format=json')
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d&&d.address){
+        // Build a clean human-readable name: suburb/neighbourhood, city/town
+        var a=d.address;
+        var parts=[];
+        if(a.suburb||a.neighbourhood||a.hamlet) parts.push(a.suburb||a.neighbourhood||a.hamlet);
+        if(a.city||a.town||a.village||a.county) parts.push(a.city||a.town||a.village||a.county);
+        var name=parts.length?parts.join(', '):(d.display_name||'').split(',').slice(0,2).join(', ');
+        locData.addr=name;
+        showLocStatus('ok', name);
+      }
+    })
+    .catch(function(){ showLocStatus('ok','Location detected'); });
+}
+
+function showLocStatus(state, msg){
+  var box=document.getElementById('locBox');
+  var icon=document.getElementById('locIcon');
+  var text=document.getElementById('locText');
+  var retry=document.getElementById('locRetry');
+  if(!box)return;
+  box.className='loc-simple';
+  if(state==='scanning'){
+    box.classList.add('loc-scanning');
+    icon.textContent='📡';
+    text.textContent=msg;
+    text.className='loc-simple-text loc-pulse';
+    retry.style.display='none';
+  } else if(state==='ok'){
+    box.classList.add('loc-ok');
+    icon.textContent='📍';
+    text.textContent=msg;
+    text.className='loc-simple-text';
+    retry.style.display='none';
+  } else {
+    box.classList.add('loc-err');
+    icon.textContent='⚠️';
+    text.textContent=msg;
+    text.className='loc-simple-text';
+    retry.style.display='inline-block';
+  }
+}
 
 // ════════════════════════════════════════════════════
 //  SUBMIT
@@ -840,10 +897,7 @@ function submitForm(){
     products:products,
     orderGenerated:document.getElementById('orderAmt').value.trim(),
     comment:document.getElementById('comment').value.trim(),
-    latitude:locData.lat,
-    longitude:locData.lng,
-    accuracy:locData.acc,
-    locationAddress:locData.addr||'',
+    locationName:locData.addr||'',
     signedBy:document.getElementById('signedBy').value.trim(),
     photoCount: photoData ? 1 : 0,
     photo1: photoData || ''
@@ -868,6 +922,7 @@ function resetForm(){
   removePhoto();
   updatePhotoSummary();
   if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null;}
+  locData={lat:null,lng:null,acc:null,addr:null};
   cur=1;document.getElementById('step-1').classList.add('active');updateProg();window.scrollTo({top:0,behavior:'smooth'});startLocation();
 }
 
