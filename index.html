@@ -227,6 +227,29 @@ tbody td:first-child{font-weight:600}
 .badge-out{background:#f3e8ff;color:#6b21a8}
 .badge-seen{background:#ecfdf5;color:#065f46;font-weight:700}
 
+/* SECTION TABS */
+.section-tabs{display:flex;gap:8px;margin:18px 0 12px;border-bottom:2px solid var(--border);padding-bottom:0}
+.stab{background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;padding:8px 14px 10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;border-radius:0}
+.stab.active{color:var(--green);border-bottom-color:var(--green)}
+
+/* PHOTO GALLERY */
+.photo-gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.photo-card{background:var(--surface);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:transform .2s}
+.photo-card:hover{transform:scale(1.02)}
+.photo-card-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:#eee}
+.photo-card-img-placeholder{width:100%;aspect-ratio:4/3;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:28px}
+.photo-card-meta{padding:8px 10px}
+.photo-card-outlet{font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.photo-card-csr{font-size:11px;color:var(--green);font-weight:600;margin-top:1px}
+.photo-card-date{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* LIGHTBOX META */
+.lb-meta-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px}
+.lb-meta-row:last-child{margin-bottom:0}
+.lb-meta-ico{font-size:16px;flex-shrink:0;margin-top:1px}
+.lb-meta-label{font-size:10px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.05em;margin-bottom:1px}
+.lb-meta-val{font-size:13px;color:#fff;font-weight:600;line-height:1.3}
+
 .photo-view-btn{display:inline-flex;align-items:center;gap:3px;background:var(--green-lt);color:var(--green-dark);border:1px solid #b6dfc9;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:600;text-decoration:none;white-space:nowrap}
 .photo-view-btn:hover{background:#c8edd8;border-color:var(--green)}
 .conn-err-card{background:var(--surface);border-radius:var(--radius);padding:22px 18px;box-shadow:var(--shadow);border:1.5px solid #fca5a5;margin-top:4px}
@@ -292,9 +315,6 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxeYz0jxGmLMXJgP-
   </button>
   <button class="bnav-btn" id="nav-dashboard" onclick="switchPage('dashboard')">
     <span class="bnav-ico">📊</span>Dashboard
-  </button>
-  <button class="bnav-btn" id="nav-table" onclick="switchPage('table')">
-    <span class="bnav-ico">📋</span>Records
   </button>
 </nav>
 
@@ -530,7 +550,7 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxeYz0jxGmLMXJgP-
 </div><!-- /page-form -->
 
 <!-- ════════════════════════════════════════════════
-     PAGE: DASHBOARD
+     PAGE: DASHBOARD (includes records + photos)
 ════════════════════════════════════════════════ -->
 <div class="page" id="page-dashboard">
   <div class="wrap">
@@ -538,36 +558,52 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxeYz0jxGmLMXJgP-
       <div><div class="db-title">Dashboard</div><div class="db-subtitle" id="dbLastUpdated">Pull data from Google Sheet</div></div>
       <button class="refresh-btn" onclick="loadDashboard()" id="refreshBtn"><span class="ref-ico">&#8635;</span> Refresh</button>
     </div>
+
+    <!-- FILTERS -->
     <div class="filter-bar">
       <label>Filter:</label>
       <select id="filterCSR" onchange="applyFilters()"><option value="">All CSRs</option></select>
       <select id="filterRegion" onchange="applyFilters()"><option value="">All Regions</option></select>
-      <select id="filterMonth" onchange="applyFilters()"><option value="">All Time</option></select>
-      <input type="date" id="filterDate" onchange="applyFilters()" title="Filter by specific date" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:110px"/>
+      <input type="date" id="filterDateFrom" onchange="applyFilters()" title="From date" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:110px"/>
+      <input type="date" id="filterDateTo" onchange="applyFilters()" title="To date" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:110px"/>
       <button class="filter-clear" onclick="clearFilters()">&#x2715; Clear</button>
-      <button class="filter-download" onclick="downloadCSV()" title="Download as CSV">&#11015; Export</button>
     </div>
+
+    <!-- ANALYTICS CHARTS -->
     <div id="dbContent">
       <div class="db-loading"><div class="spin-lg"></div><div>Loading data...</div></div>
     </div>
+
+    <!-- TAB SWITCHER: Records | Photos -->
+    <div class="section-tabs" id="sectionTabs" style="display:none">
+      <button class="stab active" id="stab-records" onclick="showSection('records')">📋 Visit Records</button>
+      <button class="stab" id="stab-photos" onclick="showSection('photos')">📷 Outlet Photos</button>
+    </div>
+
+    <!-- RECORDS TABLE SECTION -->
+    <div id="section-records" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div class="db-subtitle" id="tableCount" style="font-size:13px"></div>
+        <button class="filter-download" onclick="downloadCSV()">&#11015; Export CSV</button>
+      </div>
+      <div id="tableContent"></div>
+    </div>
+
+    <!-- PHOTOS GALLERY SECTION -->
+    <div id="section-photos" style="display:none">
+      <div class="db-subtitle" id="photoCount" style="font-size:13px;margin-bottom:10px"></div>
+      <div id="photoGallery"></div>
+    </div>
+
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════
-     PAGE: RECORDS TABLE
-════════════════════════════════════════════════ -->
-<div class="page" id="page-table">
-  <div class="wrap">
-    <div class="db-header">
-      <div><div class="db-title">Visit Records</div><div class="db-subtitle" id="tableCount">All submissions</div></div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <button class="filter-download" onclick="downloadCSV()" title="Download as CSV">&#11015; Export</button>
-        <button class="refresh-btn" onclick="loadDashboard()" id="refreshBtn2"><span class="ref-ico">&#8635;</span> Refresh</button>
-      </div>
-    </div>
-    <div id="tableContent">
-      <div class="db-loading"><div class="spin-lg"></div><div>Loading records...</div></div>
-    </div>
+<!-- PHOTO LIGHTBOX -->
+<div id="photoLightbox" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.92);z-index:9999;overflow-y:auto">
+  <button onclick="closeLightbox()" style="position:fixed;top:14px;right:16px;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:22px;width:40px;height:40px;border-radius:50%;cursor:pointer;z-index:10000">✕</button>
+  <div style="max-width:500px;margin:0 auto;padding:20px 16px 40px">
+    <img id="lbImg" src="" style="width:100%;border-radius:12px;margin-bottom:14px;display:block"/>
+    <div id="lbMeta" style="background:rgba(255,255,255,.08);border-radius:10px;padding:14px 16px"></div>
   </div>
 </div>
 
@@ -576,16 +612,15 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxeYz0jxGmLMXJgP-
 //  PAGE NAVIGATION
 // ════════════════════════════════════════════════════
 function switchPage(p) {
-  ['form','dashboard','table'].forEach(function(id) {
+  ['form','dashboard'].forEach(function(id) {
     document.getElementById('page-'+id).classList.remove('active');
     document.getElementById('nav-'+id).classList.remove('active');
   });
   document.getElementById('page-'+p).classList.add('active');
   document.getElementById('nav-'+p).classList.add('active');
-  if (p === 'dashboard' || p === 'table') {
+  if (p === 'dashboard') {
     if (!window.allRows) loadDashboard();
   }
-  // Show photo summary on step 4 when navigating back
   if (p === 'form') updatePhotoSummary();
   window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -962,15 +997,12 @@ var _retryCount = 0;
 function loadDashboard() {
   var btn = document.getElementById('refreshBtn');
   if (btn) { btn.classList.add('spinning'); btn.disabled = true; }
-  var btn2 = document.getElementById('refreshBtn2');
-  if (btn2) { btn2.classList.add('spinning'); btn2.disabled = true; }
 
   document.getElementById('dbLastUpdated').textContent = 'Syncing...';
 
   // Only show loading spinner if nothing loaded yet
   if (!window.allRows) {
     document.getElementById('dbContent').innerHTML = '<div class="db-loading"><div class="spin-lg"></div><div>Loading visits...</div></div>';
-    document.getElementById('tableContent').innerHTML = '<div class="db-loading"><div class="spin-lg"></div><div>Loading records...</div></div>';
   }
 
   var cbName = 'nkcc_cb_' + Date.now();
@@ -995,7 +1027,7 @@ function loadDashboard() {
     if (data.error) { handleFetchFailure(); return; }
     window.allRows = data.rows || [];
     populateFilters(window.allRows);
-    applyFilters();
+    applyFilters();  // calls renderDashboard + renderTable + renderPhotos
     var now = new Date().toLocaleTimeString('en-KE', {hour:'2-digit', minute:'2-digit'});
     document.getElementById('dbLastUpdated').textContent = '✅ Updated ' + now + ' · ' + window.allRows.length + ' records';
   };
@@ -1015,8 +1047,7 @@ function loadDashboard() {
   }
 
   function stopBtns() {
-    if (btn)  { btn.classList.remove('spinning');  btn.disabled  = false; }
-    if (btn2) { btn2.classList.remove('spinning'); btn2.disabled = false; }
+    if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
   }
 
   script.src = APPS_SCRIPT_URL + '?action=getData&callback=' + cbName;
@@ -1041,54 +1072,47 @@ function handleFetchFailure() {
     + '<button onclick="loadDashboard()" style="background:var(--green);color:#fff;border:none;border-radius:10px;padding:11px 28px;font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:600;cursor:pointer">↻ Refresh</button>'
     + '</div>';
   document.getElementById('dbContent').innerHTML = friendly;
-  document.getElementById('tableContent').innerHTML = friendly;
+  if (document.getElementById('tableContent')) document.getElementById('tableContent').innerHTML = friendly;
 }
 
 
 function populateFilters(rows) {
-  var csrs = {}, regions = {}, months = {};
+  var csrs = {}, regions = {};
   rows.forEach(function(r) {
     if (r['CSR Name']) csrs[r['CSR Name']] = true;
     if (r['Region'])   regions[r['Region']] = true;
-    var d = r['Date of Market Visit'];
-    if (d) { var m = String(d).substring(0,7); if (m) months[m] = true; }
   });
   var fCsr = document.getElementById('filterCSR');
   var fRgn = document.getElementById('filterRegion');
-  var fMon = document.getElementById('filterMonth');
   fCsr.innerHTML = '<option value="">All CSRs</option>';
   Object.keys(csrs).sort().forEach(function(c){ fCsr.innerHTML += '<option>'+c+'</option>'; });
   fRgn.innerHTML = '<option value="">All Regions</option>';
   Object.keys(regions).sort().forEach(function(r){ fRgn.innerHTML += '<option>'+r+'</option>'; });
-  fMon.innerHTML = '<option value="">All Time</option>';
-  Object.keys(months).sort().reverse().forEach(function(m){
-    var parts = m.split('-');
-    var label = new Date(parts[0], parts[1]-1, 1).toLocaleString('default',{month:'long',year:'numeric'});
-    fMon.innerHTML += '<option value="'+m+'">'+label+'</option>';
-  });
 }
 
 function applyFilters() {
-  var csr = document.getElementById('filterCSR').value;
-  var rgn = document.getElementById('filterRegion').value;
-  var mon = document.getElementById('filterMonth').value;
-  var dt  = document.getElementById('filterDate') ? document.getElementById('filterDate').value : '';
+  var csr      = document.getElementById('filterCSR').value;
+  var rgn      = document.getElementById('filterRegion').value;
+  var dateFrom = document.getElementById('filterDateFrom') ? document.getElementById('filterDateFrom').value : '';
+  var dateTo   = document.getElementById('filterDateTo')   ? document.getElementById('filterDateTo').value   : '';
   window.filteredRows = (window.allRows || []).filter(function(r) {
     if (csr && r['CSR Name'] !== csr) return false;
     if (rgn && r['Region'] !== rgn) return false;
-    if (mon && String(r['Date of Market Visit']).substring(0,7) !== mon) return false;
-    if (dt  && String(r['Date of Market Visit']).substring(0,10) !== dt) return false;
+    var d = String(r['Date of Market Visit']).substring(0,10);
+    if (dateFrom && d < dateFrom) return false;
+    if (dateTo   && d > dateTo)   return false;
     return true;
   });
   renderDashboard(window.filteredRows);
   renderTable(window.filteredRows);
+  renderPhotos(window.filteredRows);
 }
 
 function clearFilters() {
   document.getElementById('filterCSR').value = '';
   document.getElementById('filterRegion').value = '';
-  document.getElementById('filterMonth').value = '';
-  if (document.getElementById('filterDate')) document.getElementById('filterDate').value = '';
+  if (document.getElementById('filterDateFrom')) document.getElementById('filterDateFrom').value = '';
+  if (document.getElementById('filterDateTo'))   document.getElementById('filterDateTo').value   = '';
   applyFilters();
 }
 
@@ -1248,11 +1272,17 @@ function fmtNum(n) {
 //  RENDER TABLE
 // ════════════════════════════════════════════════════
 function renderTable(rows) {
-  document.getElementById('tableCount').textContent = rows.length + ' records';
+  // Show section tabs once we have data
+  var tabs = document.getElementById('sectionTabs');
+  if (tabs) tabs.style.display = rows && rows.length ? 'flex' : 'none';
+
+  document.getElementById('tableCount').textContent = (rows ? rows.length : 0) + ' records';
   if (!rows || rows.length === 0) {
     document.getElementById('tableContent').innerHTML = '<div class="db-empty"><div class="db-empty-ico">📭</div><div style="font-weight:600;margin-bottom:6px">No records found</div><div style="font-size:12px;color:var(--muted)">No visits match the selected filters.</div></div>';
+    document.getElementById('section-records').style.display = 'block';
     return;
   }
+  document.getElementById('section-records').style.display = 'block';
   var sorted = rows.slice().sort(function(a,b){ return String(b['Timestamp']||'').localeCompare(String(a['Timestamp']||'')); });
   var html = '<div class="card"><div class="table-wrap"><table><thead><tr><th>Date</th><th>CSR</th><th>Outlet</th><th>Region</th><th>Type</th><th>Status</th><th>Order (KSH)</th><th>Photo</th></tr></thead><tbody>';
   sorted.forEach(function(r) {
@@ -1271,6 +1301,72 @@ function renderTable(rows) {
   });
   html += '</tbody></table></div></div>';
   document.getElementById('tableContent').innerHTML = html;
+}
+
+function renderPhotos(rows) {
+  var withPhotos = (rows||[]).filter(function(r){ return r['Photo URL'] && String(r['Photo URL']).indexOf('http') === 0; });
+  document.getElementById('photoCount').textContent = withPhotos.length + ' photos';
+  if (!withPhotos.length) {
+    document.getElementById('photoGallery').innerHTML = '<div class="db-empty"><div class="db-empty-ico">📷</div><div style="font-weight:600;margin-bottom:6px">No photos yet</div><div style="font-size:12px;color:var(--muted)">Photos will appear here once CSRs submit visits.</div></div>';
+    return;
+  }
+  var sorted = withPhotos.slice().sort(function(a,b){ return String(b['Date of Market Visit']||'').localeCompare(String(a['Date of Market Visit']||'')); });
+  var html = '<div class="photo-gallery-grid">';
+  sorted.forEach(function(r, i) {
+    var outlet  = (r['Outlet / Customer Name']||'Unknown Outlet').substring(0,22);
+    var csr     = r['CSR Name'] || '—';
+    var date    = fmtDate(r['Date of Market Visit']);
+    var ts      = r['Timestamp'] || '';
+    var loc     = r['Location Name'] || '—';
+    var url     = r['Photo URL'];
+    // Build a Drive thumbnail URL from the file ID
+    var fileId  = (url.match(/\/d\/([^/]+)\//) || [])[1] || '';
+    var thumbSrc = fileId ? 'https://drive.google.com/thumbnail?id='+fileId+'&sz=w400' : '';
+    // Encode metadata for lightbox
+    var meta = encodeURIComponent(JSON.stringify({outlet:outlet,csr:csr,date:date,ts:ts,loc:loc,url:url}));
+    html += '<div class="photo-card" onclick="openLightbox(\''+encodeURIComponent(thumbSrc)+'\',\''+meta+'\')">';
+    if (thumbSrc) {
+      html += '<img class="photo-card-img" src="'+thumbSrc+'" loading="lazy" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'flex\'"/><div class="photo-card-img-placeholder" style="display:none">📷</div>';
+    } else {
+      html += '<div class="photo-card-img-placeholder">📷</div>';
+    }
+    html += '<div class="photo-card-meta">'
+      + '<div class="photo-card-outlet">'+outlet+'</div>'
+      + '<div class="photo-card-csr">'+shortName(csr)+'</div>'
+      + '<div class="photo-card-date">'+date+'</div>'
+      + '</div></div>';
+  });
+  html += '</div>';
+  document.getElementById('photoGallery').innerHTML = html;
+}
+
+function showSection(s) {
+  document.getElementById('section-records').style.display = s === 'records' ? 'block' : 'none';
+  document.getElementById('section-photos').style.display  = s === 'photos'  ? 'block' : 'none';
+  document.getElementById('stab-records').classList.toggle('active', s === 'records');
+  document.getElementById('stab-photos').classList.toggle('active',  s === 'photos');
+}
+
+function openLightbox(encodedSrc, encodedMeta) {
+  var src  = decodeURIComponent(encodedSrc);
+  var meta = {};
+  try { meta = JSON.parse(decodeURIComponent(encodedMeta)); } catch(e){}
+  document.getElementById('lbImg').src = src || '';
+  document.getElementById('lbImg').style.display = src ? 'block' : 'none';
+  var time = meta.ts ? ('<br><span style="font-size:11px;color:rgba(255,255,255,.5)">Submitted: '+meta.ts+'</span>') : '';
+  document.getElementById('lbMeta').innerHTML =
+    '<div class="lb-meta-row"><span class="lb-meta-ico">🏪</span><div><div class="lb-meta-label">Outlet</div><div class="lb-meta-val">'+( meta.outlet||'—')+'</div></div></div>'
+   +'<div class="lb-meta-row"><span class="lb-meta-ico">👤</span><div><div class="lb-meta-label">CSR</div><div class="lb-meta-val">'+(meta.csr||'—')+'</div></div></div>'
+   +'<div class="lb-meta-row"><span class="lb-meta-ico">📅</span><div><div class="lb-meta-label">Date</div><div class="lb-meta-val">'+(meta.date||'—')+time+'</div></div></div>'
+   +'<div class="lb-meta-row"><span class="lb-meta-ico">📍</span><div><div class="lb-meta-label">Location</div><div class="lb-meta-val">'+(meta.loc||'—')+'</div></div></div>'
+   +'<div class="lb-meta-row"><span class="lb-meta-ico">🔗</span><div><div class="lb-meta-label">Full Photo</div><div class="lb-meta-val"><a href="'+(meta.url||'#')+'" target="_blank" style="color:#6ee7a8;font-size:12px">Open in Google Drive ↗</a></div></div></div>';
+  document.getElementById('photoLightbox').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  document.getElementById('photoLightbox').style.display = 'none';
+  document.body.style.overflow = '';
 }
 
 function fmtDate(d) {
