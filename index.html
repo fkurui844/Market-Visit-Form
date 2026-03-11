@@ -664,10 +664,17 @@ function loadDashboard() {
   if (btn) { btn.classList.add('spinning'); btn.disabled = true; }
   var btn2 = document.getElementById('refreshBtn2');
   if (btn2) { btn2.classList.add('spinning'); btn2.disabled = true; }
-  document.getElementById('dbContent').innerHTML = '<div class="db-loading"><div class="spin-lg"></div><div>Fetching data from Google Sheet...</div></div>';
-  document.getElementById('tableContent').innerHTML = '<div class="db-loading"><div class="spin-lg"></div><div>Fetching records...</div></div>';
 
-  // JSONP — injects a <script> tag to bypass CORS entirely
+  // ── 1. Show demo data immediately so dashboard is never blank ──
+  if (!window.allRows) {
+    window.usingDemo = true;
+    window.allRows = DEMO_ROWS;
+    populateFilters(window.allRows);
+    applyFilters();
+    document.getElementById('dbLastUpdated').textContent = 'Connecting to sheet...';
+  }
+
+  // ── 2. Try fetching live data in background (5s timeout) ──
   var cbName = 'nkcc_cb_' + Date.now();
   var script  = document.createElement('script');
   var settled = false;
@@ -676,8 +683,13 @@ function loadDashboard() {
     if (settled) return;
     settled = true;
     cleanup();
-    useDemoData('Request timed out. Showing demo data.');
-  }, 10000);
+    if (btn)  { btn.classList.remove('spinning');  btn.disabled  = false; }
+    if (btn2) { btn2.classList.remove('spinning'); btn2.disabled = false; }
+    if (window.usingDemo) {
+      document.getElementById('dbLastUpdated').textContent = '⚠️ Demo data — sheet unreachable';
+      showBanner('Could not reach Google Sheet (timed out). Showing demo data. Check your deployment has access set to "Anyone".', 'warn');
+    }
+  }, 5000);
 
   window[cbName] = function(data) {
     if (settled) return;
@@ -686,15 +698,20 @@ function loadDashboard() {
     cleanup();
     if (btn)  { btn.classList.remove('spinning');  btn.disabled  = false; }
     if (btn2) { btn2.classList.remove('spinning'); btn2.disabled = false; }
-    if (data.error) { useDemoData('Sheet error: ' + data.error); return; }
+    if (data.error) {
+      document.getElementById('dbLastUpdated').textContent = '⚠️ Demo data — sheet error';
+      showBanner('Sheet error: ' + data.error, 'warn');
+      return;
+    }
+    // ✅ Live data received — replace demo
     window.usingDemo = false;
     window.allRows   = data.rows || [];
-    populateFilters(window.allRows);
-    applyFilters();
     var existing = document.getElementById('dashBanner');
     if (existing) existing.remove();
+    populateFilters(window.allRows);
+    applyFilters();
     var now = new Date().toLocaleTimeString('en-KE', {hour:'2-digit', minute:'2-digit'});
-    document.getElementById('dbLastUpdated').textContent = 'Live \u2014 ' + now + ' \u2014 ' + window.allRows.length + ' records';
+    document.getElementById('dbLastUpdated').textContent = 'Live — ' + now + ' — ' + window.allRows.length + ' records';
   };
 
   script.onerror = function() {
@@ -702,7 +719,10 @@ function loadDashboard() {
     settled = true;
     clearTimeout(timer);
     cleanup();
-    useDemoData('Could not reach Google Sheet. Showing demo data.');
+    if (btn)  { btn.classList.remove('spinning');  btn.disabled  = false; }
+    if (btn2) { btn2.classList.remove('spinning'); btn2.disabled = false; }
+    document.getElementById('dbLastUpdated').textContent = '⚠️ Demo data — sheet unreachable';
+    showBanner('Could not reach Google Sheet. Showing demo data. Check your deployment URL and access settings.', 'warn');
   };
 
   function cleanup() {
@@ -723,7 +743,7 @@ function useDemoData(msg) {
   window.allRows   = DEMO_ROWS;
   populateFilters(window.allRows);
   applyFilters();
-  document.getElementById('dbLastUpdated').textContent = '\u26a0\ufe0f Demo data \u2014 sheet not connected';
+  document.getElementById('dbLastUpdated').textContent = '⚠️ Demo data — sheet not connected';
   showBanner(msg, 'warn');
 }
 
