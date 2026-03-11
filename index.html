@@ -315,7 +315,7 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxeYz0jxGmLMXJgP-
 <!-- ── HEADER ─────────────────────────────────────── -->
 <div class="hdr">
   <h1>New KCC Market Visit Form</h1>
-  <p id="hdrSub">General Trade Field Intelligence</p>
+
 </div>
 
 <!-- ── BOTTOM NAV ─────────────────────────────────── -->
@@ -395,7 +395,7 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxeYz0jxGmLMXJgP-
           </select>
         </div>
       </div>
-      <div class="err-msg" id="err1">Please fill in all required fields before continuing.</div>
+      <div class="err-msg" id="err1">Please fill in all required fields and wait for location to be detected before continuing.</div>
       <div class="btn-row"><button class="btn btn-pri" onclick="next(1)">Continue &rarr;</button></div>
     </div>
 
@@ -814,7 +814,21 @@ function prev(from){document.getElementById('step-'+from).classList.remove('acti
 // ════════════════════════════════════════════════════
 function validate(step) {
   var ok=true;
-  if(step===1){if(!document.getElementById('visitDate').value)ok=false;if(!document.getElementById('rgnVal').value)ok=false;if(!document.getElementById('csrVal').value)ok=false;}
+  if(step===1){
+    if(!document.getElementById('visitDate').value)ok=false;
+    if(!document.getElementById('rgnVal').value)ok=false;
+    if(!document.getElementById('csrVal').value)ok=false;
+    if(!locData.addr){
+      ok=false;
+      var lb=document.getElementById('locBox');
+      if(lb){lb.classList.add('loc-err');lb.style.outline='2px solid var(--red)';}
+      var lt=document.getElementById('locText');
+      if(lt && !locData.addr){lt.textContent='Location required — wait for detection or tap Retry.';}
+    } else {
+      var lb=document.getElementById('locBox');
+      if(lb) lb.style.outline='';
+    }
+  }
   if(step===2){
     if(!document.getElementById('outletName').value.trim())ok=false;
     if(!document.querySelector('input[name="custStatus"]:checked'))ok=false;
