@@ -801,22 +801,28 @@ function validate(step) {
 }
 
 // ════════════════════════════════════════════════════
-//  LOCATION — name only (no lat/lng/accuracy shown)
+//  LOCATION — street-level name, no coords shown
 // ════════════════════════════════════════════════════
 function startLocation(){
   if(!navigator.geolocation){showLocStatus('error','Location not supported on this device.');return;}
   showLocStatus('scanning','Detecting location...');
   locData={lat:null,lng:null,acc:null,addr:null};
   bestAcc=Infinity;
+  var reverseGeoTimer=null;
   if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null;}
   watchId=navigator.geolocation.watchPosition(
     function(pos){
       var lat=pos.coords.latitude,lng=pos.coords.longitude,acc=Math.round(pos.coords.accuracy);
       if(acc<bestAcc){
         bestAcc=acc;
-        locData.lat=lat.toFixed(6);locData.lng=lng.toFixed(6);locData.acc=acc;
-        reverseGeo(lat,lng);
-        if(acc<=40){navigator.geolocation.clearWatch(watchId);watchId=null;}
+        locData.lat=lat.toFixed(7);
+        locData.lng=lng.toFixed(7);
+        locData.acc=acc;
+        // Debounce reverse geocode — only call when signal improves
+        if(reverseGeoTimer) clearTimeout(reverseGeoTimer);
+        reverseGeoTimer=setTimeout(function(){ reverseGeo(lat,lng,acc); },600);
+        // Stop watching once we hit ≤20m (excellent street-level accuracy)
+        if(acc<=20){navigator.geolocation.clearWatch(watchId);watchId=null;}
       }
     },
     function(err){
@@ -825,24 +831,48 @@ function startLocation(){
       if(err.code===1)msg='Location access denied. Enable in browser settings, then tap Retry.';
       showLocStatus('error',msg);
     },
-    {enableHighAccuracy:true,timeout:30000,maximumAge:0}
+    {enableHighAccuracy:true,timeout:40000,maximumAge:0}
   );
 }
 
-function reverseGeo(lat,lng){
-  fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lng+'&format=json')
+function reverseGeo(lat,lng,acc){
+  // zoom=18 gives building/street level detail from Nominatim
+  fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lng+'&format=json&zoom=18&addressdetails=1')
     .then(function(r){return r.json();})
     .then(function(d){
-      if(d&&d.address){
-        // Build a clean human-readable name: suburb/neighbourhood, city/town
-        var a=d.address;
-        var parts=[];
-        if(a.suburb||a.neighbourhood||a.hamlet) parts.push(a.suburb||a.neighbourhood||a.hamlet);
-        if(a.city||a.town||a.village||a.county) parts.push(a.city||a.town||a.village||a.county);
-        var name=parts.length?parts.join(', '):(d.display_name||'').split(',').slice(0,2).join(', ');
-        locData.addr=name;
-        showLocStatus('ok', name);
+      if(!d||!d.address){showLocStatus('ok','Location detected');return;}
+      var a=d.address;
+      var parts=[];
+
+      // 1. Building name or amenity (e.g. "Quickmart", "Shell Petrol Station")
+      if(a.amenity)            parts.push(a.amenity);
+      else if(a.building)      parts.push(a.building);
+      else if(a.shop)          parts.push(a.shop);
+
+      // 2. House number + street name
+      var streetPart='';
+      if(a.road||a.street||a.pedestrian||a.footway){
+        var road=a.road||a.street||a.pedestrian||a.footway;
+        streetPart=(a.house_number?a.house_number+' ':'')+road;
       }
+      if(streetPart) parts.push(streetPart);
+
+      // 3. Suburb / neighbourhood / estate
+      if(a.suburb||a.neighbourhood||a.quarter||a.estate)
+        parts.push(a.suburb||a.neighbourhood||a.quarter||a.estate);
+
+      // 4. Town / city (only if not already obvious from above)
+      if(a.city||a.town||a.village)
+        parts.push(a.city||a.town||a.village);
+
+      var name=parts.length
+        ? parts.join(', ')
+        : (d.display_name||'').split(',').slice(0,3).join(', ');
+
+      // Append accuracy indicator for CSR awareness
+      var accLabel= acc<=20?'precise': acc<=50?'~'+acc+'m': '~'+acc+'m';
+      locData.addr=name;
+      showLocStatus('ok', '📍 '+name);
     })
     .catch(function(){ showLocStatus('ok','Location detected'); });
 }
@@ -862,13 +892,15 @@ function showLocStatus(state, msg){
     retry.style.display='none';
   } else if(state==='ok'){
     box.classList.add('loc-ok');
-    icon.textContent='📍';
+    icon.textContent='';  // icon embedded in msg via 📍
+    icon.style.display='none';
     text.textContent=msg;
     text.className='loc-simple-text';
     retry.style.display='none';
   } else {
     box.classList.add('loc-err');
     icon.textContent='⚠️';
+    icon.style.display='';
     text.textContent=msg;
     text.className='loc-simple-text';
     retry.style.display='inline-block';
