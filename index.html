@@ -88,26 +88,10 @@ textarea{resize:vertical;min-height:80px}
 .counter-input{flex:1;border:none!important;box-shadow:none!important;outline:none!important;text-align:center;font-size:20px;font-weight:800;color:var(--text);background:transparent;padding:0!important;font-family:'Syne',sans-serif}
 .counter-hint{font-size:11px;color:var(--muted);margin-top:5px;text-align:center}
 
-/* SEARCH PICKER */
-.picker-wrap{position:relative;z-index:1}
-.pi-row{display:flex;align-items:center;gap:7px;border:1.5px solid var(--border);border-radius:10px;padding:9px 12px;background:var(--surface);transition:border-color .2s,box-shadow .2s}
-.pi-row:focus-within{border-color:var(--green);box-shadow:0 0 0 3px rgba(13,110,63,.1)}
-.pi-ico{font-size:14px;opacity:.4;flex-shrink:0}
-.pi-input{flex:1;border:none!important;padding:0!important;font-size:14px;background:transparent;color:var(--text);outline:none!important;box-shadow:none!important;-webkit-appearance:none;appearance:none}
-.pi-input::placeholder{color:#b0b8c1}
-.pi-x{background:none;border:none;cursor:pointer;font-size:13px;color:var(--muted);padding:0 2px;flex-shrink:0;line-height:1;display:none}
-.pi-x:hover{color:var(--red)}
-.pi-badge{display:none;align-items:center;gap:7px;margin-top:7px;background:var(--green-lt);border:1.5px solid #b6dfc9;border-radius:8px;padding:8px 12px;font-size:13px;font-weight:600;color:var(--green-dark)}
-.pi-badge.show{display:flex}
-.pi-chk{color:var(--green);font-weight:800;font-size:14px;flex-shrink:0}
-.pi-change{margin-left:auto;background:none;border:none;font-size:11px;color:var(--green);cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;text-decoration:underline}
-.pi-drop{display:none;position:absolute;top:calc(100% + 5px);left:0;right:0;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;background:var(--surface);box-shadow:0 8px 24px rgba(0,0,0,.15);max-height:200px;overflow-y:auto;z-index:300}
-.pi-drop.open{display:block}
-.pi-opt{padding:11px 13px;font-size:13px;color:var(--text);cursor:pointer;border-bottom:1px solid #f0f0f0;transition:background .15s}
-.pi-opt:last-of-type{border-bottom:none}
-.pi-opt:hover,.pi-opt:active{background:var(--green-lt);color:var(--green-dark)}
-.pi-opt mark{background:#fff3b0;color:inherit;border-radius:2px;padding:0 1px}
-.pi-empty{padding:12px;font-size:12px;color:var(--muted);text-align:center;display:none}
+/* NATIVE SELECT */
+select.form-select{width:100%;padding:11px 40px 11px 13px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") right 14px center/12px no-repeat;-webkit-appearance:none;appearance:none;cursor:pointer;transition:border-color .2s,box-shadow .2s}
+select.form-select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(13,110,63,.1)}
+select.form-select option[value=""]{color:#b0b8c1}
 
 /* LOCATION */
 .loc-box{background:var(--green-lt);border:1.5px solid #b6dfc9;border-radius:10px;padding:13px;transition:all .3s}
@@ -295,57 +279,39 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0fntf9RICUGtgTO
       </div>
       <div class="card">
         <div class="field">
-          <label>Region <span class="req">*</span></label>
-          <div class="picker-wrap" id="rgnWrap">
-            <div class="pi-row">
-              <span class="pi-ico">&#128269;</span>
-              <input class="pi-input" id="rgnInput" type="text" placeholder="Search region..." autocomplete="off"/>
-              <button class="pi-x" id="rgnX" onclick="clearPicker('rgn')">&#x2715;</button>
-            </div>
-            <div class="pi-badge" id="rgnBadge"><span class="pi-chk">&#x2713;</span><span id="rgnBadgeTxt"></span><button class="pi-change" onclick="changePicker('rgn')">Change</button></div>
-            <div class="pi-drop" id="rgnDrop">
-              <div class="pi-opt" data-v="Nairobi North">Nairobi North</div>
-              <div class="pi-opt" data-v="Nairobi South">Nairobi South</div>
-              <div class="pi-opt" data-v="Eastern">Eastern</div>
-              <div class="pi-opt" data-v="Nairobi Tier I">Nairobi Tier I</div>
-              <div class="pi-opt" data-v="Nairobi Tier II">Nairobi Tier II</div>
-              <div class="pi-opt" data-v="Institutions / Exports">Institutions / Exports</div>
-              <div class="pi-empty">No results found</div>
-            </div>
-          </div>
-          <input type="hidden" id="rgnVal"/>
+          <label for="rgnVal">Region <span class="req">*</span></label>
+          <select id="rgnVal" class="form-select">
+            <option value="">— Select region —</option>
+            <option>Nairobi North</option>
+            <option>Nairobi South</option>
+            <option>Eastern</option>
+            <option>Nairobi Tier I</option>
+            <option>Nairobi Tier II</option>
+            <option>Institutions / Exports</option>
+          </select>
         </div>
       </div>
       <div class="card">
         <div class="field">
-          <label>CSR Name <span class="req">*</span></label>
-          <div class="picker-wrap" id="csrWrap">
-            <div class="pi-row">
-              <span class="pi-ico">&#128269;</span>
-              <input class="pi-input" id="csrInput" type="text" placeholder="Search your name..." autocomplete="off"/>
-              <button class="pi-x" id="csrX" onclick="clearPicker('csr')">&#x2715;</button>
-            </div>
-            <div class="pi-badge" id="csrBadge"><span class="pi-chk">&#x2713;</span><span id="csrBadgeTxt"></span><button class="pi-change" onclick="changePicker('csr')">Change</button></div>
-            <div class="pi-drop" id="csrDrop">
-              <div class="pi-opt" data-v="James Njeru">James Njeru</div>
-              <div class="pi-opt" data-v="Evans Bokoo">Evans Bokoo</div>
-              <div class="pi-opt" data-v="Philomena Ndunge">Philomena Ndunge</div>
-              <div class="pi-opt" data-v="Edwin Rono">Edwin Rono</div>
-              <div class="pi-opt" data-v="Ndooci Gitau">Ndooci Gitau</div>
-              <div class="pi-opt" data-v="Julius Mutura">Julius Mutura</div>
-              <div class="pi-opt" data-v="Dalmas Lechamakanya">Dalmas Lechamakanya</div>
-              <div class="pi-opt" data-v="Duncan Yegon">Duncan Yegon</div>
-              <div class="pi-opt" data-v="Geofreey Too">Geofreey Too</div>
-              <div class="pi-opt" data-v="Rebecca Boit">Rebecca Boit</div>
-              <div class="pi-opt" data-v="Lilian Kariuki">Lilian Kariuki</div>
-              <div class="pi-opt" data-v="Agnes Miano">Agnes Miano</div>
-              <div class="pi-opt" data-v="Francis Koge">Francis Koge</div>
-              <div class="pi-opt" data-v="Moses Kaburu">Moses Kaburu</div>
-              <div class="pi-opt" data-v="Wilfred Bitonja">Wilfred Bitonja</div>
-              <div class="pi-empty">No results found</div>
-            </div>
-          </div>
-          <input type="hidden" id="csrVal"/>
+          <label for="csrVal">CSR Name <span class="req">*</span></label>
+          <select id="csrVal" class="form-select">
+            <option value="">— Select your name —</option>
+            <option>James Njeru</option>
+            <option>Evans Bokoo</option>
+            <option>Philomena Ndunge</option>
+            <option>Edwin Rono</option>
+            <option>Ndooci Gitau</option>
+            <option>Julius Mutura</option>
+            <option>Dalmas Lechamakanya</option>
+            <option>Duncan Yegon</option>
+            <option>Geofreey Too</option>
+            <option>Rebecca Boit</option>
+            <option>Lilian Kariuki</option>
+            <option>Agnes Miano</option>
+            <option>Francis Koge</option>
+            <option>Moses Kaburu</option>
+            <option>Wilfred Bitonja</option>
+          </select>
         </div>
       </div>
       <div class="err-msg" id="err1">Please fill in all required fields before continuing.</div>
@@ -551,8 +517,6 @@ var stepLabels = ['Visit Info','Customer Details','Products & Order','Notes & Si
 
 window.addEventListener('DOMContentLoaded', function() {
   document.getElementById('visitDate').value = new Date().toISOString().split('T')[0];
-  initPicker('rgn');
-  initPicker('csr');
   startLocation();
 });
 
@@ -606,33 +570,6 @@ function validate(step) {
   e.className=ok?'err-msg':'err-msg show';
   return ok;
 }
-
-// ════════════════════════════════════════════════════
-//  SEARCH PICKERS
-// ════════════════════════════════════════════════════
-function initPicker(key) {
-  var input=document.getElementById(key+'Input'),drop=document.getElementById(key+'Drop'),opts=drop.querySelectorAll('.pi-opt'),empty=drop.querySelector('.pi-empty'),xBtn=document.getElementById(key+'X');
-  var wrap=document.getElementById(key+'Wrap');
-  function filter(){
-    var q=input.value.trim().toLowerCase();
-    xBtn.style.display=q?'inline':'none';
-    var any=false;
-    opts.forEach(function(o){
-      var txt=o.getAttribute('data-v'),match=txt.toLowerCase().indexOf(q)>-1;
-      o.style.display=match?'':'none';
-      if(match){any=true;if(q){var re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');o.innerHTML=txt.replace(re,'<mark>$1</mark>');}else{o.textContent=txt;}}
-    });
-    empty.style.display=any?'none':'block';
-    drop.classList.add('open');
-    wrap.style.zIndex='400';
-  }
-  input.addEventListener('input',filter);
-  input.addEventListener('focus',function(){opts.forEach(function(o){o.style.display='';o.textContent=o.getAttribute('data-v');});empty.style.display='none';drop.classList.add('open');wrap.style.zIndex='400';});
-  opts.forEach(function(o){o.addEventListener('mousedown',function(e){e.preventDefault();var v=this.getAttribute('data-v');document.getElementById(key+'Val').value=v;input.value='';xBtn.style.display='none';document.getElementById(key+'BadgeTxt').textContent=v;document.getElementById(key+'Badge').classList.add('show');drop.classList.remove('open');wrap.style.zIndex='1';input.blur();});});
-}
-function clearPicker(key){document.getElementById(key+'Val').value='';document.getElementById(key+'Input').value='';document.getElementById(key+'X').style.display='none';document.getElementById(key+'Badge').classList.remove('show');var drop=document.getElementById(key+'Drop');drop.classList.remove('open');drop.querySelectorAll('.pi-opt').forEach(function(o){o.style.display='';o.textContent=o.getAttribute('data-v');});drop.querySelector('.pi-empty').style.display='none';}
-function changePicker(key){document.getElementById(key+'Badge').classList.remove('show');document.getElementById(key+'Val').value='';document.getElementById(key+'Input').focus();}
-document.addEventListener('click',function(e){['rgn','csr'].forEach(function(key){var w=document.getElementById(key+'Wrap');if(w&&!w.contains(e.target)){document.getElementById(key+'Drop').classList.remove('open');w.style.zIndex='1';}});});
 
 // ════════════════════════════════════════════════════
 //  LOCATION
@@ -690,11 +627,12 @@ function resetForm(){
   document.querySelectorAll('input[type=text],input[type=tel],input[type=number],textarea').forEach(function(el){el.value='';});
   document.querySelectorAll('input[type=radio],input[type=checkbox]').forEach(function(el){el.checked=false;});
   document.getElementById('visitDate').value=new Date().toISOString().split('T')[0];
+  document.getElementById('rgnVal').value='';
+  document.getElementById('csrVal').value='';
   document.getElementById('customersSeen').value='1';
   document.getElementById('submitBtn').disabled=false;
   document.getElementById('submitBtn').innerHTML='Submit Visit &#10003;';
   document.querySelectorAll('.err-msg').forEach(function(el){el.className='err-msg';});
-  clearPicker('rgn');clearPicker('csr');
   if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null;}
   cur=1;document.getElementById('step-1').classList.add('active');updateProg();window.scrollTo({top:0,behavior:'smooth'});startLocation();
 }
