@@ -110,7 +110,6 @@ select.form-select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0
 input[type=file].cam-input{display:none}
 .photo-guide{display:flex;gap:6px;margin-top:10px;overflow-x:auto;padding-bottom:2px}
 .guide-chip{display:flex;align-items:center;gap:5px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:5px 10px;font-size:10px;color:var(--muted);white-space:nowrap;flex-shrink:0}
-
 /* ── ORDER BUILDER ─────────────────── */
 .toggle-switch{position:relative;display:inline-block;width:50px;height:28px;flex-shrink:0}
 .toggle-switch input{opacity:0;width:0;height:0}
@@ -157,7 +156,6 @@ input[type=file].cam-input{display:none}
 .order-no-items{font-size:12px;color:var(--muted);padding:4px 0;font-style:italic}
 .order-filter-search{padding:7px 11px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);flex:1;min-width:140px;outline:none}
 .order-filter-search:focus{border-color:var(--green)}
-
 /* ── DASHBOARD ─────────────────────── */
 .db-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-top:4px}
 .db-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--green-dark)}
@@ -169,6 +167,8 @@ input[type=file].cam-input{display:none}
 .filter-bar select{padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:100px}
 .filter-clear{background:none;border:1.5px solid var(--border);border-radius:8px;padding:6px 10px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
 .filter-download{background:var(--green);border:none;border-radius:8px;padding:6px 12px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;color:#fff;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:4px}
+.filter-order-input{padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);flex:1;min-width:90px;outline:none;-webkit-appearance:none;appearance:none}
+.filter-order-input:focus{border-color:var(--green)}
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
 .stat-card{background:var(--surface);border-radius:12px;padding:14px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.04);position:relative;overflow:hidden}
 .stat-card::before{content:'';position:absolute;top:-10px;right:-10px;width:60px;height:60px;border-radius:50%;opacity:.08}
@@ -181,6 +181,7 @@ input[type=file].cam-input{display:none}
 .chart-card-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text)}
 .chart-card-sub{font-size:11px;color:var(--muted);margin-top:1px}
 .chart-wrap{position:relative;height:200px}
+.chart-wrap-lg{position:relative;height:280px}
 .table-wrap{overflow-x:auto;margin-top:8px}
 table{width:100%;border-collapse:collapse;font-size:12px;min-width:500px}
 thead th{background:var(--green-lt);color:var(--green-dark);font-weight:700;padding:9px 11px;text-align:left;white-space:nowrap;border-bottom:2px solid #b6dfc9}
@@ -242,6 +243,15 @@ tbody td:first-child{font-weight:600}
 .prod-pill{background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:8px 12px;font-size:12px;display:flex;flex-direction:column;gap:2px;min-width:80px}
 .prod-pill-name{font-weight:700;color:var(--text)}
 .prod-pill-count{font-size:11px;color:var(--green);font-weight:600}
+/* ── ORDERS TABLE ── */
+.orders-table-wrap{overflow-x:auto;margin-top:8px}
+.orders-table{width:100%;border-collapse:collapse;font-size:12px;min-width:420px}
+.orders-table thead th{background:var(--green-lt);color:var(--green-dark);font-weight:700;padding:9px 11px;text-align:left;white-space:nowrap;border-bottom:2px solid #b6dfc9}
+.orders-table tbody tr{border-bottom:1px solid var(--border);transition:background .15s}
+.orders-table tbody tr:hover{background:#f8fffe}
+.orders-table tbody td{padding:9px 11px;color:var(--text);vertical-align:middle}
+/* ── PACK PILL ── */
+.pack-badge{display:inline-block;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:700;background:#f0f9ff;color:#0369a1;border:1px solid #bae6fd;white-space:nowrap}
 .admin-card{background:var(--surface);border-radius:var(--radius);padding:18px 16px;box-shadow:var(--shadow)}
 .admin-section-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--text);margin-bottom:10px}
 .admin-input{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--bg);outline:none;transition:border-color .2s}
@@ -260,14 +270,24 @@ tbody td:first-child{font-weight:600}
 <script>
 var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwP9ughPjTaZtYpQY8Oq9hs49IWJSX5aUK5vehjBd13vE7BHkzru9qxw4FYdVO9f932/exec";
 
-// ── PRODUCT CATALOGUE ────────────────────────────────
 var PRODUCT_CATALOGUE = {"TFA":[{"code":"20","name":"GOLD CROWN TFA 1/2LT 1x 12","pack":"Cartons","price":636},{"code":"21","name":"KCC FRESH TFA 1x 12 x 1/2 lt","pack":"Cartons","price":624},{"code":"83","name":"TAIFA TFA 1*12*500 ML","pack":"Cartons","price":612},{"code":"29","name":"TAIFA TFA 1*24*250 ML","pack":"Cartons","price":678.48}],"TCA":[{"code":"23","name":"GOLD CROWN TCA1 2DCL 1x 21","pack":"Cartons","price":525},{"code":"27","name":"KCC FRESH TCA1 2DL 1x 21","pack":"Cartons","price":504},{"code":"12","name":"TAIFA TCA DCL 1*21*200 ML","pack":"Cartons","price":525},{"code":"28","name":"KCC SCHOOL TCA1 2DL 1x 21","pack":"Cartons","price":860}],"ESL":[{"code":"24","name":"ASEPTIC POUCH 18*500ML G/C","pack":"Cartons","price":612},{"code":"30","name":"ESL 450 ML","pack":"Cartons","price":540},{"code":"26a","name":"ESL GOLD CROWN 200 ML","pack":"Cartons","price":512},{"code":"13","name":"TAIFA ESL -200 ML","pack":"Cartons","price":445.2}],"TBA/UHT":[{"code":"18","name":"TBA G/C 1*12*1 LTR LACTOSE FREE","pack":"Packs","price":1920},{"code":"17","name":"LACTOSE FREE 12*500ML","pack":"Cartons","price":900},{"code":"71","name":"TBA GC 1LT","pack":"Cartons","price":1644},{"code":"73C","name":"UHT FULL CREAM 1L","pack":"Cartons","price":458},{"code":"73B","name":"UHT FULL CREAM WITH CUPS 1L","pack":"Cartons","price":1308},{"code":"81","name":"UHT FULL CREAM 500ML","pack":"Cartons","price":732}],"Water":[{"code":"500","name":"Gold Crown Water 1*24*300ML Bottle","pack":"Trays","price":456},{"code":"501","name":"Gold Crown Water 1*24*500ML Bottle","pack":"Trays","price":576},{"code":"502","name":"Gold Crown Water 1*12*1L Bottle","pack":"Trays","price":528},{"code":"503","name":"Gold Crown Water 1*12*1.5LTR Bottle","pack":"Trays","price":768}],"Mala":[{"code":"88","name":"PLAIN MALA (1x16) 1/2 (TR)","pack":"PCS","price":85},{"code":"110","name":"MALA TR-1LITRE","pack":"PCS","price":165},{"code":"69","name":"MALA 1L BOTTLE","pack":"PCS","price":165},{"code":"63","name":"PLAIN MALA 1/2 LT BOTTLE","pack":"PCS","price":85},{"code":"65","name":"12*500 ML SLEEVED MALA BOTTLE","pack":"Trays","price":956.28},{"code":"60","name":"BOTTLED MALA(1*12*250ML) SLEEVE","pack":"Trays","price":561.6},{"code":"15","name":"SWEETENED MALA -500 ML","pack":"Trays","price":1072.92},{"code":"10","name":"SWEETENED MALA 1L","pack":"PCS","price":175},{"code":"14","name":"SWEETENED MALA -250 ML","pack":"Trays","price":564.6},{"code":"134","name":"500ML FILPAK MALA","pack":"Crates","price":1260},{"code":"135","name":"MALA 200ML POUCH","pack":"Crates","price":630},{"code":"9","name":"SWEETEND MALA POUCH","pack":"Crates","price":1350}],"Yoghurts":[{"code":"201","name":"VANILLA YOGHURT 0.25 LT CUPS","pack":"Trays","price":696},{"code":"202","name":"VANILLA YOGHURT 0.5 LT CUPS","pack":"Trays","price":647.28},{"code":"36","name":"VANILLA CUP 100 ML","pack":"Trays","price":200},{"code":"204","name":"STRAWBERRY YOGHURT 0.25LT CUPS","pack":"Trays","price":696},{"code":"205","name":"STRAWBERRY YOGHURT 0.5LT CUPS","pack":"Trays","price":647.28},{"code":"216","name":"COCONUT YOGHURT 0.25LT CUPS","pack":"Trays","price":696},{"code":"217","name":"COCONUT YOGHURT 0.5LT CUPS","pack":"Trays","price":647.28},{"code":"219","name":"NATURAL YOGHURT 0.25LT CUPS","pack":"Trays","price":756},{"code":"220","name":"NATURAL YOGHURT 0.5LT CUPS","pack":"Trays","price":647.28},{"code":"210","name":"PINEAPPLE YOGHURT 0.25LT CUPS","pack":"Trays","price":696},{"code":"211","name":"PINEAPPLE YOGHURT 0.5LT CUPS","pack":"Trays","price":647.28},{"code":"40","name":"KCC VANILLA YOGHURT (1x16) 1/2LT (TR)","pack":"Trays","price":1612.16},{"code":"41","name":"KCC STRAWBERRY YOGHURT (1x16) 1/2LT (TR)","pack":"Trays","price":1612.16}],"Shakes":[{"code":"121","name":"TCA 1*21*200ML STRAWBERRY SHAKE","pack":"Trays","price":777},{"code":"120","name":"TCA 1*21*200ML CHOCOLATE SHAKE","pack":"Trays","price":777},{"code":"122","name":"TCA 1*21*200ML VANILLA SHAKE","pack":"Trays","price":777},{"code":"75","name":"STRAWBERRY FLAVOUR 1*24*250 ML SHAKES","pack":"Cartons","price":1440},{"code":"79","name":"VANILLA FLAVOUR 1*24*250 ML SHAKES","pack":"Cartons","price":1440},{"code":"77","name":"CHOCOLATE FLAVOUR 1*24*250 ML SHAKES","pack":"Cartons","price":1440}],"Cheese":[{"code":"432","name":"RINDLESS CHEDDAR 150gms*90","pack":"Cartons","price":280},{"code":"430","name":"RINDLESS CHEDDAR 250gms","pack":"Cartons","price":450},{"code":"433","name":"RINDLESS CHEDDAR 500 gms","pack":"Cartons","price":785},{"code":"436","name":"RINDLESS CHEDDAR 1 KG","pack":"Cartons","price":1345}],"Butter":[{"code":"600","name":"SALTED BUTTER TUBS 1*18* 0.5KG","pack":"Cartons","price":16516.62},{"code":"601","name":"SALTED BUTTER TUBS 1*24* 0.25KG","pack":"Cartons","price":12945.6},{"code":"602","name":"UNSALTED BUTTER TUBS 1*18* 0.5KG","pack":"Cartons","price":16516.62},{"code":"603","name":"UNSALTED BUTTER TUBS 1*24* 0.25KG","pack":"Cartons","price":12945.6},{"code":"604","name":"SALTED BUTTER 1*20*0.5KG","pack":"Cartons","price":18351.8},{"code":"605","name":"SALTED BUTTER 1*40*0.25KG","pack":"Cartons","price":21576},{"code":"646","name":"UNSALTED BUTTER 1*20* 0.5KG","pack":"Cartons","price":18351.8},{"code":"709","name":"SALTED MINI BUTTER 1x100x10 GMS x 12","pack":"Cartons","price":32532},{"code":"606","name":"SALTED MINI BUTTER TUB 1x24x8 GMS x 12","pack":"Cartons","price":7807.68},{"code":"757","name":"BULK UNSALTED BUTTER 10 KGS","pack":"Cartons","price":19400},{"code":"758","name":"BULK SALTED BUTTER 10 KGS","pack":"Cartons","price":19400}],"Powder":[{"code":"1036","name":"DRIED POWDER 1*12*400 GRMS","pack":"Bags","price":6408},{"code":"1037","name":"DRIED MILK POWDER 1*12*900 GRMS","pack":"Bags","price":14652},{"code":"1038","name":"DRIED POWDER 1*6*2.50 KG TIN","pack":"Bags","price":17670},{"code":"1031","name":"DRIED WHOLE MILK POWDER 1 x 25 KG BAG","pack":"Bags","price":22000},{"code":"1021","name":"DRIED SKIMMED MILK POWDER 1 x 25 KG BAG","pack":"Bags","price":21000}],"Ghee":[{"code":"885","name":"SUPERFINE GHEE 20 x 1/2KG TINS","pack":"Cartons","price":9440},{"code":"882","name":"SUPERFINE GHEE 12 x 1KG TINS","pack":"Cartons","price":10284},{"code":"876","name":"SUPERFINE GHEE 6 x 3KG TINS","pack":"Cartons","price":12327},{"code":"877","name":"SUPERFINE GHEE 6 x 2KG TINS","pack":"Cartons","price":8574},{"code":"851","name":"SUPERFINE GHEE 1 x 18KG PLASTIC","pack":"Buckets","price":17280}],"Fresh Milk":[{"code":"58","name":"GOLD CROWN 1X16X1LT (TR)","pack":"PCS","price":115},{"code":"68","name":"GOLD CROWN 1X16X500ML (TR)","pack":"PCS","price":65},{"code":"70","name":"KCC FRESH MILK 1X16X500ML (TR)","pack":"Crates","price":956.16},{"code":"55","name":"GOLD CROWN FILPAK 1X18X500ML POUCH","pack":"Crates","price":936},{"code":"59","name":"GOLD CROWN FILPAK 1X45X200ML POUCH","pack":"Crates","price":945},{"code":"84","name":"KCC FRESH FILPAK 1X18X500ML POUCH","pack":"Crates","price":936},{"code":"86","name":"KCC FRESH FILPAK 1X45X200ML POUCH","pack":"Crates","price":900},{"code":"85","name":"TAIFA FRESH FILPAK 1X18X500ML POUCH","pack":"Crates","price":900},{"code":"54","name":"TAIFA FRESH FILPAK 1X45X200ML POUCH","pack":"Crates","price":360},{"code":"97","name":"KCC FRESH MILK 500ML BOTTLE","pack":"PCS","price":70},{"code":"98","name":"GOLD CROWN FRESH MILK 500ML BOTTLE","pack":"PCS","price":70},{"code":"100","name":"GOLD CROWN FRESH MILK 1X35X1LT BOTTLE","pack":"PCS","price":130},{"code":"101","name":"GOLD CROWN FRESH MILK 1X18X2LT BOTTLE","pack":"PCS","price":250},{"code":"102","name":"GOLD CROWN FRESH MILK 1X10X3LT BOTTLE","pack":"PCS","price":390},{"code":"103","name":"GOLD CROWN STANDARD 1X35X1LT BOTTLE","pack":"PCS","price":130},{"code":"104","name":"GOLD CROWN STANDARD 1X18X2LT BOTTLE","pack":"PCS","price":250},{"code":"105","name":"GOLD CROWN STANDARD 1X10X3LT BOTTLE","pack":"PCS","price":390},{"code":"106","name":"GOLD CROWN LOWFAT 1X18X2LT BOTTLE","pack":"PCS","price":250},{"code":"107","name":"GOLD CROWN LOWFAT 1X10X3LT BOTTLE","pack":"PCS","price":390},{"code":"108","name":"GOLD CROWN FRESH MILK 5 LITRE BOTTLE","pack":"PCS","price":580},{"code":"51","name":"BULK FRESH MILK 50 LITRE CAN","pack":"PCS","price":4500},{"code":"50","name":"BULK FRESH MILK 20L PACK","pack":"PCS","price":2000}]};
+
+// Derive all pack types from catalogue
+var ALL_PACK_TYPES = (function(){
+  var set = {};
+  Object.keys(PRODUCT_CATALOGUE).forEach(function(cat){
+    PRODUCT_CATALOGUE[cat].forEach(function(p){ if(p.pack) set[p.pack]=true; });
+  });
+  return Object.keys(set).sort();
+})();
+
+var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
 </script>
 
 <!-- ── HEADER ──────────────────────────────────────── -->
 <div class="hdr">
   <div style="display:flex;align-items:center;gap:10px;max-width:100%;position:relative;z-index:1">
-    <img src="data:image/png;base64,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" alt="NKCC" onclick="secretTap()" style="height:40px;width:auto;border-radius:5px;background:#fff;padding:2px 4px;object-fit:contain;flex-shrink:0;cursor:pointer"/>
+    <img src="data:image/png;base64,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" alt="NKCC" onclick="secretTap()" style="height:40px;width:auto;border-radius:5px;background:#fff;padding:2px 4px;object-fit:contain;flex-shrink:0;cursor:pointer"/>
     <h1 id="hdrTitle">NEW KCC Market Visit Form</h1>
     <button onclick="openAdmin()" style="flex-shrink:0;background:transparent;border:none;color:transparent;width:32px;height:32px;cursor:default;pointer-events:none;margin-left:auto">⚙️</button>
   </div>
@@ -292,7 +312,6 @@ var PRODUCT_CATALOGUE = {"TFA":[{"code":"20","name":"GOLD CROWN TFA 1/2LT 1x 12"
   </div>
 
   <div class="wrap">
-
     <!-- STEP 1 -->
     <div class="step active" id="step-1">
       <h2 class="step-title">Visit Information</h2>
@@ -375,8 +394,6 @@ var PRODUCT_CATALOGUE = {"TFA":[{"code":"20","name":"GOLD CROWN TFA 1/2LT 1x 12"
     <div class="step" id="step-3">
       <h2 class="step-title">Order Builder</h2>
       <p class="step-sub">Add products ordered by the outlet, or record a zero-order visit.</p>
-
-      <!-- NO ORDER TOGGLE -->
       <div class="card" style="margin-bottom:14px">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
           <div>
@@ -389,24 +406,14 @@ var PRODUCT_CATALOGUE = {"TFA":[{"code":"20","name":"GOLD CROWN TFA 1/2LT 1x 12"
           </label>
         </div>
       </div>
-
-      <!-- ORDER BUILDER PANEL -->
       <div id="orderBuilderPanel">
-
-        <!-- CATEGORY FILTER PILLS -->
         <div style="overflow-x:auto;padding-bottom:6px;margin-bottom:10px;-webkit-overflow-scrolling:touch">
           <div style="display:flex;gap:6px;min-width:max-content" id="catPills"></div>
         </div>
-
-        <!-- SEARCH -->
         <div style="margin-bottom:10px">
           <input type="text" id="productSearch" placeholder="🔍 Search product name or code..." oninput="filterProducts()"/>
         </div>
-
-        <!-- PRODUCT LIST -->
         <div id="productList" style="display:flex;flex-direction:column;gap:7px;max-height:400px;overflow-y:auto;padding-right:2px;scroll-behavior:smooth"></div>
-
-        <!-- ORDER SUMMARY -->
         <div id="orderSummaryBox" style="display:none;margin-top:14px">
           <div class="order-summary-box">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
@@ -421,8 +428,6 @@ var PRODUCT_CATALOGUE = {"TFA":[{"code":"20","name":"GOLD CROWN TFA 1/2LT 1x 12"
           </div>
         </div>
       </div>
-
-      <!-- NO ORDER BANNER (shown when toggled) -->
       <div id="noOrderBanner" style="display:none">
         <div class="no-order-banner">
           <div style="font-size:32px;margin-bottom:8px">📋</div>
@@ -430,12 +435,8 @@ var PRODUCT_CATALOGUE = {"TFA":[{"code":"20","name":"GOLD CROWN TFA 1/2LT 1x 12"
           <div style="font-size:12px;color:#a16207;line-height:1.6">This visit will be submitted with <strong>KSH 0</strong> order value.<br>Use the Notes section on the next step to add context.</div>
         </div>
       </div>
-
-      <!-- HIDDEN FIELDS used in submit -->
       <input type="hidden" id="orderAmt" value="0"/>
       <input type="hidden" id="orderItemsJSON" value="[]"/>
-
-      <!-- PHOTO SECTION -->
       <div class="photo-section" id="photoSection" style="margin-top:14px">
         <div class="photo-header">
           <div class="photo-header-ico">📸</div>
@@ -448,7 +449,7 @@ var PRODUCT_CATALOGUE = {"TFA":[{"code":"20","name":"GOLD CROWN TFA 1/2LT 1x 12"
           <span style="font-size:18px;flex-shrink:0">🏪</span>
           <div>
             <div style="font-size:12px;font-weight:700;color:#7a4800;margin-bottom:2px">Photo Instruction</div>
-            <div style="font-size:11px;color:#9a5f00;line-height:1.5">Step outside the outlet and take a clear photo showing the <strong>outlet name/signage and entrance</strong>. The full storefront should be visible so the location can be identified.</div>
+            <div style="font-size:11px;color:#9a5f00;line-height:1.5">Step outside the outlet and take a clear photo showing the <strong>outlet name/signage and entrance</strong>.</div>
           </div>
         </div>
         <div class="photo-zone" id="photoZone">
@@ -466,7 +467,6 @@ var PRODUCT_CATALOGUE = {"TFA":[{"code":"20","name":"GOLD CROWN TFA 1/2LT 1x 12"
           <div class="guide-chip"><span>☀️</span> Good lighting</div>
         </div>
       </div>
-
       <div class="err-msg" id="err3">Please add at least one product (or toggle No Order on) and take the outlet photo.</div>
       <div class="btn-row"><button class="btn btn-sec" onclick="prev(3)">&larr; Back</button><button class="btn btn-pri" onclick="next(3)">Continue &rarr;</button></div>
     </div>
@@ -489,7 +489,7 @@ var PRODUCT_CATALOGUE = {"TFA":[{"code":"20","name":"GOLD CROWN TFA 1/2LT 1x 12"
         <summary class="about-summary">ℹ️ About this app</summary>
         <div class="about-body">
           <p>This tool has been created for the purpose of capturing outlets visited by the <strong>New KCC Sales Team</strong>, enabling real-time field intelligence and reporting.</p>
-          <div class="about-dev"><span style="font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Developed by</span><a href="/cdn-cgi/l/email-protection#ef86818980af81848c8cc18c80c1848a" style="font-size:12px;font-weight:600;color:var(--green);text-decoration:none">✉️ <span class="__cf_email__" data-cfemail="b8d1d6ded7f8d6d3dbdb96dbd796d3dd">[email&#160;protected]</span></a></div>
+          <div class="about-dev"><span style="font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Developed by</span><a href="mailto:dev@nkcc.co.ke" style="font-size:12px;font-weight:600;color:var(--green);text-decoration:none">✉️ dev@nkcc.co.ke</a></div>
         </div>
       </details>
       <div class="err-msg" id="err4">Please sign out with your full name before submitting.</div>
@@ -506,7 +506,6 @@ var PRODUCT_CATALOGUE = {"TFA":[{"code":"20","name":"GOLD CROWN TFA 1/2LT 1x 12"
       <p>Saved to the NKCC Google Sheet successfully.</p>
       <button class="btn btn-pri" onclick="resetForm()" style="max-width:220px;margin:0 auto;display:block">+ Record Another Visit</button>
     </div>
-
   </div>
 </div>
 
@@ -517,18 +516,36 @@ var PRODUCT_CATALOGUE = {"TFA":[{"code":"20","name":"GOLD CROWN TFA 1/2LT 1x 12"
       <div><div class="db-title">Dashboard</div><div class="db-subtitle" id="dbLastUpdated">Syncing...</div></div>
       <button class="refresh-btn" onclick="loadDashboard()" id="refreshBtn"><span class="ref-ico">&#8635;</span> Refresh</button>
     </div>
+
+    <!-- ── FILTER BAR ─────────────────────────────── -->
     <div class="filter-bar">
       <label>Filter:</label>
       <select id="filterCSR" onchange="applyFilters()"><option value="">All CSRs</option></select>
       <select id="filterRegion" onchange="applyFilters()"><option value="">All Regions</option></select>
-      <input type="text" id="filterOutlet" oninput="applyFilters()" placeholder="🏪 Outlet name..." class="order-filter-search"/>
+
+      <!-- ORDERS FILTER: product category -->
+      <select id="filterProduct" onchange="applyFilters()" title="Filter by product category ordered" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:120px;outline:none">
+        <option value="">📦 All Products</option>
+      </select>
+
+      <!-- ORDERS FILTER: packaging type -->
+      <select id="filterPack" onchange="applyFilters()" title="Filter by packaging type" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:110px;outline:none">
+        <option value="">🗃 All Packaging</option>
+      </select>
+
+      <!-- ORDERS FILTER: min/max KSH -->
+      <input type="number" id="filterOrderMin" onchange="applyFilters()" placeholder="Min KSH" min="0" class="filter-order-input" title="Minimum order value (KSH)"/>
+      <input type="number" id="filterOrderMax" onchange="applyFilters()" placeholder="Max KSH" min="0" class="filter-order-input" title="Maximum order value (KSH)"/>
+
       <input type="date" id="filterDateFrom" onchange="applyFilters()" title="From date" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:110px"/>
       <input type="date" id="filterDateTo" onchange="applyFilters()" title="To date" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:110px"/>
       <button class="filter-clear" onclick="clearFilters()">&#x2715; Clear</button>
     </div>
+
     <div id="dbContent"><div class="db-loading"><div class="spin-lg"></div><div>Loading data...</div></div></div>
     <div class="section-tabs" id="sectionTabs" style="display:none">
       <button class="stab active" id="stab-records" onclick="showSection('records')">📋 Visit Records</button>
+      <button class="stab" id="stab-orders" onclick="showSection('orders')">🧾 Orders</button>
       <button class="stab" id="stab-photos" onclick="showSection('photos')">📷 Outlet Photos</button>
     </div>
     <div id="section-records" style="display:none">
@@ -538,6 +555,57 @@ var PRODUCT_CATALOGUE = {"TFA":[{"code":"20","name":"GOLD CROWN TFA 1/2LT 1x 12"
       </div>
       <div id="tableContent"></div>
     </div>
+
+    <!-- ── ORDERS SECTION ── -->
+    <div id="section-orders" style="display:none">
+      <div class="db-subtitle" id="ordersSubtitle" style="font-size:13px;margin-bottom:12px"></div>
+
+      <!-- Orders by CSR revenue table -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <div>
+            <div class="chart-card-title">💰 Revenue by Team Member</div>
+            <div class="chart-card-sub">Total KSH orders generated per CSR</div>
+          </div>
+        </div>
+        <div class="chart-wrap-lg"><canvas id="chartOrdersCSR"></canvas></div>
+        <div class="orders-table-wrap" style="margin-top:14px">
+          <table class="orders-table" id="ordersCSRTable">
+            <thead><tr><th>#</th><th>CSR Name</th><th>Visits</th><th>Orders</th><th>Zero Orders</th><th>Total KSH</th><th>Avg KSH/Visit</th></tr></thead>
+            <tbody id="ordersCSRBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Orders by Packaging -->
+      <div class="chart-card" style="margin-top:14px">
+        <div class="chart-card-header">
+          <div>
+            <div class="chart-card-title">🗃 Revenue by Packaging Type</div>
+            <div class="chart-card-sub">KSH breakdown per packaging format across all visits</div>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="chartOrdersPack"></canvas></div>
+        <div class="orders-table-wrap" style="margin-top:14px">
+          <table class="orders-table" id="ordersPackTable">
+            <thead><tr><th>Packaging</th><th>Product Categories</th><th>Times Ordered</th><th>Total KSH</th></tr></thead>
+            <tbody id="ordersPackBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Orders by Product Category -->
+      <div class="chart-card" style="margin-top:14px">
+        <div class="chart-card-header">
+          <div>
+            <div class="chart-card-title">📦 Revenue by Product Category</div>
+            <div class="chart-card-sub">Which product lines are generating the most orders</div>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="chartOrdersCat"></canvas></div>
+      </div>
+    </div>
+
     <div id="section-photos" style="display:none">
       <div class="db-subtitle" id="photoCount" style="font-size:13px;margin-bottom:10px"></div>
       <div id="photoGallery"></div>
@@ -554,16 +622,31 @@ var PRODUCT_CATALOGUE = {"TFA":[{"code":"20","name":"GOLD CROWN TFA 1/2LT 1x 12"
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
+// ════════════════════════════════════════════════════
+//  POPULATE PRODUCT & PACK FILTERS
+// ════════════════════════════════════════════════════
+(function initFilterDropdowns(){
+  var prodSel = document.getElementById('filterProduct');
+  ALL_CATEGORIES.forEach(function(cat){
+    var opt = document.createElement('option'); opt.value = cat; opt.textContent = cat;
+    prodSel.appendChild(opt);
+  });
+  var packSel = document.getElementById('filterPack');
+  ALL_PACK_TYPES.forEach(function(pack){
+    var opt = document.createElement('option'); opt.value = pack; opt.textContent = pack;
+    packSel.appendChild(opt);
+  });
+})();
+
 // ════════════════════════════════════════════════════
 //  ORDER BUILDER STATE
 // ════════════════════════════════════════════════════
-var orderQtys = {}; // { "code": qty }
+var orderQtys = {};
 var activeCat = 'All';
 var noOrder = false;
 
 function initOrderBuilder() {
-  // Build category pills
   var cats = ['All'].concat(Object.keys(PRODUCT_CATALOGUE));
   var pillsEl = document.getElementById('catPills');
   pillsEl.innerHTML = '';
@@ -588,9 +671,7 @@ function getFilteredProducts() {
   Object.keys(PRODUCT_CATALOGUE).forEach(function(cat) {
     if (activeCat !== 'All' && activeCat !== cat) return;
     PRODUCT_CATALOGUE[cat].forEach(function(p) {
-      if (!q || p.name.toLowerCase().includes(q) || p.code.toLowerCase().includes(q)) {
-        all.push(p);
-      }
+      if (!q || p.name.toLowerCase().includes(q) || p.code.toLowerCase().includes(q)) all.push(p);
     });
   });
   return all;
@@ -599,32 +680,21 @@ function getFilteredProducts() {
 function renderProductList() {
   var list = document.getElementById('productList');
   var products = getFilteredProducts();
-  if (!products.length) {
-    list.innerHTML = '<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px">No products found</div>';
-    return;
-  }
+  if (!products.length) { list.innerHTML = '<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px">No products found</div>'; return; }
   list.innerHTML = '';
   products.forEach(function(p) {
     var qty = orderQtys[p.code] || 0;
     var packUnit = p.pack ? p.pack.replace(/s$/i,'').replace(/carton/i,'Ctn').replace(/tray/i,'Tray').replace(/crate/i,'Crate').replace(/bag/i,'Bag').replace(/bucket/i,'Bucket').replace(/pack/i,'Pack').replace(/pcs/i,'PC') : '';
-    var subtotal = qty > 0 ? ' &nbsp;<span style="color:var(--green-dark);font-weight:800;font-size:11px">= KSH ' + fmtNum(Math.round(qty * p.price)) + '</span>' : '';
     var row = document.createElement('div');
     row.className = 'prod-row' + (qty > 0 ? ' has-qty' : '');
     row.id = 'prodrow-' + p.code;
     row.innerHTML =
-      '<div class="prod-info">' +
-        '<div class="prod-name">' + p.name + '</div>' +
-        '<div class="prod-meta">Code: ' + p.code + ' &nbsp;|&nbsp; per ' + p.pack + '</div>' +
-      '</div>' +
+      '<div class="prod-info"><div class="prod-name">' + p.name + '</div><div class="prod-meta">Code: ' + p.code + ' &nbsp;|&nbsp; per ' + p.pack + '</div></div>' +
       '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex-shrink:0;margin-right:4px">' +
         '<div class="prod-price">KSH ' + fmtNum(p.price) + '<span style="font-size:9px;font-weight:500;color:var(--muted)"> /' + packUnit + '</span></div>' +
         '<div id="sub-' + p.code + '" style="font-size:11px;font-weight:700;color:var(--green-dark);min-height:14px">' + (qty > 0 ? 'KSH ' + fmtNum(Math.round(qty * p.price)) : '') + '</div>' +
       '</div>' +
-      '<div class="qty-ctrl">' +
-        '<button class="qty-btn" onclick="changeQty(\'' + p.code + '\',-1)">−</button>' +
-        '<span class="qty-val" id="qty-' + p.code + '">' + qty + '</span>' +
-        '<button class="qty-btn plus" onclick="changeQty(\'' + p.code + '\',1)">+</button>' +
-      '</div>';
+      '<div class="qty-ctrl"><button class="qty-btn" onclick="changeQty(\'' + p.code + '\',-1)">−</button><span class="qty-val" id="qty-' + p.code + '">' + qty + '</span><button class="qty-btn plus" onclick="changeQty(\'' + p.code + '\',1)">+</button></div>';
     list.appendChild(row);
   });
 }
@@ -632,102 +702,63 @@ function renderProductList() {
 function changeQty(code, delta) {
   var current = orderQtys[code] || 0;
   var newQty = Math.max(0, current + delta);
-  if (newQty === 0) { delete orderQtys[code]; } else { orderQtys[code] = newQty; }
+  if (newQty === 0) delete orderQtys[code]; else orderQtys[code] = newQty;
   var qtyEl = document.getElementById('qty-' + code);
   var rowEl = document.getElementById('prodrow-' + code);
   var subEl = document.getElementById('sub-' + code);
   if (qtyEl) qtyEl.textContent = newQty;
   if (rowEl) { if (newQty > 0) rowEl.classList.add('has-qty'); else rowEl.classList.remove('has-qty'); }
-  // Update inline subtotal
   if (subEl) {
     var price = 0;
-    Object.keys(PRODUCT_CATALOGUE).forEach(function(cat) {
-      PRODUCT_CATALOGUE[cat].forEach(function(p) { if (p.code === code) price = p.price; });
-    });
+    Object.keys(PRODUCT_CATALOGUE).forEach(function(cat) { PRODUCT_CATALOGUE[cat].forEach(function(p) { if (p.code === code) price = p.price; }); });
     subEl.textContent = newQty > 0 ? 'KSH ' + fmtNum(Math.round(newQty * price)) : '';
   }
   updateOrderSummary();
 }
 
-function filterProducts() {
-  renderProductList();
-}
+function filterProducts() { renderProductList(); }
 
 function updateOrderSummary() {
-  var total = 0;
-  var items = [];
-  // Collect all items with qty > 0
+  var total = 0, items = [];
   Object.keys(PRODUCT_CATALOGUE).forEach(function(cat) {
     PRODUCT_CATALOGUE[cat].forEach(function(p) {
       var qty = orderQtys[p.code] || 0;
-      if (qty > 0) {
-        var lineTotal = qty * p.price;
-        total += lineTotal;
-        items.push({ code: p.code, name: p.name, pack: p.pack, price: p.price, qty: qty, lineTotal: lineTotal });
-      }
+      if (qty > 0) { var lt = qty * p.price; total += lt; items.push({ code: p.code, name: p.name, pack: p.pack, price: p.price, qty: qty, lineTotal: lt }); }
     });
   });
-
   var summaryBox = document.getElementById('orderSummaryBox');
   var summaryLines = document.getElementById('summaryLines');
   var totalDisplay = document.getElementById('orderTotalDisplay');
-
-  if (items.length === 0) {
-    summaryBox.style.display = 'none';
-  } else {
-    summaryBox.style.display = 'block';
-    summaryLines.innerHTML = '';
+  if (items.length === 0) { summaryBox.style.display = 'none'; }
+  else {
+    summaryBox.style.display = 'block'; summaryLines.innerHTML = '';
     items.forEach(function(item) {
-      var line = document.createElement('div');
-      line.className = 'order-summary-line';
-      line.innerHTML =
-        '<div class="order-summary-name">' + item.name + '<br>' +
-        '<span style="font-size:10px;opacity:.7">' + item.qty + ' ' + item.pack + ' × KSH ' + fmtNum(item.price) + '</span></div>' +
-        '<div class="order-summary-val">KSH ' + fmtNum(Math.round(item.lineTotal)) + '</div>';
+      var line = document.createElement('div'); line.className = 'order-summary-line';
+      line.innerHTML = '<div class="order-summary-name">' + item.name + '<br><span style="font-size:10px;opacity:.7">' + item.qty + ' ' + item.pack + ' × KSH ' + fmtNum(item.price) + '</span></div><div class="order-summary-val">KSH ' + fmtNum(Math.round(item.lineTotal)) + '</div>';
       summaryLines.appendChild(line);
     });
     totalDisplay.textContent = 'KSH ' + fmtNum(Math.round(total));
   }
-
-  // Update hidden fields
   document.getElementById('orderAmt').value = Math.round(total);
-  document.getElementById('orderItemsJSON').value = JSON.stringify(items.map(function(i) {
-    return { code: i.code, name: i.name, qty: i.qty, pack: i.pack, price: i.price, lineTotal: Math.round(i.lineTotal) };
-  }));
+  document.getElementById('orderItemsJSON').value = JSON.stringify(items.map(function(i) { return { code: i.code, name: i.name, qty: i.qty, pack: i.pack, price: i.price, lineTotal: Math.round(i.lineTotal) }; }));
 }
 
-function clearAllOrder() {
-  orderQtys = {};
-  renderProductList();
-  updateOrderSummary();
-}
+function clearAllOrder() { orderQtys = {}; renderProductList(); updateOrderSummary(); }
 
 function handleNoOrderToggle() {
   noOrder = document.getElementById('noOrderToggle').checked;
-  var panel = document.getElementById('orderBuilderPanel');
-  var banner = document.getElementById('noOrderBanner');
-  if (noOrder) {
-    panel.style.display = 'none';
-    banner.style.display = 'block';
-    document.getElementById('orderAmt').value = '0';
-    document.getElementById('orderItemsJSON').value = '[]';
-  } else {
-    panel.style.display = 'block';
-    banner.style.display = 'none';
-    updateOrderSummary();
-  }
+  document.getElementById('orderBuilderPanel').style.display = noOrder ? 'none' : 'block';
+  document.getElementById('noOrderBanner').style.display = noOrder ? 'block' : 'none';
+  if (noOrder) { document.getElementById('orderAmt').value = '0'; document.getElementById('orderItemsJSON').value = '[]'; }
+  else updateOrderSummary();
 }
 
 // ════════════════════════════════════════════════════
 //  PAGE NAVIGATION
 // ════════════════════════════════════════════════════
 function switchPage(p) {
-  ['form','dashboard'].forEach(function(id) {
-    document.getElementById('page-'+id).classList.remove('active');
-    document.getElementById('nav-'+id).classList.remove('active');
-  });
-  document.getElementById('page-'+p).classList.add('active');
-  document.getElementById('nav-'+p).classList.add('active');
+  ['form','dashboard'].forEach(function(id) { document.getElementById('page-'+id).classList.remove('active'); document.getElementById('nav-'+id).classList.remove('active'); });
+  document.getElementById('page-'+p).classList.add('active'); document.getElementById('nav-'+p).classList.add('active');
   if (p === 'dashboard') loadDashboard();
   if (p === 'form') updatePhotoSummary();
   window.scrollTo({top:0,behavior:'smooth'});
@@ -765,8 +796,7 @@ function handlePhoto(event) {
     var img = new Image();
     img.onload = function() {
       var canvas = document.createElement('canvas');
-      var maxW = 1024, maxH = 1024;
-      var w = img.width, h = img.height;
+      var maxW = 1024, maxH = 1024, w = img.width, h = img.height;
       if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
       if (h > maxH) { w = Math.round(w * maxH / h); h = maxH; }
       canvas.width = w; canvas.height = h;
@@ -813,8 +843,7 @@ function removePhoto() {
 }
 
 function updatePhotoSummary() {
-  var card = document.getElementById('photoSummaryCard');
-  var grid = document.getElementById('photoSummaryGrid');
+  var card = document.getElementById('photoSummaryCard'), grid = document.getElementById('photoSummaryGrid');
   if (!card || !grid) return;
   if (!photoData) { card.style.display = 'none'; return; }
   card.style.display = 'block'; grid.innerHTML = '';
@@ -851,13 +880,8 @@ function validate(step) {
     if(!document.getElementById('visitDate').value)ok=false;
     if(!document.getElementById('rgnVal').value)ok=false;
     if(!document.getElementById('csrVal').value)ok=false;
-    if(!locData.addr){
-      ok=false;
-      var lb=document.getElementById('locBox');
-      if(lb){lb.classList.add('loc-err');lb.style.outline='2px solid var(--red)';}
-    } else {
-      var lb2=document.getElementById('locBox'); if(lb2) lb2.style.outline='';
-    }
+    if(!locData.addr){ok=false;var lb=document.getElementById('locBox');if(lb){lb.classList.add('loc-err');lb.style.outline='2px solid var(--red)';}}
+    else{var lb2=document.getElementById('locBox');if(lb2)lb2.style.outline='';}
   }
   if(step===2){
     if(!document.getElementById('outletName').value.trim())ok=false;
@@ -869,7 +893,7 @@ function validate(step) {
   }
   if(step===3){
     var hasOrder = noOrder || Object.keys(orderQtys).length > 0;
-    if(!hasOrder) ok=false;
+    if(!hasOrder)ok=false;
     if(!photoData){ok=false;document.getElementById('photoSection').classList.add('photo-required-err');}
     else{document.getElementById('photoSection').classList.remove('photo-required-err');}
   }
@@ -885,24 +909,22 @@ function validate(step) {
 function startLocation(){
   if(!navigator.geolocation){showLocStatus('error','Location not supported on this device.');return;}
   showLocStatus('scanning','Detecting location...');
-  locData={lat:null,lng:null,acc:null,addr:null};
-  bestAcc=Infinity;
+  locData={lat:null,lng:null,acc:null,addr:null};bestAcc=Infinity;
   var reverseGeoTimer=null;
   if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null;}
   watchId=navigator.geolocation.watchPosition(
     function(pos){
       var lat=pos.coords.latitude,lng=pos.coords.longitude,acc=Math.round(pos.coords.accuracy);
       if(acc<bestAcc){
-        bestAcc=acc;
-        locData.lat=lat.toFixed(7);locData.lng=lng.toFixed(7);locData.acc=acc;
-        if(reverseGeoTimer) clearTimeout(reverseGeoTimer);
+        bestAcc=acc;locData.lat=lat.toFixed(7);locData.lng=lng.toFixed(7);locData.acc=acc;
+        if(reverseGeoTimer)clearTimeout(reverseGeoTimer);
         reverseGeoTimer=setTimeout(function(){reverseGeo(lat,lng,acc);},600);
         if(acc<=20){navigator.geolocation.clearWatch(watchId);watchId=null;}
       }
     },
     function(err){
       navigator.geolocation.clearWatch(watchId);watchId=null;
-      var msg='Could not detect location. Tap Retry.', guide='';
+      var msg='Could not detect location. Tap Retry.',guide='';
       if(err.code===1){msg='📵 Location access was blocked.';guide='<div style="margin-top:8px;font-size:11px;color:var(--muted);line-height:1.7"><strong style="color:var(--text)">Android:</strong> Tap 🔒 lock icon → Site settings → Location → Allow<br><strong style="color:var(--text)">iPhone:</strong> Settings → Safari/Chrome → Location → Allow While Using App<br><strong style="color:var(--text)">Then tap Retry.</strong></div>';}
       showLocStatus('error',msg,guide);
     },
@@ -915,25 +937,22 @@ function reverseGeo(lat,lng,acc){
     .then(function(r){return r.json();})
     .then(function(d){
       if(!d||!d.address){showLocStatus('ok','Location detected');return;}
-      var a=d.address, parts=[];
-      if(a.amenity) parts.push(a.amenity);
-      else if(a.building) parts.push(a.building);
-      else if(a.shop) parts.push(a.shop);
+      var a=d.address,parts=[];
+      if(a.amenity)parts.push(a.amenity);else if(a.building)parts.push(a.building);else if(a.shop)parts.push(a.shop);
       var streetPart='';
       if(a.road||a.street||a.pedestrian||a.footway){var road=a.road||a.street||a.pedestrian||a.footway;streetPart=(a.house_number?a.house_number+' ':'')+road;}
-      if(streetPart) parts.push(streetPart);
-      if(a.suburb||a.neighbourhood||a.quarter||a.estate) parts.push(a.suburb||a.neighbourhood||a.quarter||a.estate);
-      if(a.city||a.town||a.village) parts.push(a.city||a.town||a.village);
+      if(streetPart)parts.push(streetPart);
+      if(a.suburb||a.neighbourhood||a.quarter||a.estate)parts.push(a.suburb||a.neighbourhood||a.quarter||a.estate);
+      if(a.city||a.town||a.village)parts.push(a.city||a.town||a.village);
       var name=parts.length?parts.join(', '):(d.display_name||'').split(',').slice(0,3).join(', ');
-      locData.addr=name;
-      showLocStatus('ok','📍 '+name);
+      locData.addr=name;showLocStatus('ok','📍 '+name);
     })
     .catch(function(){showLocStatus('ok','Location detected');});
 }
 
 function showLocStatus(state,msg,guide){
   var box=document.getElementById('locBox'),icon=document.getElementById('locIcon'),text=document.getElementById('locText'),retry=document.getElementById('locRetry');
-  if(!box) return;
+  if(!box)return;
   box.className='loc-simple';
   if(state==='scanning'){box.classList.add('loc-scanning');icon.textContent='📡';icon.style.display='';text.innerHTML=msg;text.className='loc-simple-text loc-pulse';retry.style.display='none';}
   else if(state==='ok'){box.classList.add('loc-ok');icon.textContent='';icon.style.display='none';text.innerHTML=msg;text.className='loc-simple-text';retry.style.display='none';}
@@ -944,16 +963,17 @@ function showLocStatus(state,msg,guide){
 //  SUBMIT
 // ════════════════════════════════════════════════════
 function submitForm(){
-  if(!validate(4)) return;
+  if(!validate(4))return;
   var btn=document.getElementById('submitBtn');
   btn.disabled=true;btn.innerHTML='<span class="spin"></span>Saving...';
-
-  // Build order items string for sheet
-  var orderItems = [];
-  try { orderItems = JSON.parse(document.getElementById('orderItemsJSON').value || '[]'); } catch(e){}
-  var orderStr = noOrder ? 'NO ORDER' : (orderItems.length ? orderItems.map(function(i){ return i.qty+'x '+i.name; }).join('; ') : 'NO ORDER');
-  var orderProducts = orderItems.length ? [...new Set(orderItems.map(function(i){ return Object.keys(PRODUCT_CATALOGUE).find(function(c){ return PRODUCT_CATALOGUE[c].find(function(p){ return p.code===i.code; }); }) || ''; }))].filter(Boolean).join(', ') : 'None';
-
+  var orderItems=[];try{orderItems=JSON.parse(document.getElementById('orderItemsJSON').value||'[]');}catch(e){}
+  var orderStr=noOrder?'NO ORDER':(orderItems.length?orderItems.map(function(i){return i.qty+'x '+i.name;}).join('; '):'NO ORDER');
+  var _catsSeen={},_catsArr=[];
+  orderItems.forEach(function(i){
+    var cat=Object.keys(PRODUCT_CATALOGUE).find(function(c){return PRODUCT_CATALOGUE[c].find(function(p){return p.code===i.code;});}) || '';
+    if(cat && !_catsSeen[cat]){_catsSeen[cat]=true;_catsArr.push(cat);}
+  });
+  var orderProducts=_catsArr.length?_catsArr.join(', '):'None';
   var payload={
     visitDate:document.getElementById('visitDate').value,
     region:document.getElementById('rgnVal').value,
@@ -964,9 +984,9 @@ function submitForm(){
     telephone:document.getElementById('telephone').value.trim(),
     distributor:document.getElementById('distributor').value.trim(),
     outletType:(document.querySelector('input[name="outletType"]:checked')||{}).value||'',
-    products: orderProducts,
+    products:orderProducts,
     orderGenerated:document.getElementById('orderAmt').value,
-    orderDetails: orderStr,
+    orderDetails:orderStr,
     comment:document.getElementById('comment').value.trim(),
     locationName:locData.addr||'',
     signedBy:document.getElementById('signedBy').value.trim(),
@@ -975,10 +995,7 @@ function submitForm(){
   };
   fetch(APPS_SCRIPT_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload),headers:{'Content-Type':'application/json'}})
     .then(function(){showSuccess();})
-    .catch(function(){
-      btn.disabled=false;btn.innerHTML='Submit Visit &#10003;';
-      var e=document.getElementById('err4');e.textContent='Network error. Check connection and try again.';e.className='err-msg show';
-    });
+    .catch(function(){btn.disabled=false;btn.innerHTML='Submit Visit &#10003;';var e=document.getElementById('err4');e.textContent='Network error. Check connection and try again.';e.className='err-msg show';});
 }
 
 function showSuccess(){
@@ -1000,7 +1017,6 @@ function resetForm(){
   photoData=null;removePhoto();updatePhotoSummary();
   if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null;}
   locData={lat:null,lng:null,acc:null,addr:null};
-  // Reset order builder
   orderQtys={};noOrder=false;
   document.getElementById('noOrderToggle').checked=false;
   document.getElementById('orderBuilderPanel').style.display='block';
@@ -1010,8 +1026,7 @@ function resetForm(){
   document.getElementById('productSearch').value='';
   activeCat='All';
   document.querySelectorAll('.cat-pill').forEach(function(p,i){p.classList.toggle('active',i===0);});
-  renderProductList();
-  updateOrderSummary();
+  renderProductList();updateOrderSummary();
   cur=1;document.getElementById('step-1').classList.add('active');updateProg();
   window.scrollTo({top:0,behavior:'smooth'});startLocation();
 }
@@ -1027,12 +1042,10 @@ function loadDashboard(){
   if(btn){btn.classList.add('spinning');btn.disabled=true;}
   document.getElementById('dbLastUpdated').textContent='Syncing...';
   if(!window.allRows) document.getElementById('dbContent').innerHTML='<div class="db-loading"><div class="spin-lg"></div><div>Loading visits...</div></div>';
-
   var cbName='nkcc_cb_'+Date.now();
   var script=document.createElement('script');
   var settled=false;
   var timer=setTimeout(function(){if(settled)return;settled=true;cleanup();stopBtns();handleFetchFailure();},15000);
-
   window[cbName]=function(data){
     if(settled)return;settled=true;clearTimeout(timer);cleanup();stopBtns();_retryCount=0;
     if(data.error){handleFetchFailure();return;}
@@ -1041,12 +1054,9 @@ function loadDashboard(){
     var now=new Date().toLocaleTimeString('en-KE',{hour:'2-digit',minute:'2-digit'});
     document.getElementById('dbLastUpdated').textContent='✅ Updated '+now+' · '+window.allRows.length+' records';
   };
-
   script.onerror=function(){if(settled)return;settled=true;clearTimeout(timer);cleanup();stopBtns();handleFetchFailure();};
-
   function cleanup(){if(script.parentNode)script.parentNode.removeChild(script);try{delete window[cbName];}catch(e){window[cbName]=undefined;}}
   function stopBtns(){if(btn){btn.classList.remove('spinning');btn.disabled=false;}}
-
   script.src=APPS_SCRIPT_URL+'?action=getData&callback='+cbName;
   document.head.appendChild(script);
 }
@@ -1071,24 +1081,60 @@ function populateFilters(rows){
   Object.keys(regions).sort().forEach(function(r){fRgn.innerHTML+='<option>'+r+'</option>';});
 }
 
+// ── UPDATED applyFilters with product category + order KSH range ──────────
 function applyFilters(){
   var csr=document.getElementById('filterCSR').value;
   var rgn=document.getElementById('filterRegion').value;
+  var prod=document.getElementById('filterProduct').value;       // product category
+  var pack=document.getElementById('filterPack').value;          // packaging type
+  var orderMin=parseFloat(document.getElementById('filterOrderMin').value)||0;
+  var orderMax=parseFloat(document.getElementById('filterOrderMax').value)||Infinity;
   var dateFrom=document.getElementById('filterDateFrom')?document.getElementById('filterDateFrom').value:'';
   var dateTo=document.getElementById('filterDateTo')?document.getElementById('filterDateTo').value:'';
+
   window.filteredRows=(window.allRows||[]).filter(function(r){
     if(csr&&r['CSR Name']!==csr)return false;
     if(rgn&&r['Region']!==rgn)return false;
     var d=String(r['Date of Market Visit']).substring(0,10);
     if(dateFrom&&d<dateFrom)return false;
     if(dateTo&&d>dateTo)return false;
+
+    // Product category filter — checks NKCC Products column
+    if(prod){
+      var prods=String(r['NKCC Products']||'');
+      if(!prods.split(',').map(function(p){return p.trim();}).includes(prod)) return false;
+    }
+
+    // Packaging filter — derive packs that appear in the product categories for this row
+    if(pack){
+      var rowCats=String(r['NKCC Products']||'').split(',').map(function(p){return p.trim();}).filter(Boolean);
+      var rowPacks=[];
+      rowCats.forEach(function(cat){
+        if(PRODUCT_CATALOGUE[cat]) PRODUCT_CATALOGUE[cat].forEach(function(p){ if(p.pack&&rowPacks.indexOf(p.pack)===-1) rowPacks.push(p.pack); });
+      });
+      if(rowPacks.indexOf(pack)===-1) return false;
+    }
+
+    // Order KSH range filter
+    var amt=parseFloat(String(r['Order Generated (KSH)']).replace(/,/g,''))||0;
+    if(amt<orderMin)return false;
+    if(amt>orderMax)return false;
+
     return true;
   });
-  renderDashboard(window.filteredRows);renderTable(window.filteredRows);renderPhotos(window.filteredRows);
+  renderDashboard(window.filteredRows);
+  renderTable(window.filteredRows);
+  renderOrders(window.filteredRows);
+  renderPhotos(window.filteredRows);
 }
 
 function clearFilters(){
-  document.getElementById('filterCSR').value='';document.getElementById('filterRegion').value='';
+  document.getElementById('filterCSR').value='';
+  document.getElementById('filterRegion').value='';
+  document.getElementById('filterProduct').value='';
+  document.getElementById('filterPack').value='';
+  document.getElementById('filterOrderMin').value='';
+  document.getElementById('filterOrderMax').value='';
   if(document.getElementById('filterDateFrom'))document.getElementById('filterDateFrom').value='';
   if(document.getElementById('filterDateTo'))document.getElementById('filterDateTo').value='';
   applyFilters();
@@ -1104,13 +1150,12 @@ function downloadCSV(){
   var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
   var url=URL.createObjectURL(blob);
   var a=document.createElement('a');
-  var now=new Date().toISOString().slice(0,10);
-  a.href=url;a.download='NKCC_Visits_'+now+'.csv';
+  a.href=url;a.download='NKCC_Visits_'+new Date().toISOString().slice(0,10)+'.csv';
   document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
 }
 
 // ════════════════════════════════════════════════════
-//  RENDER DASHBOARD
+//  RENDER DASHBOARD (KPIs + Charts)
 // ════════════════════════════════════════════════════
 function renderDashboard(rows){
   if(!rows||rows.length===0){
@@ -1141,21 +1186,13 @@ function renderDashboard(rows){
   var today=new Date();
   var currentMonth=today.getFullYear()+'-'+(String(today.getMonth()+1).padStart(2,'0'));
   var csrMonthCounts={};
-  rows.forEach(function(r){
-    var name=r['CSR Name'];if(!name)return;
-    var d=String(r['Date of Market Visit']).substring(0,7);if(!d)return;
-    if(!csrMonthCounts[name])csrMonthCounts[name]={};
-    csrMonthCounts[name][d]=(csrMonthCounts[name][d]||0)+1;
-  });
-  var allMonthsSet={};
-  rows.forEach(function(r){var d=String(r['Date of Market Visit']).substring(0,7);if(d)allMonthsSet[d]=true;});
+  rows.forEach(function(r){var name=r['CSR Name'];if(!name)return;var d=String(r['Date of Market Visit']).substring(0,7);if(!d)return;if(!csrMonthCounts[name])csrMonthCounts[name]={};csrMonthCounts[name][d]=(csrMonthCounts[name][d]||0)+1;});
+  var allMonthsSet={};rows.forEach(function(r){var d=String(r['Date of Market Visit']).substring(0,7);if(d)allMonthsSet[d]=true;});
   var allMonths=Object.keys(allMonthsSet).sort().reverse();
   if(!allMonths.length)allMonths=[currentMonth];
   var trackMonth=allMonths[0];
   var trackLabel=(function(m){var p=m.split('-');return new Date(p[0],p[1]-1,1).toLocaleString('default',{month:'long',year:'numeric'});})(trackMonth);
-
   var ALL_CSRS=['James Njeru','Evans Bokoo','Philomena Ndunge','Edwin Rono','Julius Muturia','Dalmas Lechamakanya','Duncan Yegon','Geofreey Too','Rebecca Boit','Lilian Kariuki','Agnes Miano','Francis Koge','Moses Kaburu','Wilfred Bitonja','James Ngochi','Peter Rukaria','RSM Shadrack K','RSM Collins W','RSM Mercy Chepkorir','RSM Agatha W','Ag HNS Arnold B'];
-
   var targetRows=ALL_CSRS.map(function(name){return{name:name,count:(csrMonthCounts[name]&&csrMonthCounts[name][trackMonth])||0};}).sort(function(a,b){return b.count-a.count;});
 
   html+='<div class="chart-card" style="margin-top:14px"><div class="chart-card-header"><div><div class="chart-card-title">📍 CSR Monthly Target</div><div class="chart-card-sub">'+trackLabel+' · Target: '+TARGET+' visits per CSR</div></div>';
@@ -1163,10 +1200,8 @@ function renderDashboard(rows){
   if(allMonths.length>1){allMonths.forEach(function(m){var p=m.split('-');var lbl=new Date(p[0],p[1]-1,1).toLocaleString('default',{month:'short',year:'2-digit'});html+='<button onclick="switchTargetMonth(\''+m+'\')" id="tmBtn_'+m.replace('-','_')+'" style="background:'+(m===trackMonth?'var(--green)':'var(--bg)')+';color:'+(m===trackMonth?'#fff':'var(--muted)')+';border:1.5px solid '+(m===trackMonth?'var(--green)':'var(--border)')+';border-radius:6px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer">'+lbl+'</button>';});}
   html+='</div></div><div id="targetRows">';
   targetRows.forEach(function(r){
-    var pct=Math.min(100,Math.round((r.count/TARGET)*100));
-    var over=r.count>TARGET;
-    var barColor=pct>=100?'#0d6e3f':pct>=60?'#f5a623':'#d94f4f';
-    var status=pct>=100?'✅':pct>=60?'🟡':'🔴';
+    var pct=Math.min(100,Math.round((r.count/TARGET)*100));var over=r.count>TARGET;
+    var barColor=pct>=100?'#0d6e3f':pct>=60?'#f5a623':'#d94f4f';var status=pct>=100?'✅':pct>=60?'🟡':'🔴';
     html+='<div class="target-row"><div class="target-name">'+r.name+'</div><div class="target-bar-wrap"><div class="target-bar"><div class="target-bar-fill" style="width:'+pct+'%;background:'+barColor+'"></div></div></div><div class="target-count" style="color:'+barColor+'">'+(over?'<span title="Exceeded">⭐ </span>':'')+r.count+'/'+TARGET+'</div><div class="target-pct">'+status+' '+pct+'%</div></div>';
   });
   html+='</div></div>';
@@ -1237,6 +1272,139 @@ function statCard(color,ico,val,label,sub){return '<div class="stat-card '+color
 function fmtNum(n){return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');}
 
 // ════════════════════════════════════════════════════
+//  RENDER ORDERS SECTION (NEW)
+// ════════════════════════════════════════════════════
+function renderOrders(rows){
+  var el=document.getElementById('section-orders');if(!el)return;
+  var ordersSubtitle=document.getElementById('ordersSubtitle');
+
+  if(!rows||rows.length===0){
+    el.innerHTML='<div class="db-empty"><div class="db-empty-ico">🧾</div><div style="font-weight:600;margin-bottom:6px">No orders to display</div><div style="font-size:12px;color:var(--muted)">Adjust filters or submit visits to see order data.</div></div>';
+    if(ordersSubtitle)ordersSubtitle.textContent='';
+    return;
+  }
+
+  // ── Per-CSR order aggregation ──────────────────────────
+  var csrOrders={};
+  rows.forEach(function(r){
+    var name=r['CSR Name']||'Unknown';
+    if(!csrOrders[name])csrOrders[name]={visits:0,orders:0,zeros:0,total:0};
+    csrOrders[name].visits++;
+    var amt=parseFloat(String(r['Order Generated (KSH)']).replace(/,/g,''))||0;
+    csrOrders[name].total+=amt;
+    if(amt>0)csrOrders[name].orders++;else csrOrders[name].zeros++;
+  });
+  var csrArr=Object.entries(csrOrders).map(function(e){return{name:e[0],visits:e[1].visits,orders:e[1].orders,zeros:e[1].zeros,total:e[1].total,avg:e[1].visits>0?e[1].total/e[1].visits:0};}).sort(function(a,b){return b.total-a.total;});
+  var grandTotal=csrArr.reduce(function(s,c){return s+c.total;},0);
+  if(ordersSubtitle)ordersSubtitle.textContent=csrArr.length+' CSRs · '+rows.length+' visits · KSH '+fmtNum(Math.round(grandTotal))+' total orders';
+
+  // ── Per-packaging aggregation ─────────────────────────
+  // Build pack → {total, categories, count}  from PRODUCT_CATALOGUE + NKCC Products column
+  var packOrders={};
+  rows.forEach(function(r){
+    var amt=parseFloat(String(r['Order Generated (KSH)']).replace(/,/g,''))||0;
+    if(amt<=0)return;
+    var cats=String(r['NKCC Products']||'').split(',').map(function(p){return p.trim();}).filter(Boolean);
+    var seen={};
+    cats.forEach(function(cat){
+      if(!PRODUCT_CATALOGUE[cat])return;
+      PRODUCT_CATALOGUE[cat].forEach(function(p){
+        if(!p.pack)return;
+        var key=p.pack;
+        if(!packOrders[key])packOrders[key]={total:0,count:0,cats:{}};
+        if(!seen[key]){
+          // Distribute order evenly across packs present (approximation)
+          packOrders[key].total+=amt/(cats.length||1);
+          packOrders[key].count++;
+          seen[key]=true;
+        }
+        packOrders[key].cats[cat]=true;
+      });
+    });
+  });
+  var packArr=Object.entries(packOrders).map(function(e){return{pack:e[0],total:e[1].total,count:e[1].count,cats:Object.keys(e[1].cats).join(', ')};}).sort(function(a,b){return b.total-a.total;});
+
+  // ── Per-category revenue aggregation ────────────────
+  var catOrders={};
+  rows.forEach(function(r){
+    var amt=parseFloat(String(r['Order Generated (KSH)']).replace(/,/g,''))||0;
+    if(amt<=0)return;
+    var cats=String(r['NKCC Products']||'').split(',').map(function(p){return p.trim();}).filter(Boolean);
+    cats.forEach(function(cat){
+      catOrders[cat]=(catOrders[cat]||0)+(amt/(cats.length||1));
+    });
+  });
+  var catArr=Object.entries(catOrders).sort(function(a,b){return b[1]-a[1];});
+
+  // ── Render CSR table ───────────────────────────────
+  var csrBodyHTML='';
+  csrArr.forEach(function(c,i){
+    var rankEmoji=i===0?'🥇':i===1?'🥈':i===2?'🥉':''+(i+1);
+    csrBodyHTML+='<tr><td>'+rankEmoji+'</td><td>'+c.name+'</td><td>'+c.visits+'</td><td style="color:var(--green-dark);font-weight:700">'+c.orders+'</td><td style="color:var(--red)">'+c.zeros+'</td><td style="font-weight:800;color:var(--green-dark)">KSH '+fmtNum(Math.round(c.total))+'</td><td style="color:var(--muted)">KSH '+fmtNum(Math.round(c.avg))+'</td></tr>';
+  });
+  var csrBody=document.getElementById('ordersCSRBody');
+  if(csrBody)csrBody.innerHTML=csrBodyHTML;
+
+  // ── Render packaging table ─────────────────────────
+  var packBodyHTML='';
+  packArr.forEach(function(p){
+    packBodyHTML+='<tr><td><span class="pack-badge">'+p.pack+'</span></td><td style="color:var(--muted);font-size:11px">'+p.cats+'</td><td>'+p.count+'</td><td style="font-weight:700;color:var(--green-dark)">KSH '+fmtNum(Math.round(p.total))+'</td></tr>';
+  });
+  var packBody=document.getElementById('ordersPackBody');
+  if(packBody)packBody.innerHTML=packBodyHTML||'<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:16px">No packaging data</td></tr>';
+
+  // ── Charts ─────────────────────────────────────────
+  var COLORS=['#0d6e3f','#f5a623','#2563eb','#7c3aed','#0891b2','#d94f4f','#16a34a','#ea580c','#b45309','#6d28d9'];
+
+  setTimeout(function(){
+    // Orders by CSR bar chart
+    var csrEl=document.getElementById('chartOrdersCSR');
+    if(csrEl){
+      destroyChart('chartOrdersCSR');
+      var ctx=csrEl.getContext('2d');
+      window.charts['chartOrdersCSR']=new Chart(ctx,{
+        type:'bar',
+        data:{
+          labels:csrArr.map(function(c){return shortName(c.name);}),
+          datasets:[{label:'Total KSH',data:csrArr.map(function(c){return Math.round(c.total);}),backgroundColor:csrArr.map(function(_,i){return COLORS[i%COLORS.length];}),borderRadius:6,borderSkipped:false}]
+        },
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return 'KSH '+fmtNum(ctx.parsed.y);}}}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return 'KSH '+fmtNum(v);}}}}}
+      });
+    }
+
+    // Orders by packaging doughnut
+    var packEl=document.getElementById('chartOrdersPack');
+    if(packEl&&packArr.length){
+      destroyChart('chartOrdersPack');
+      var ctx2=packEl.getContext('2d');
+      window.charts['chartOrdersPack']=new Chart(ctx2,{
+        type:'doughnut',
+        data:{
+          labels:packArr.map(function(p){return p.pack;}),
+          datasets:[{data:packArr.map(function(p){return Math.round(p.total);}),backgroundColor:COLORS,borderWidth:2,borderColor:'#fff'}]
+        },
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:12,font:{size:11}}},tooltip:{callbacks:{label:function(ctx){return ctx.label+': KSH '+fmtNum(ctx.parsed);}}}}}
+      });
+    }
+
+    // Orders by product category horizontal bar
+    var catEl=document.getElementById('chartOrdersCat');
+    if(catEl&&catArr.length){
+      destroyChart('chartOrdersCat');
+      var ctx3=catEl.getContext('2d');
+      window.charts['chartOrdersCat']=new Chart(ctx3,{
+        type:'bar',
+        data:{
+          labels:catArr.map(function(c){return c[0];}),
+          datasets:[{label:'KSH',data:catArr.map(function(c){return Math.round(c[1]);}),backgroundColor:catArr.map(function(_,i){return COLORS[i%COLORS.length];}),borderRadius:6,borderSkipped:false}]
+        },
+        options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return 'KSH '+fmtNum(ctx.parsed.x);}}}},scales:{x:{beginAtZero:true,ticks:{callback:function(v){return 'KSH '+fmtNum(v);}}}}}
+      });
+    }
+  },60);
+}
+
+// ════════════════════════════════════════════════════
 //  RENDER TABLE
 // ════════════════════════════════════════════════════
 function renderTable(rows){
@@ -1266,22 +1434,14 @@ function renderPhotos(rows){
   var allRows=rows||[];
   var withPhotos=allRows.filter(function(r){return String(r['Photo URL']||'').trim().length>5;});
   document.getElementById('photoCount').textContent=withPhotos.length+' photo'+(withPhotos.length!==1?'s':'')+' found';
-  if(!withPhotos.length){
-    document.getElementById('photoGallery').innerHTML='<div class="db-empty"><div class="db-empty-ico">📷</div><div style="font-weight:600;margin-bottom:6px">No photos yet</div><div style="font-size:12px;color:var(--muted)">Photos will appear here once CSRs submit visits.</div></div>';
-    return;
-  }
+  if(!withPhotos.length){document.getElementById('photoGallery').innerHTML='<div class="db-empty"><div class="db-empty-ico">📷</div><div style="font-weight:600;margin-bottom:6px">No photos yet</div><div style="font-size:12px;color:var(--muted)">Photos will appear here once CSRs submit visits.</div></div>';return;}
   var sorted=withPhotos.slice().sort(function(a,b){return String(b['Date of Market Visit']||'').localeCompare(String(a['Date of Market Visit']||''));});
   var html='<div class="photo-gallery-grid">';
   sorted.forEach(function(r){
     var outlet=(r['Outlet / Customer Name']||'Unknown Outlet');
-    var csr=r['CSR Name']||'—';
-    var date=fmtDate(r['Date of Market Visit']);
-    var ts=r['Timestamp']||'';
-    var loc=r['Location Name']||'—';
-    var url=String(r['Photo URL']||'').trim();
-    var fileId='';
-    var m=url.match(/\/d\/([a-zA-Z0-9_-]+)/)||url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-    if(m) fileId=m[1];
+    var csr=r['CSR Name']||'—';var date=fmtDate(r['Date of Market Visit']);var ts=r['Timestamp']||'';var loc=r['Location Name']||'—';
+    var url=String(r['Photo URL']||'').trim();var fileId='';
+    var m=url.match(/\/d\/([a-zA-Z0-9_-]+)/)||url.match(/[?&]id=([a-zA-Z0-9_-]+)/);if(m)fileId=m[1];
     var imgSrc=fileId?'https://drive.google.com/thumbnail?id='+fileId+'&sz=w400':'';
     var lbImgSrc=fileId?'https://drive.google.com/thumbnail?id='+fileId+'&sz=w800':'';
     var meta=encodeURIComponent(JSON.stringify({outlet:outlet,csr:csr,date:date,ts:ts,loc:loc,url:url,lbSrc:lbImgSrc}));
@@ -1301,22 +1461,22 @@ function renderPhotos(rows){
 
 function showSection(s){
   document.getElementById('section-records').style.display=s==='records'?'block':'none';
+  document.getElementById('section-orders').style.display=s==='orders'?'block':'none';
   document.getElementById('section-photos').style.display=s==='photos'?'block':'none';
   document.getElementById('stab-records').classList.toggle('active',s==='records');
+  document.getElementById('stab-orders').classList.toggle('active',s==='orders');
   document.getElementById('stab-photos').classList.toggle('active',s==='photos');
+  // Re-render orders charts when tab is activated (they may have been destroyed)
+  if(s==='orders') renderOrders(window.filteredRows||window.allRows||[]);
 }
 
 // ════════════════════════════════════════════════════
 //  LIGHTBOX
 // ════════════════════════════════════════════════════
 function openLightbox(encodedSrc,encodedMeta){
-  var imgSrc=decodeURIComponent(encodedSrc);
-  var meta={};
-  try{meta=JSON.parse(decodeURIComponent(encodedMeta));}catch(e){}
-  var displaySrc=meta.lbSrc||imgSrc;
-  var lbImg=document.getElementById('lbImg');
-  if(displaySrc){lbImg.src=displaySrc;lbImg.style.display='block';lbImg.onerror=function(){lbImg.style.display='none';};}
-  else{lbImg.style.display='none';}
+  var imgSrc=decodeURIComponent(encodedSrc);var meta={};try{meta=JSON.parse(decodeURIComponent(encodedMeta));}catch(e){}
+  var displaySrc=meta.lbSrc||imgSrc;var lbImg=document.getElementById('lbImg');
+  if(displaySrc){lbImg.src=displaySrc;lbImg.style.display='block';lbImg.onerror=function(){lbImg.style.display='none';};}else{lbImg.style.display='none';}
   document.getElementById('lbMeta').innerHTML=
     '<div class="lb-meta-row"><span class="lb-meta-ico">🏪</span><div><div class="lb-meta-label">Outlet</div><div class="lb-meta-val">'+(meta.outlet||'—')+'</div></div></div>'
    +'<div class="lb-meta-row"><span class="lb-meta-ico">👤</span><div><div class="lb-meta-label">CSR</div><div class="lb-meta-val">'+(meta.csr||'—')+'</div></div></div>'
@@ -1324,10 +1484,8 @@ function openLightbox(encodedSrc,encodedMeta){
    +'<div class="lb-meta-row"><span class="lb-meta-ico">🕐</span><div><div class="lb-meta-label">Submitted At</div><div class="lb-meta-val">'+(meta.ts||'—')+'</div></div></div>'
    +'<div class="lb-meta-row"><span class="lb-meta-ico">📍</span><div><div class="lb-meta-label">Location</div><div class="lb-meta-val">'+(meta.loc||'—')+'</div></div></div>'
    +'<div style="margin-top:14px;text-align:center"><a href="'+(meta.url||'#')+'" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:#34a853;color:#fff;text-decoration:none;padding:10px 20px;border-radius:9px;font-size:13px;font-weight:700">↗ Open Full Resolution in Drive</a></div>';
-  document.getElementById('photoLightbox').style.display='block';
-  document.body.style.overflow='hidden';
+  document.getElementById('photoLightbox').style.display='block';document.body.style.overflow='hidden';
 }
-
 function closeLightbox(){document.getElementById('photoLightbox').style.display='none';document.body.style.overflow='';}
 
 // ════════════════════════════════════════════════════
@@ -1340,7 +1498,6 @@ var _savedCsrs=DEFAULT_CSRS.slice(),_savedRegions=DEFAULT_REGIONS.slice();
 var _adminCsrs=[],_adminRegions=[];
 
 function loadAdminData(){return{csrs:_savedCsrs.slice(),regions:_savedRegions.slice()};}
-
 function applyAdminDataToForm(){
   var data=loadAdminData();
   var csrSel=document.getElementById('csrVal'),rgnSel=document.getElementById('rgnVal');
@@ -1376,9 +1533,7 @@ function checkAdminPwd(){
   if(val===ADMIN_PASSWORD){
     document.getElementById('adminLock').style.display='none';document.getElementById('adminPanel').style.display='block';
     var data=loadAdminData();_adminCsrs=data.csrs.slice();_adminRegions=data.regions.slice();renderAdminLists();
-  } else {
-    document.getElementById('adminPwdErr').style.display='block';document.getElementById('adminPwdInput').value='';document.getElementById('adminPwdInput').focus();
-  }
+  }else{document.getElementById('adminPwdErr').style.display='block';document.getElementById('adminPwdInput').value='';document.getElementById('adminPwdInput').focus();}
 }
 
 function renderAdminLists(){
@@ -1445,3 +1600,11 @@ function shortName(n){var parts=n.split(' ');if(parts.length>=2)return parts[0]+
       <div class="admin-card" style="margin-top:14px;text-align:center">
         <div style="font-size:28px;margin-bottom:8px">ℹ️</div>
         <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px">About This App</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.7">NKCC Market Visit Form v2.0<br>Field intelligence for the New KCC Sales Team.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
