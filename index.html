@@ -167,6 +167,12 @@ input[type=file].cam-input{display:none}
 .filter-bar select{padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:100px}
 .filter-clear{background:none;border:1.5px solid var(--border);border-radius:8px;padding:6px 10px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
 .filter-download{background:var(--green);border:none;border-radius:8px;padding:6px 12px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;color:#fff;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:4px}
+.dditem{display:flex;align-items:center;gap:10px;padding:11px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--text);cursor:pointer;border:none;background:none;width:100%;text-align:left;transition:background .15s;-webkit-tap-highlight-color:transparent}
+.dditem:hover,.dditem:active{background:var(--green-lt)}
+.dditem.active{color:var(--green-dark);background:var(--green-lt)}
+.dditem.active::after{content:'✓';margin-left:auto;font-weight:800;color:var(--green)}
+.filter-apply{background:var(--green);border:none;border-radius:8px;padding:7px 16px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;color:#fff;cursor:pointer;white-space:nowrap;box-shadow:0 3px 10px rgba(13,110,63,.3);transition:background .2s}
+.filter-apply:hover{background:var(--green-dark)}
 .filter-order-input{padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);flex:1;min-width:90px;outline:none;-webkit-appearance:none;appearance:none}
 .filter-order-input:focus{border-color:var(--green)}
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
@@ -296,8 +302,24 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
 <!-- ── BOTTOM NAV ──────────────────────────────────── -->
 <nav class="bnav">
   <button class="bnav-btn active" id="nav-form" onclick="switchPage('form')"><span class="bnav-ico">📝</span>New Visit</button>
-  <button class="bnav-btn" id="nav-dashboard" onclick="switchPage('dashboard')"><span class="bnav-ico">📊</span>Dashboard</button>
+  <button class="bnav-btn" id="nav-dashboard" onclick="handleDashboardNav()"><span class="bnav-ico">📊</span>Dashboard</button>
 </nav>
+
+<!-- ── DASHBOARD DROPDOWN (top-right) ── -->
+<div id="dbDropdown" style="display:none;position:fixed;top:58px;right:12px;z-index:600;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.18);min-width:210px;overflow:hidden">
+  <div style="padding:10px 14px 6px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Views</div>
+  <div class="dditem active" id="dditem-overview" onclick="selectView('overview')"><span>📊</span>Overview</div>
+  <div class="dditem" id="dditem-records"  onclick="selectView('records')"><span>📋</span>Visit Records</div>
+  <div class="dditem" id="dditem-orders"   onclick="selectView('orders')"><span>🧾</span>Orders</div>
+  <div class="dditem" id="dditem-photos"   onclick="selectView('photos')"><span>📷</span>Outlet Photos</div>
+  <div style="height:1px;background:var(--border);margin:6px 0"></div>
+  <div style="padding:0 0 6px">
+    <button class="dditem" onclick="loadDashboard();closeDropdown()"><span>&#8635;</span>Refresh Data</button>
+    <button class="dditem" onclick="downloadCSV();closeDropdown()"><span>&#11015;</span>Export CSV</button>
+  </div>
+</div>
+<!-- tap-outside overlay -->
+<div id="ddOverlay" onclick="closeDropdown()" style="display:none;position:fixed;inset:0;z-index:599"></div>
 
 <!-- ════════════ PAGE: FORM ════════════ -->
 <div class="page active" id="page-form">
@@ -489,7 +511,7 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
         <summary class="about-summary">ℹ️ About this app</summary>
         <div class="about-body">
           <p>This tool has been created for the purpose of capturing outlets visited by the <strong>New KCC Sales Team</strong>, enabling real-time field intelligence and reporting.</p>
-          <div class="about-dev"><span style="font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Developed by</span><a href="mailto:dev@nkcc.co.ke" style="font-size:12px;font-weight:600;color:var(--green);text-decoration:none">✉️ dev@nkcc.co.ke</a></div>
+          <div class="about-dev"><span style="font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Developed by</span><a href="/cdn-cgi/l/email-protection#98fcfdeed8f6f3fbfbb6fbf7b6f3fd" style="font-size:12px;font-weight:600;color:var(--green);text-decoration:none">✉️ <span class="__cf_email__" data-cfemail="cbafaebd8ba5a0a8a8e5a8a4e5a0ae">[email&#160;protected]</span></a></div>
         </div>
       </details>
       <div class="err-msg" id="err4">Please sign out with your full name before submitting.</div>
@@ -513,41 +535,38 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
 <div class="page" id="page-dashboard">
   <div class="wrap">
     <div class="db-header">
-      <div><div class="db-title">Dashboard</div><div class="db-subtitle" id="dbLastUpdated">Syncing...</div></div>
-      <button class="refresh-btn" onclick="loadDashboard()" id="refreshBtn"><span class="ref-ico">&#8635;</span> Refresh</button>
+      <div><div class="db-title" id="dbViewTitle">Dashboard</div><div class="db-subtitle" id="dbLastUpdated">Syncing...</div></div>
+      <button onclick="toggleDropdown()" style="background:var(--green);border:none;border-radius:10px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;color:#fff;box-shadow:0 2px 8px rgba(13,110,63,.3);flex-shrink:0" title="Menu">&#9776;</button>
     </div>
 
     <!-- ── FILTER BAR ─────────────────────────────── -->
     <div class="filter-bar">
       <label>Filter:</label>
-      <select id="filterCSR" onchange="applyFilters()"><option value="">All CSRs</option></select>
-      <select id="filterRegion" onchange="applyFilters()"><option value="">All Regions</option></select>
-
-      <!-- ORDERS FILTER: product category -->
-      <select id="filterProduct" onchange="applyFilters()" title="Filter by product category ordered" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:120px;outline:none">
-        <option value="">📦 All Products</option>
+      <select id="filterCSR" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:100px"><option value="">All CSRs</option></select>
+      <select id="filterRegion" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:100px"><option value="">All Regions</option></select>
+      <select id="filterOrderStatus" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:140px;outline:none">
+        <option value="">🧾 Orders Generated</option>
+        <option value="with">With Orders Only</option>
+        <option value="zero">Zero Orders Only</option>
       </select>
-
-      <!-- ORDERS FILTER: packaging type -->
-      <select id="filterPack" onchange="applyFilters()" title="Filter by packaging type" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:110px;outline:none">
-        <option value="">🗃 All Packaging</option>
-      </select>
-
-      <!-- ORDERS FILTER: min/max KSH -->
-      <input type="number" id="filterOrderMin" onchange="applyFilters()" placeholder="Min KSH" min="0" class="filter-order-input" title="Minimum order value (KSH)"/>
-      <input type="number" id="filterOrderMax" onchange="applyFilters()" placeholder="Max KSH" min="0" class="filter-order-input" title="Maximum order value (KSH)"/>
-
-      <input type="date" id="filterDateFrom" onchange="applyFilters()" title="From date" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:110px"/>
-      <input type="date" id="filterDateTo" onchange="applyFilters()" title="To date" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:110px"/>
+      <input type="date" id="filterDateFrom" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:110px"/>
+      <input type="date" id="filterDateTo" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:110px"/>
       <button class="filter-clear" onclick="clearFilters()">&#x2715; Clear</button>
+      <button class="filter-apply" id="applyBtn" onclick="applyFilters()">&#10003; Apply</button>
     </div>
 
-    <div id="dbContent"><div class="db-loading"><div class="spin-lg"></div><div>Loading data...</div></div></div>
-    <div class="section-tabs" id="sectionTabs" style="display:none">
-      <button class="stab active" id="stab-records" onclick="showSection('records')">📋 Visit Records</button>
-      <button class="stab" id="stab-orders" onclick="showSection('orders')">🧾 Orders</button>
-      <button class="stab" id="stab-photos" onclick="showSection('photos')">📷 Outlet Photos</button>
+    <!-- ── FILTER SUMMARY (visible after Apply when filters active) ── -->
+    <div id="filterSummary" style="display:none;background:linear-gradient(135deg,#0d6e3f,#16a34a);border-radius:12px;padding:13px 16px;margin-bottom:14px">
+      <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.07em;margin-bottom:9px">Filtered Report Summary</div>
+      <div id="fsSummaryGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:7px"></div>
+      <div id="fsSummaryTags" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:9px"></div>
     </div>
+
+    <!-- ── PRODUCT PRESENCE (below filter, above main content) ── -->
+    <div id="productPresenceSection" style="display:none"></div>
+
+    <!-- ── MAIN CONTENT AREAS ── -->
+    <div id="dbContent"><div class="db-loading"><div class="spin-lg"></div><div>Loading data...</div></div></div>
     <div id="section-records" style="display:none">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
         <div class="db-subtitle" id="tableCount" style="font-size:13px"></div>
@@ -622,22 +641,7 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
   </div>
 </div>
 
-<script>
-// ════════════════════════════════════════════════════
-//  POPULATE PRODUCT & PACK FILTERS
-// ════════════════════════════════════════════════════
-(function initFilterDropdowns(){
-  var prodSel = document.getElementById('filterProduct');
-  ALL_CATEGORIES.forEach(function(cat){
-    var opt = document.createElement('option'); opt.value = cat; opt.textContent = cat;
-    prodSel.appendChild(opt);
-  });
-  var packSel = document.getElementById('filterPack');
-  ALL_PACK_TYPES.forEach(function(pack){
-    var opt = document.createElement('option'); opt.value = pack; opt.textContent = pack;
-    packSel.appendChild(opt);
-  });
-})();
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 
 // ════════════════════════════════════════════════════
 //  ORDER BUILDER STATE
@@ -751,17 +755,6 @@ function handleNoOrderToggle() {
   document.getElementById('noOrderBanner').style.display = noOrder ? 'block' : 'none';
   if (noOrder) { document.getElementById('orderAmt').value = '0'; document.getElementById('orderItemsJSON').value = '[]'; }
   else updateOrderSummary();
-}
-
-// ════════════════════════════════════════════════════
-//  PAGE NAVIGATION
-// ════════════════════════════════════════════════════
-function switchPage(p) {
-  ['form','dashboard'].forEach(function(id) { document.getElementById('page-'+id).classList.remove('active'); document.getElementById('nav-'+id).classList.remove('active'); });
-  document.getElementById('page-'+p).classList.add('active'); document.getElementById('nav-'+p).classList.add('active');
-  if (p === 'dashboard') loadDashboard();
-  if (p === 'form') updatePhotoSummary();
-  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 // ════════════════════════════════════════════════════
@@ -1038,8 +1031,6 @@ window.allRows=null;window.filteredRows=null;window.charts={};
 var _retryCount=0;
 
 function loadDashboard(){
-  var btn=document.getElementById('refreshBtn');
-  if(btn){btn.classList.add('spinning');btn.disabled=true;}
   document.getElementById('dbLastUpdated').textContent='Syncing...';
   if(!window.allRows) document.getElementById('dbContent').innerHTML='<div class="db-loading"><div class="spin-lg"></div><div>Loading visits...</div></div>';
   var cbName='nkcc_cb_'+Date.now();
@@ -1056,7 +1047,7 @@ function loadDashboard(){
   };
   script.onerror=function(){if(settled)return;settled=true;clearTimeout(timer);cleanup();stopBtns();handleFetchFailure();};
   function cleanup(){if(script.parentNode)script.parentNode.removeChild(script);try{delete window[cbName];}catch(e){window[cbName]=undefined;}}
-  function stopBtns(){if(btn){btn.classList.remove('spinning');btn.disabled=false;}}
+  function stopBtns(){}
   script.src=APPS_SCRIPT_URL+'?action=getData&callback='+cbName;
   document.head.appendChild(script);
 }
@@ -1081,62 +1072,144 @@ function populateFilters(rows){
   Object.keys(regions).sort().forEach(function(r){fRgn.innerHTML+='<option>'+r+'</option>';});
 }
 
-// ── UPDATED applyFilters with product category + order KSH range ──────────
+// ════════════════════════════════════════════════════
+//  PAGE NAVIGATION + DROPDOWN
+// ════════════════════════════════════════════════════
+var _currentView = 'overview';
+
+function switchPage(p){
+  ['form','dashboard'].forEach(function(id){
+    document.getElementById('page-'+id).classList.remove('active');
+    document.getElementById('nav-'+id).classList.remove('active');
+  });
+  document.getElementById('page-'+p).classList.add('active');
+  document.getElementById('nav-'+p).classList.add('active');
+  if(p==='dashboard') loadDashboard();
+  if(p==='form') updatePhotoSummary();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function handleDashboardNav(){
+  var onDash=document.getElementById('page-dashboard').classList.contains('active');
+  if(!onDash){ switchPage('dashboard'); }
+  toggleDropdown();
+}
+
+function toggleDropdown(){
+  var dd=document.getElementById('dbDropdown');
+  var ov=document.getElementById('ddOverlay');
+  var open=dd.style.display!=='none';
+  dd.style.display=open?'none':'block';
+  ov.style.display=open?'none':'block';
+}
+
+function closeDropdown(){
+  document.getElementById('dbDropdown').style.display='none';
+  document.getElementById('ddOverlay').style.display='none';
+}
+
+var _viewTitles={overview:'Dashboard',records:'Visit Records',orders:'Orders',photos:'Outlet Photos'};
+
+function selectView(v){
+  _currentView=v;
+  // Update checkmarks in dropdown
+  ['overview','records','orders','photos'].forEach(function(k){
+    var el=document.getElementById('dditem-'+k);
+    if(el) el.className='dditem'+(k===v?' active':'');
+  });
+  // Show/hide sections
+  var isOverview=v==='overview';
+  document.getElementById('dbContent').style.display=isOverview?'block':'none';
+  document.getElementById('productPresenceSection').style.display=isOverview?'block':'none';
+  document.getElementById('section-records').style.display=v==='records'?'block':'none';
+  document.getElementById('section-orders').style.display=v==='orders'?'block':'none';
+  document.getElementById('section-photos').style.display=v==='photos'?'block':'none';
+  if(v==='orders') renderOrders(window.filteredRows||window.allRows||[]);
+  // Update header title
+  var t=document.getElementById('dbViewTitle');
+  if(t) t.textContent=_viewTitles[v]||'Dashboard';
+  closeDropdown();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// Keep old showSection alias for compatibility
+function showSection(s){ selectView(s); }
+
+// ════════════════════════════════════════════════════
+//  FILTERS
+// ════════════════════════════════════════════════════
 function applyFilters(){
+  var btn=document.getElementById('applyBtn');
+  if(btn){btn.textContent='⏳ Applying...';btn.disabled=true;}
+
   var csr=document.getElementById('filterCSR').value;
   var rgn=document.getElementById('filterRegion').value;
-  var prod=document.getElementById('filterProduct').value;       // product category
-  var pack=document.getElementById('filterPack').value;          // packaging type
-  var orderMin=parseFloat(document.getElementById('filterOrderMin').value)||0;
-  var orderMax=parseFloat(document.getElementById('filterOrderMax').value)||Infinity;
-  var dateFrom=document.getElementById('filterDateFrom')?document.getElementById('filterDateFrom').value:'';
-  var dateTo=document.getElementById('filterDateTo')?document.getElementById('filterDateTo').value:'';
+  var orderStatus=document.getElementById('filterOrderStatus').value;
+  var dateFrom=document.getElementById('filterDateFrom').value;
+  var dateTo=document.getElementById('filterDateTo').value;
 
   window.filteredRows=(window.allRows||[]).filter(function(r){
-    if(csr&&r['CSR Name']!==csr)return false;
-    if(rgn&&r['Region']!==rgn)return false;
+    if(csr&&r['CSR Name']!==csr) return false;
+    if(rgn&&r['Region']!==rgn) return false;
     var d=String(r['Date of Market Visit']).substring(0,10);
-    if(dateFrom&&d<dateFrom)return false;
-    if(dateTo&&d>dateTo)return false;
-
-    // Product category filter — checks NKCC Products column
-    if(prod){
-      var prods=String(r['NKCC Products']||'');
-      if(!prods.split(',').map(function(p){return p.trim();}).includes(prod)) return false;
+    if(dateFrom&&d<dateFrom) return false;
+    if(dateTo&&d>dateTo) return false;
+    if(orderStatus){
+      var amt=parseFloat(String(r['Order Generated (KSH)']).replace(/,/g,''))||0;
+      if(orderStatus==='with'&&amt<=0) return false;
+      if(orderStatus==='zero'&&amt>0) return false;
     }
-
-    // Packaging filter — derive packs that appear in the product categories for this row
-    if(pack){
-      var rowCats=String(r['NKCC Products']||'').split(',').map(function(p){return p.trim();}).filter(Boolean);
-      var rowPacks=[];
-      rowCats.forEach(function(cat){
-        if(PRODUCT_CATALOGUE[cat]) PRODUCT_CATALOGUE[cat].forEach(function(p){ if(p.pack&&rowPacks.indexOf(p.pack)===-1) rowPacks.push(p.pack); });
-      });
-      if(rowPacks.indexOf(pack)===-1) return false;
-    }
-
-    // Order KSH range filter
-    var amt=parseFloat(String(r['Order Generated (KSH)']).replace(/,/g,''))||0;
-    if(amt<orderMin)return false;
-    if(amt>orderMax)return false;
-
     return true;
   });
+
+  renderFilterSummary(window.filteredRows,{csr:csr,rgn:rgn,orderStatus:orderStatus,dateFrom:dateFrom,dateTo:dateTo});
   renderDashboard(window.filteredRows);
+  renderProductPresence(window.filteredRows);
   renderTable(window.filteredRows);
   renderOrders(window.filteredRows);
   renderPhotos(window.filteredRows);
+  selectView(_currentView);
+
+  setTimeout(function(){ if(btn){btn.textContent='✓ Apply';btn.disabled=false;} },400);
+}
+
+function renderFilterSummary(rows, f){
+  var card=document.getElementById('filterSummary');
+  var grid=document.getElementById('fsSummaryGrid');
+  var tags=document.getElementById('fsSummaryTags');
+  if(!card||!grid||!tags) return;
+  var hasFilter=f.csr||f.rgn||f.orderStatus||f.dateFrom||f.dateTo;
+  if(!hasFilter||!rows||!rows.length){ card.style.display='none'; return; }
+  var totalVisits=rows.length, totalOrder=0, withOrders=0, zeroOrders=0;
+  rows.forEach(function(r){
+    var amt=parseFloat(String(r['Order Generated (KSH)']).replace(/,/g,''))||0;
+    totalOrder+=amt; if(amt>0)withOrders++; else zeroOrders++;
+  });
+  function fsStat(val,lbl){
+    return '<div style="background:rgba(255,255,255,.12);border-radius:8px;padding:8px 10px">'
+      +'<div style="font-family:\'Syne\',sans-serif;font-size:17px;font-weight:800;color:#fff;line-height:1">'+val+'</div>'
+      +'<div style="font-size:10px;color:rgba(255,255,255,.65);margin-top:2px">'+lbl+'</div></div>';
+  }
+  grid.innerHTML=fsStat(totalVisits,'Visits')+fsStat('KSH '+fmtNum(Math.round(totalOrder)),'Total Orders')+fsStat(withOrders,'With Orders')+fsStat(zeroOrders,'Zero Orders');
+  function fsTag(t){ return '<span style="background:rgba(255,255,255,.15);border-radius:6px;padding:3px 8px;font-size:11px;color:#fff;font-weight:600">'+t+'</span>'; }
+  var tagHtml='';
+  if(f.csr) tagHtml+=fsTag('👤 '+f.csr);
+  if(f.rgn) tagHtml+=fsTag('📍 '+f.rgn);
+  if(f.orderStatus==='with') tagHtml+=fsTag('🧾 With Orders');
+  if(f.orderStatus==='zero') tagHtml+=fsTag('🚫 Zero Orders');
+  if(f.dateFrom) tagHtml+=fsTag('From: '+f.dateFrom);
+  if(f.dateTo) tagHtml+=fsTag('To: '+f.dateTo);
+  tags.innerHTML=tagHtml;
+  card.style.display='block';
 }
 
 function clearFilters(){
   document.getElementById('filterCSR').value='';
   document.getElementById('filterRegion').value='';
-  document.getElementById('filterProduct').value='';
-  document.getElementById('filterPack').value='';
-  document.getElementById('filterOrderMin').value='';
-  document.getElementById('filterOrderMax').value='';
-  if(document.getElementById('filterDateFrom'))document.getElementById('filterDateFrom').value='';
-  if(document.getElementById('filterDateTo'))document.getElementById('filterDateTo').value='';
+  document.getElementById('filterOrderStatus').value='';
+  document.getElementById('filterDateFrom').value='';
+  document.getElementById('filterDateTo').value='';
+  document.getElementById('filterSummary').style.display='none';
   applyFilters();
 }
 
@@ -1221,13 +1294,6 @@ function renderDashboard(rows){
   });
   html+='</div>';
 
-  var prodSorted=Object.entries(productCounts).sort(function(a,b){return b[1]-a[1];});
-  if(prodSorted.length>0){
-    html+='<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title">Product Presence</div><div class="chart-card-sub">How often each product category appears</div></div></div><div class="product-grid">';
-    prodSorted.forEach(function(pair){html+='<div class="prod-pill"><div class="prod-pill-name">'+pair[0]+'</div><div class="prod-pill-count">'+pair[1]+' visits</div></div>';});
-    html+='</div></div>';
-  }
-
   document.getElementById('dbContent').innerHTML=html;
 
   setTimeout(function(){
@@ -1269,6 +1335,45 @@ function switchTargetMonth(month){
 }
 
 function statCard(color,ico,val,label,sub){return '<div class="stat-card '+color+'"><div class="stat-ico">'+ico+'</div><div class="stat-val">'+val+'</div><div class="stat-label">'+label+'</div><div style="font-size:10px;color:var(--muted);margin-top:2px">'+sub+'</div></div>';}
+
+// ── Product Presence — pinned below filter bar ───────────────────────────
+function renderProductPresence(rows){
+  var sec=document.getElementById('productPresenceSection');
+  if(!sec)return;
+  if(!rows||!rows.length){sec.style.display='none';return;}
+  var productCounts={};
+  rows.forEach(function(r){
+    if(r['NKCC Products']){
+      r['NKCC Products'].split(',').forEach(function(p){
+        var t=p.trim();if(t&&t!=='None')productCounts[t]=(productCounts[t]||0)+1;
+      });
+    }
+  });
+  var prodSorted=Object.entries(productCounts).sort(function(a,b){return b[1]-a[1];});
+  if(!prodSorted.length){sec.style.display='none';return;}
+  // Build order totals per category too
+  var catRevenue={};
+  rows.forEach(function(r){
+    var amt=parseFloat(String(r['Order Generated (KSH)']).replace(/,/g,''))||0;
+    if(!amt)return;
+    var cats=String(r['NKCC Products']||'').split(',').map(function(p){return p.trim();}).filter(Boolean);
+    cats.forEach(function(cat){catRevenue[cat]=(catRevenue[cat]||0)+(amt/(cats.length||1));});
+  });
+  var html='<div class="chart-card" style="margin-bottom:14px">'
+    +'<div class="chart-card-header"><div><div class="chart-card-title">📦 Product Presence &amp; Revenue</div>'
+    +'<div class="chart-card-sub">Categories ordered · filtered to '+rows.length+' visit'+(rows.length!==1?'s':'')+'</div></div></div>'
+    +'<div class="product-grid">';
+  prodSorted.forEach(function(pair){
+    var rev=catRevenue[pair[0]]||0;
+    html+='<div class="prod-pill"><div class="prod-pill-name">'+pair[0]+'</div>'
+      +'<div class="prod-pill-count">'+pair[1]+' visit'+(pair[1]!==1?'s':'')+'</div>'
+      +(rev>0?'<div style="font-size:10px;color:var(--accent);font-weight:700;margin-top:1px">KSH '+fmtNum(Math.round(rev))+'</div>':'')
+      +'</div>';
+  });
+  html+='</div></div>';
+  sec.innerHTML=html;
+  sec.style.display='block';
+}
 function fmtNum(n){return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');}
 
 // ════════════════════════════════════════════════════
@@ -1408,8 +1513,6 @@ function renderOrders(rows){
 //  RENDER TABLE
 // ════════════════════════════════════════════════════
 function renderTable(rows){
-  var tabs=document.getElementById('sectionTabs');
-  if(tabs)tabs.style.display=rows&&rows.length?'flex':'none';
   document.getElementById('tableCount').textContent=(rows?rows.length:0)+' records';
   if(!rows||rows.length===0){
     document.getElementById('tableContent').innerHTML='<div class="db-empty"><div class="db-empty-ico">📭</div><div style="font-weight:600;margin-bottom:6px">No records found</div><div style="font-size:12px;color:var(--muted)">No visits match the selected filters.</div></div>';
@@ -1459,16 +1562,6 @@ function renderPhotos(rows){
   document.getElementById('photoGallery').innerHTML=html;
 }
 
-function showSection(s){
-  document.getElementById('section-records').style.display=s==='records'?'block':'none';
-  document.getElementById('section-orders').style.display=s==='orders'?'block':'none';
-  document.getElementById('section-photos').style.display=s==='photos'?'block':'none';
-  document.getElementById('stab-records').classList.toggle('active',s==='records');
-  document.getElementById('stab-orders').classList.toggle('active',s==='orders');
-  document.getElementById('stab-photos').classList.toggle('active',s==='photos');
-  // Re-render orders charts when tab is activated (they may have been destroyed)
-  if(s==='orders') renderOrders(window.filteredRows||window.allRows||[]);
-}
 
 // ════════════════════════════════════════════════════
 //  LIGHTBOX
@@ -1599,12 +1692,4 @@ function shortName(n){var parts=n.split(' ');if(parts.length>=2)return parts[0]+
       <div id="adminSaveMsg" style="text-align:center;font-size:12px;color:#6ee7a8;margin-top:8px;display:none">✅ Saved! Dropdowns updated.</div>
       <div class="admin-card" style="margin-top:14px;text-align:center">
         <div style="font-size:28px;margin-bottom:8px">ℹ️</div>
-        <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px">About This App</div>
-        <div style="font-size:12px;color:var(--muted);line-height:1.7">NKCC Market Visit Form v2.0<br>Field intelligence for the New KCC Sales Team.</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-</body>
-</html>
+        <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px">
