@@ -324,7 +324,6 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
   <div style="height:1px;background:var(--border);margin:4px 0"></div>
   <div style="padding:0 0 6px">
     <button class="dditem" onclick="loadDashboard();closeDropdown()"><span>&#8635;</span>Refresh Data</button>
-    <button class="dditem" onclick="downloadCSV();closeDropdown()"><span>&#11015;</span>Export CSV</button>
   </div>
 </div>
 <!-- tap-outside overlay -->
@@ -637,6 +636,13 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
     <div id="section-photos" style="display:none">
       <div class="db-subtitle" id="photoCount" style="font-size:13px;margin-bottom:10px"></div>
       <div id="photoGallery"></div>
+    </div>
+
+    <!-- ── EXPORT CSV — bottom of dashboard ── -->
+    <div style="padding:20px 0 8px;text-align:center">
+      <button onclick="downloadCSV()" style="display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#fff;border:none;border-radius:12px;padding:13px 28px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 3px 12px rgba(13,110,63,.3);width:100%;justify-content:center;max-width:400px;margin:0 auto">
+        <span style="font-size:18px">&#11015;</span> Export to CSV
+      </button>
     </div>
   </div>
 </div>
