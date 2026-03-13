@@ -306,13 +306,22 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
 </nav>
 
 <!-- ── DASHBOARD DROPDOWN (top-right) ── -->
-<div id="dbDropdown" style="display:none;position:fixed;top:58px;right:12px;z-index:600;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.18);min-width:210px;overflow:hidden">
-  <div style="padding:10px 14px 6px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Views</div>
-  <div class="dditem active" id="dditem-overview" onclick="selectView('overview')"><span>📊</span>Overview</div>
-  <div class="dditem" id="dditem-records"  onclick="selectView('records')"><span>📋</span>Visit Records</div>
-  <div class="dditem" id="dditem-orders"   onclick="selectView('orders')"><span>🧾</span>Orders</div>
-  <div class="dditem" id="dditem-photos"   onclick="selectView('photos')"><span>📷</span>Outlet Photos</div>
-  <div style="height:1px;background:var(--border);margin:6px 0"></div>
+<div id="dbDropdown" style="display:none;position:fixed;top:58px;right:12px;z-index:600;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.18);min-width:220px;overflow:hidden;max-height:85vh;overflow-y:auto">
+  <div style="padding:10px 14px 6px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Summary</div>
+  <div class="dditem active" id="dditem-overview"  onclick="selectView('overview')"><span>📊</span>Overview</div>
+  <div style="height:1px;background:var(--border);margin:4px 0"></div>
+  <div style="padding:6px 14px 4px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Analytics</div>
+  <div class="dditem" id="dditem-target"    onclick="selectView('target')"><span>📍</span>CSR Monthly Target</div>
+  <div class="dditem" id="dditem-monthord"  onclick="selectView('monthord')"><span>📈</span>Orders by Month</div>
+  <div class="dditem" id="dditem-region"    onclick="selectView('region')"><span>🗺</span>Visits by Region</div>
+  <div class="dditem" id="dditem-outlet"    onclick="selectView('outlet')"><span>🏪</span>Outlet Types</div>
+  <div class="dditem" id="dditem-leaders"   onclick="selectView('leaders')"><span>🏆</span>CSR Leaderboard</div>
+  <div style="height:1px;background:var(--border);margin:4px 0"></div>
+  <div style="padding:6px 14px 4px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Records</div>
+  <div class="dditem" id="dditem-records"   onclick="selectView('records')"><span>📋</span>Visit Records</div>
+  <div class="dditem" id="dditem-orders"    onclick="selectView('orders')"><span>🧾</span>Orders</div>
+  <div class="dditem" id="dditem-photos"    onclick="selectView('photos')"><span>📷</span>Outlet Photos</div>
+  <div style="height:1px;background:var(--border);margin:4px 0"></div>
   <div style="padding:0 0 6px">
     <button class="dditem" onclick="loadDashboard();closeDropdown()"><span>&#8635;</span>Refresh Data</button>
     <button class="dditem" onclick="downloadCSV();closeDropdown()"><span>&#11015;</span>Export CSV</button>
@@ -1108,23 +1117,42 @@ function closeDropdown(){
   document.getElementById('ddOverlay').style.display='none';
 }
 
-var _viewTitles={overview:'Dashboard',records:'Visit Records',orders:'Orders',photos:'Outlet Photos'};
+var _viewTitles={
+  overview:'Dashboard',
+  target:'CSR Monthly Target',
+  monthord:'Orders by Month',
+  region:'Visits by Region',
+  outlet:'Outlet Types',
+  leaders:'CSR Leaderboard',
+  records:'Visit Records',
+  orders:'Orders',
+  photos:'Outlet Photos'
+};
+
+// Views that render into dbContent (analytics panel)
+var _dbContentViews={overview:1,target:1,monthord:1,region:1,outlet:1,leaders:1};
 
 function selectView(v){
   _currentView=v;
-  // Update checkmarks in dropdown
-  ['overview','records','orders','photos'].forEach(function(k){
+  // Update checkmarks
+  ['overview','target','monthord','region','outlet','leaders','records','orders','photos'].forEach(function(k){
     var el=document.getElementById('dditem-'+k);
     if(el) el.className='dditem'+(k===v?' active':'');
   });
-  // Show/hide sections
-  var isOverview=v==='overview';
-  document.getElementById('dbContent').style.display=isOverview?'block':'none';
-  document.getElementById('productPresenceSection').style.display=isOverview?'block':'none';
+  // Show dbContent vs section panels
+  var inDbContent=!!_dbContentViews[v];
+  document.getElementById('dbContent').style.display=inDbContent?'block':'none';
+  document.getElementById('productPresenceSection').style.display=v==='overview'?'block':'none';
   document.getElementById('section-records').style.display=v==='records'?'block':'none';
   document.getElementById('section-orders').style.display=v==='orders'?'block':'none';
   document.getElementById('section-photos').style.display=v==='photos'?'block':'none';
-  if(v==='orders') renderOrders(window.filteredRows||window.allRows||[]);
+  // Render the chosen sub-view
+  if(v==='target')    renderViewTarget();
+  if(v==='monthord')  renderViewOrdersByMonth();
+  if(v==='region')    renderViewRegion();
+  if(v==='outlet')    renderViewOutletTypes();
+  if(v==='leaders')   renderViewLeaderboard();
+  if(v==='orders')    renderOrders(window.filteredRows||window.allRows||[]);
   // Update header title
   var t=document.getElementById('dbViewTitle');
   if(t) t.textContent=_viewTitles[v]||'Dashboard';
@@ -1141,6 +1169,7 @@ function showSection(s){ selectView(s); }
 function applyFilters(){
   var btn=document.getElementById('applyBtn');
   if(btn){btn.textContent='⏳ Applying...';btn.disabled=true;}
+  window._dashData=null; // clear cache so sub-views recompute
 
   var csr=document.getElementById('filterCSR').value;
   var rgn=document.getElementById('filterRegion').value;
@@ -1254,21 +1283,46 @@ function renderDashboard(rows){
   html+=statCard('blue','&#128100;',activeCsrs,'Active CSRs','CSRs with visits');
   html+=statCard('purple','&#127381;',newCount,'New Customers','First-time outlets');
   html+='</div>';
+  document.getElementById('dbContent').innerHTML=html;
+  // Store aggregates for sub-views to reuse
+  window._dashData={rows:rows,csrCounts:csrCounts,regionCounts:regionCounts,outletCounts:outletCounts,monthOrders:monthOrders};
+}
 
+function destroyChart(id){if(window.charts[id]){window.charts[id].destroy();delete window.charts[id];}}
+
+var COLORS=['#0d6e3f','#f5a623','#2563eb','#7c3aed','#0891b2','#d94f4f','#16a34a','#ea580c'];
+
+// ── helper: get cached dash data or recompute ──────────────────────────
+function getDashData(){
+  if(window._dashData) return window._dashData;
+  var rows=window.filteredRows||window.allRows||[];
+  var csrCounts={},regionCounts={},outletCounts={},monthOrders={};
+  rows.forEach(function(r){
+    var amt=parseFloat(String(r['Order Generated (KSH)']).replace(/,/g,''))||0;
+    if(r['CSR Name'])csrCounts[r['CSR Name']]=(csrCounts[r['CSR Name']]||0)+1;
+    if(r['Region'])regionCounts[r['Region']]=(regionCounts[r['Region']]||0)+1;
+    if(r['Outlet Type'])outletCounts[r['Outlet Type']]=(outletCounts[r['Outlet Type']]||0)+1;
+    var d=String(r['Date of Market Visit']).substring(0,7);if(d)monthOrders[d]=(monthOrders[d]||0)+amt;
+  });
+  return {rows:rows,csrCounts:csrCounts,regionCounts:regionCounts,outletCounts:outletCounts,monthOrders:monthOrders};
+}
+
+// ── VIEW: CSR Monthly Target ──────────────────────────────────────────
+function renderViewTarget(){
+  var d=getDashData(); var rows=d.rows;
   var TARGET=100;
   var today=new Date();
   var currentMonth=today.getFullYear()+'-'+(String(today.getMonth()+1).padStart(2,'0'));
   var csrMonthCounts={};
-  rows.forEach(function(r){var name=r['CSR Name'];if(!name)return;var d=String(r['Date of Market Visit']).substring(0,7);if(!d)return;if(!csrMonthCounts[name])csrMonthCounts[name]={};csrMonthCounts[name][d]=(csrMonthCounts[name][d]||0)+1;});
-  var allMonthsSet={};rows.forEach(function(r){var d=String(r['Date of Market Visit']).substring(0,7);if(d)allMonthsSet[d]=true;});
+  rows.forEach(function(r){var name=r['CSR Name'];if(!name)return;var dm=String(r['Date of Market Visit']).substring(0,7);if(!dm)return;if(!csrMonthCounts[name])csrMonthCounts[name]={};csrMonthCounts[name][dm]=(csrMonthCounts[name][dm]||0)+1;});
+  var allMonthsSet={};rows.forEach(function(r){var dm=String(r['Date of Market Visit']).substring(0,7);if(dm)allMonthsSet[dm]=true;});
   var allMonths=Object.keys(allMonthsSet).sort().reverse();
   if(!allMonths.length)allMonths=[currentMonth];
   var trackMonth=allMonths[0];
   var trackLabel=(function(m){var p=m.split('-');return new Date(p[0],p[1]-1,1).toLocaleString('default',{month:'long',year:'numeric'});})(trackMonth);
   var ALL_CSRS=['James Njeru','Evans Bokoo','Philomena Ndunge','Edwin Rono','Julius Muturia','Dalmas Lechamakanya','Duncan Yegon','Geofreey Too','Rebecca Boit','Lilian Kariuki','Agnes Miano','Francis Koge','Moses Kaburu','Wilfred Bitonja','James Ngochi','Peter Rukaria','RSM Shadrack K','RSM Collins W','RSM Mercy Chepkorir','RSM Agatha W','Ag HNS Arnold B'];
   var targetRows=ALL_CSRS.map(function(name){return{name:name,count:(csrMonthCounts[name]&&csrMonthCounts[name][trackMonth])||0};}).sort(function(a,b){return b.count-a.count;});
-
-  html+='<div class="chart-card" style="margin-top:14px"><div class="chart-card-header"><div><div class="chart-card-title">📍 CSR Monthly Target</div><div class="chart-card-sub">'+trackLabel+' · Target: '+TARGET+' visits per CSR</div></div>';
+  var html='<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title">📍 CSR Monthly Target</div><div class="chart-card-sub">'+trackLabel+' · Target: '+TARGET+' visits per CSR</div></div>';
   html+='<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">';
   if(allMonths.length>1){allMonths.forEach(function(m){var p=m.split('-');var lbl=new Date(p[0],p[1]-1,1).toLocaleString('default',{month:'short',year:'2-digit'});html+='<button onclick="switchTargetMonth(\''+m+'\')" id="tmBtn_'+m.replace('-','_')+'" style="background:'+(m===trackMonth?'var(--green)':'var(--bg)')+';color:'+(m===trackMonth?'#fff':'var(--muted)')+';border:1.5px solid '+(m===trackMonth?'var(--green)':'var(--border)')+';border-radius:6px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer">'+lbl+'</button>';});}
   html+='</div></div><div id="targetRows">';
@@ -1278,44 +1332,72 @@ function renderDashboard(rows){
     html+='<div class="target-row"><div class="target-name">'+r.name+'</div><div class="target-bar-wrap"><div class="target-bar"><div class="target-bar-fill" style="width:'+pct+'%;background:'+barColor+'"></div></div></div><div class="target-count" style="color:'+barColor+'">'+(over?'<span title="Exceeded">⭐ </span>':'')+r.count+'/'+TARGET+'</div><div class="target-pct">'+status+' '+pct+'%</div></div>';
   });
   html+='</div></div>';
+  document.getElementById('dbContent').innerHTML=html;
+}
 
+// ── VIEW: Orders by Month ─────────────────────────────────────────────
+function renderViewOrdersByMonth(){
+  var d=getDashData(); var monthOrders=d.monthOrders;
   var months=Object.keys(monthOrders).sort();
-  if(months.length>0) html+='<div class="chart-card" style="margin-top:14px"><div class="chart-card-header"><div><div class="chart-card-title">Orders by Month</div><div class="chart-card-sub">KSH value trend</div></div></div><div class="chart-wrap"><canvas id="chartMonths"></canvas></div></div>';
-  html+='<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title">Visits by Region</div><div class="chart-card-sub">Distribution across territories</div></div></div><div class="chart-wrap"><canvas id="chartRegion"></canvas></div></div>';
-  html+='<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title">Outlet Types</div><div class="chart-card-sub">Channel breakdown</div></div></div><div class="chart-wrap"><canvas id="chartOutlet"></canvas></div></div>';
+  if(!months.length){
+    document.getElementById('dbContent').innerHTML='<div class="db-empty"><div class="db-empty-ico">📈</div><div style="font-weight:600;margin-bottom:6px">No order data</div><div style="font-size:12px;color:var(--muted)">Submit visits with orders to see trends.</div></div>';
+    return;
+  }
+  document.getElementById('dbContent').innerHTML='<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title">📈 Orders by Month</div><div class="chart-card-sub">KSH value trend across all months</div></div></div><div class="chart-wrap" style="height:280px"><canvas id="chartMonths"></canvas></div></div>';
+  setTimeout(function(){
+    destroyChart('chartMonths');
+    var ctx=document.getElementById('chartMonths').getContext('2d');
+    window.charts['chartMonths']=new Chart(ctx,{type:'bar',data:{labels:months.map(function(m){var p=m.split('-');return new Date(p[0],p[1]-1,1).toLocaleString('default',{month:'short',year:'2-digit'});}),datasets:[{label:'KSH',data:months.map(function(m){return monthOrders[m];}),backgroundColor:'rgba(13,110,63,0.8)',borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return 'KSH '+fmtNum(v);}}}}}});
+  },50);
+}
 
+// ── VIEW: Visits by Region ────────────────────────────────────────────
+function renderViewRegion(){
+  var d=getDashData(); var regionCounts=d.regionCounts;
+  var rKeys=Object.keys(regionCounts); var rVals=rKeys.map(function(k){return regionCounts[k];});
+  if(!rKeys.length){
+    document.getElementById('dbContent').innerHTML='<div class="db-empty"><div class="db-empty-ico">🗺</div><div style="font-weight:600;margin-bottom:6px">No region data</div></div>';
+    return;
+  }
+  document.getElementById('dbContent').innerHTML='<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title">🗺 Visits by Region</div><div class="chart-card-sub">Distribution across territories</div></div></div><div class="chart-wrap" style="height:280px"><canvas id="chartRegion"></canvas></div></div>';
+  setTimeout(function(){
+    destroyChart('chartRegion');
+    var ctx=document.getElementById('chartRegion').getContext('2d');
+    window.charts['chartRegion']=new Chart(ctx,{type:'doughnut',data:{labels:rKeys,datasets:[{data:rVals,backgroundColor:COLORS,borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:12,font:{size:11}}}}}});
+  },50);
+}
+
+// ── VIEW: Outlet Types ────────────────────────────────────────────────
+function renderViewOutletTypes(){
+  var d=getDashData(); var outletCounts=d.outletCounts;
+  var oKeys=Object.keys(outletCounts).sort(function(a,b){return outletCounts[b]-outletCounts[a];}); var oVals=oKeys.map(function(k){return outletCounts[k];});
+  if(!oKeys.length){
+    document.getElementById('dbContent').innerHTML='<div class="db-empty"><div class="db-empty-ico">🏪</div><div style="font-weight:600;margin-bottom:6px">No outlet data</div></div>';
+    return;
+  }
+  document.getElementById('dbContent').innerHTML='<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title">🏪 Outlet Types</div><div class="chart-card-sub">Channel breakdown</div></div></div><div class="chart-wrap" style="height:280px"><canvas id="chartOutlet"></canvas></div></div>';
+  setTimeout(function(){
+    destroyChart('chartOutlet');
+    var ctx=document.getElementById('chartOutlet').getContext('2d');
+    window.charts['chartOutlet']=new Chart(ctx,{type:'bar',data:{labels:oKeys,datasets:[{label:'Visits',data:oVals,backgroundColor:oKeys.map(function(_,i){return COLORS[i%COLORS.length];}),borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}}},indexAxis:'y'}});
+  },50);
+}
+
+// ── VIEW: CSR Leaderboard ─────────────────────────────────────────────
+function renderViewLeaderboard(){
+  var d=getDashData(); var csrCounts=d.csrCounts;
   var csrSorted=Object.entries(csrCounts).sort(function(a,b){return b[1]-a[1];});
   var maxCount=csrSorted.length>0?csrSorted[0][1]:1;
-  html+='<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title">CSR Leaderboard</div><div class="chart-card-sub">Visits per representative</div></div></div>';
+  var html='<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title">🏆 CSR Leaderboard</div><div class="chart-card-sub">Visits per representative</div></div></div>';
   csrSorted.forEach(function(pair,i){
     var rankCls=i===0?'gold':i===1?'silver':i===2?'bronze':'';
     var pct=Math.round((pair[1]/maxCount)*100);
     html+='<div class="lb-row"><div class="lb-rank '+rankCls+'">'+(i+1)+'</div><div class="lb-name">'+pair[0]+'</div><div class="lb-bar-wrap"><div class="lb-bar"><div class="lb-bar-fill" style="width:'+pct+'%"></div></div></div><div class="lb-count">'+pair[1]+'</div></div>';
   });
   html+='</div>';
-
   document.getElementById('dbContent').innerHTML=html;
-
-  setTimeout(function(){
-    var COLORS=['#0d6e3f','#f5a623','#2563eb','#7c3aed','#0891b2','#d94f4f','#16a34a','#ea580c'];
-    if(months.length>0){
-      destroyChart('chartMonths');
-      var ctx=document.getElementById('chartMonths').getContext('2d');
-      window.charts['chartMonths']=new Chart(ctx,{type:'bar',data:{labels:months.map(function(m){var p=m.split('-');return new Date(p[0],p[1]-1,1).toLocaleString('default',{month:'short',year:'2-digit'});}),datasets:[{label:'KSH',data:months.map(function(m){return monthOrders[m];}),backgroundColor:'rgba(13,110,63,0.8)',borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return 'KSH '+fmtNum(v);}}}}}});
-    }
-    var rKeys=Object.keys(regionCounts),rVals=rKeys.map(function(k){return regionCounts[k];});
-    destroyChart('chartRegion');
-    var ctx2=document.getElementById('chartRegion').getContext('2d');
-    window.charts['chartRegion']=new Chart(ctx2,{type:'doughnut',data:{labels:rKeys,datasets:[{data:rVals,backgroundColor:COLORS,borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:12,font:{size:11}}}}}});
-    var oKeys=Object.keys(outletCounts).sort(function(a,b){return outletCounts[b]-outletCounts[a];});
-    var oVals=oKeys.map(function(k){return outletCounts[k];});
-    destroyChart('chartOutlet');
-    var ctx3=document.getElementById('chartOutlet').getContext('2d');
-    window.charts['chartOutlet']=new Chart(ctx3,{type:'bar',data:{labels:oKeys,datasets:[{label:'Visits',data:oVals,backgroundColor:oKeys.map(function(_,i){return COLORS[i%COLORS.length];}),borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}}},indexAxis:'y'}});
-  },50);
 }
 
-function destroyChart(id){if(window.charts[id]){window.charts[id].destroy();delete window.charts[id];}}
 
 function switchTargetMonth(month){
   var TARGET=100;
