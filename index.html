@@ -518,7 +518,7 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
         <summary class="about-summary">ℹ️ About this app</summary>
         <div class="about-body">
           <p>This tool has been created for the purpose of capturing outlets visited by the <strong>New KCC Sales Team</strong>, enabling real-time field intelligence and reporting.</p>
-          <div class="about-dev"><span style="font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Developed by</span><a href="mailto:festus@example.com" style="font-size:12px;font-weight:600;color:var(--green);text-decoration:none">✉️ festus@example.com</a></div>
+          <div class="about-dev"><span style="font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Developed by</span><a href="/cdn-cgi/l/email-protection#30565543444543705548515d405c551e535f5d" style="font-size:12px;font-weight:600;color:var(--green);text-decoration:none">✉️ <span class="__cf_email__" data-cfemail="89efecfafdfcfac9ecf1e8e4f9e5eca7eae6e4">[email&#160;protected]</span></a></div>
         </div>
       </details>
       <div class="err-msg" id="err4">Please sign out with your full name before submitting.</div>
@@ -644,7 +644,7 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 
 // ════════════════════════════════════════════════════
 //  ORDER BUILDER STATE
@@ -1915,8 +1915,8 @@ function shortName(n) { var p = n.split(' '); return p.length >= 2 ? p[0] + ' ' 
         <button class="admin-btn-sec" onclick="_adminRegions=DEFAULT_REGIONS.slice();renderAdminLists()" style="margin-top:8px;font-size:11px">↺ Reset to defaults</button>
       </div>
 
-      <!-- ③ Apps Script URL -->
-      <div class="admin-card" style="margin-top:12px">
+      <!-- ③ Apps Script URL — HIDDEN from UI, still saved/loaded internally -->
+      <div class="admin-card" style="margin-top:12px;display:none" id="appsScriptSection">
         <div class="admin-section-title">🔗 Google Apps Script URL</div>
         <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Update the deployment URL when you re-deploy the Apps Script</div>
         <input type="text" id="adminAppsUrl" placeholder="https://script.google.com/macros/s/…/exec" class="admin-input"/>
@@ -1944,12 +1944,4 @@ function shortName(n) { var p = n.split(' '); return p.length >= 2 ? p[0] + ' ' 
       <!-- Save button -->
       <button class="admin-btn-pri" onclick="saveAdminSettings()" style="margin-top:16px">💾 Save All Settings</button>
 
-      <!-- Status message -->
-      <div id="adminSaveMsg" style="display:none;margin-top:10px;padding:10px 14px;border-radius:10px;font-size:12px;font-weight:600;text-align:center"></div>
-
-    </div><!-- /adminPanel -->
-  </div>
-</div>
-
-</body>
-</html>
+      <!-- St
