@@ -318,8 +318,7 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwP9ughPjTaZtYpQY
             <option>Evans Bokoo</option>
             <option>Philomena Ndunge</option>
             <option>Edwin Rono</option>
-            <option>Ndooci Gitau</option>
-            <option>Julius Mutura</option>
+            <option>Julius Muturia</option>
             <option>Dalmas Lechamakanya</option>
             <option>Duncan Yegon</option>
             <option>Geofreey Too</option>
@@ -331,6 +330,11 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwP9ughPjTaZtYpQY
             <option>Wilfred Bitonja</option>
             <option>James Ngochi</option>
             <option>Peter Rukaria</option>
+            <option>RSM Shadrack K</option>
+            <option>RSM Collins W</option>
+            <option>RSM Mercy Chepkorir</option>
+            <option>RSM Agatha W</option>
+            <option>Ag HNS Arnold B</option>
           </select>
         </div>
       </div>
@@ -460,7 +464,7 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwP9ughPjTaZtYpQY
         <summary class="about-summary">ℹ️ About this app</summary>
         <div class="about-body">
           <p>This tool has been created for the purpose of capturing outlets visited by the <strong>New KCC Sales Team</strong>, enabling real-time field intelligence and reporting.</p>
-          <div class="about-dev"><span style="font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Developed by</span><a href="mailto:developer@example.com" style="font-size:12px;font-weight:600;color:var(--green);text-decoration:none">✉️ developer@example.com</a></div>
+          <div class="about-dev"><span style="font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Developed by</span><a href="/cdn-cgi/l/email-protection#adc9c8dbc8c1c2ddc8dfedc8d5ccc0ddc1c883cec2c0" style="font-size:12px;font-weight:600;color:var(--green);text-decoration:none">✉️ <span class="__cf_email__" data-cfemail="badedfccdfd6d5cadfc8fadfc2dbd7cad6df94d9d5d7">[email&#160;protected]</span></a></div>
         </div>
       </details>
       <div class="err-msg" id="err4">Please sign out with your full name before submitting.</div>
@@ -524,7 +528,7 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwP9ughPjTaZtYpQY
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ════════════════════════════════════════════════════
 //  PAGE NAVIGATION
 // ════════════════════════════════════════════════════
@@ -955,12 +959,12 @@ function renderDashboard(rows){
   var trackMonth=allMonths[0];
   var trackLabel=(function(m){var p=m.split('-');return new Date(p[0],p[1]-1,1).toLocaleString('default',{month:'long',year:'numeric'});})(trackMonth);
 
-  // ✅ UPDATED ALL_CSRS — James Ngochi and Peter Rukaria added
   var ALL_CSRS=[
-    'James Njeru','Evans Bokoo','Philomena Ndunge','Edwin Rono','Ndooci Gitau',
-    'Julius Mutura','Dalmas Lechamakanya','Duncan Yegon','Geofreey Too','Rebecca Boit',
+    'James Njeru','Evans Bokoo','Philomena Ndunge','Edwin Rono',
+    'Julius Muturia','Dalmas Lechamakanya','Duncan Yegon','Geofreey Too','Rebecca Boit',
     'Lilian Kariuki','Agnes Miano','Francis Koge','Moses Kaburu','Wilfred Bitonja',
-    'James Ngochi','Peter Rukaria'
+    'James Ngochi','Peter Rukaria',
+    'RSM Shadrack K','RSM Collins W','RSM Mercy Chepkorir','RSM Agatha W','Ag HNS Arnold B'
   ];
 
   var targetRows=ALL_CSRS.map(function(name){return{name:name,count:(csrMonthCounts[name]&&csrMonthCounts[name][trackMonth])||0};}).sort(function(a,b){return b.count-a.count;});
@@ -1025,12 +1029,13 @@ function destroyChart(id){if(window.charts[id]){window.charts[id].destroy();dele
 
 function switchTargetMonth(month){
   var TARGET=100;
-  // ✅ UPDATED ALL_CSRS — James Ngochi and Peter Rukaria added
+  // ✅ UPDATED ALL_CSRS
   var ALL_CSRS=[
-    'James Njeru','Evans Bokoo','Philomena Ndunge','Edwin Rono','Ndooci Gitau',
-    'Julius Mutura','Dalmas Lechamakanya','Duncan Yegon','Geofreey Too','Rebecca Boit',
+    'James Njeru','Evans Bokoo','Philomena Ndunge','Edwin Rono',
+    'Julius Muturia','Dalmas Lechamakanya','Duncan Yegon','Geofreey Too','Rebecca Boit',
     'Lilian Kariuki','Agnes Miano','Francis Koge','Moses Kaburu','Wilfred Bitonja',
-    'James Ngochi','Peter Rukaria'
+    'James Ngochi','Peter Rukaria',
+    'RSM Shadrack K','RSM Collins W','RSM Mercy Chepkorir','RSM Agatha W','Ag HNS Arnold B'
   ];
   var rows=window.filteredRows||window.allRows||[];
   var csrMonthCounts={};
@@ -1171,10 +1176,11 @@ var ADMIN_PASSWORD="Festoo";
 
 // ✅ UPDATED DEFAULT_CSRS — James Ngochi and Peter Rukaria added
 var DEFAULT_CSRS=[
-  "James Njeru","Evans Bokoo","Philomena Ndunge","Edwin Rono","Ndooci Gitau",
-  "Julius Mutura","Dalmas Lechamakanya","Duncan Yegon","Geofreey Too","Rebecca Boit",
+  "James Njeru","Evans Bokoo","Philomena Ndunge","Edwin Rono",
+  "Julius Muturia","Dalmas Lechamakanya","Duncan Yegon","Geofreey Too","Rebecca Boit",
   "Lilian Kariuki","Agnes Miano","Francis Koge","Moses Kaburu","Wilfred Bitonja",
-  "James Ngochi","Peter Rukaria"
+  "James Ngochi","Peter Rukaria",
+  "RSM Shadrack K","RSM Collins W","RSM Mercy Chepkorir","RSM Agatha W","Ag HNS Arnold B"
 ];
 
 var DEFAULT_REGIONS=["Nairobi North","Nairobi South","Eastern","Nairobi Tier I","Nairobi Tier II","Institutions / Exports"];
@@ -1286,12 +1292,4 @@ function shortName(n){var parts=n.split(' ');if(parts.length>=2)return parts[0]+
       <div id="adminSaveMsg" style="text-align:center;font-size:12px;color:#6ee7a8;margin-top:8px;display:none">✅ Saved! Dropdowns updated.</div>
       <div class="admin-card" style="margin-top:14px;text-align:center">
         <div style="font-size:28px;margin-bottom:8px">ℹ️</div>
-        <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px">About This App</div>
-        <div style="font-size:12px;color:var(--muted);line-height:1.7">Capturing outlets visited by the <strong>New KCC Sales Team</strong> for real-time field intelligence.</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-</body>
-</html>
+        <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px">About This
