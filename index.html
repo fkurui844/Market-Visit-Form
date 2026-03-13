@@ -1750,102 +1750,223 @@ function closeLightbox(){document.getElementById('photoLightbox').style.display=
 // ════════════════════════════════════════════════════
 //  ADMIN PANEL
 // ════════════════════════════════════════════════════
-var ADMIN_PASSWORD="Festoo";
-var DEFAULT_CSRS=['James Njeru','Evans Bokoo','Philomena Ndunge','Edwin Rono','Julius Muturia','Dalmas Lechamakanya','Duncan Yegon','Geofreey Too','Rebecca Boit','Lilian Kariuki','Agnes Miano','Francis Koge','Moses Kaburu','Wilfred Bitonja','James Ngochi','Peter Rukaria','RSM Shadrack K','RSM Collins W','RSM Mercy Chepkorir','RSM Agatha W','Ag HNS Arnold B'];
-var DEFAULT_REGIONS=['Nairobi North','Nairobi South','Eastern','Nairobi Tier I','Nairobi Tier II','Institutions / Exports'];
-var _savedCsrs=DEFAULT_CSRS.slice(),_savedRegions=DEFAULT_REGIONS.slice();
-var _adminCsrs=[],_adminRegions=[];
+var ADMIN_PASSWORD = "Festoo";
+var DEFAULT_CSRS = ['James Njeru','Evans Bokoo','Philomena Ndunge','Edwin Rono','Julius Muturia','Dalmas Lechamakanya','Duncan Yegon','Geofreey Too','Rebecca Boit','Lilian Kariuki','Agnes Miano','Francis Koge','Moses Kaburu','Wilfred Bitonja','James Ngochi','Peter Rukaria','RSM Shadrack K','RSM Collins W','RSM Mercy Chepkorir','RSM Agatha W','Ag HNS Arnold B'];
+var DEFAULT_REGIONS = ['Nairobi North','Nairobi South','Eastern','Nairobi Tier I','Nairobi Tier II','Institutions / Exports'];
+var _adminCsrs = [], _adminRegions = [];
 
-function loadAdminData(){return{csrs:_savedCsrs.slice(),regions:_savedRegions.slice()};}
-function applyAdminDataToForm(){
-  var data=loadAdminData();
-  var csrSel=document.getElementById('csrVal'),rgnSel=document.getElementById('rgnVal');
-  if(!csrSel||!rgnSel)return;
-  var prevCsr=csrSel.value,prevRgn=rgnSel.value;
-  csrSel.innerHTML='<option value="">— Select your name —</option>';
-  data.csrs.forEach(function(c){csrSel.innerHTML+='<option'+(c===prevCsr?' selected':'')+'>'+c+'</option>';});
-  rgnSel.innerHTML='<option value="">— Select region —</option>';
-  data.regions.forEach(function(r){rgnSel.innerHTML+='<option'+(r===prevRgn?' selected':'')+'>'+r+'</option>';});
+// ── Persist settings to localStorage ──────────────────────
+function loadSettings() {
+  try { var s = localStorage.getItem('nkcc_settings'); if (s) return JSON.parse(s); } catch(e) {}
+  return { csrs: DEFAULT_CSRS.slice(), regions: DEFAULT_REGIONS.slice(), pwd: ADMIN_PASSWORD,
+           ghToken: '', ghRepo: '', ghPath: '', ghBranch: 'main', appsUrl: '' };
+}
+function saveSettings(obj) {
+  try { localStorage.setItem('nkcc_settings', JSON.stringify(obj)); } catch(e) {}
 }
 
-var _tapCount=0,_tapTimer=null;
-function secretTap(){
+function loadAdminData() {
+  var s = loadSettings();
+  return { csrs: (s.csrs || DEFAULT_CSRS).slice(), regions: (s.regions || DEFAULT_REGIONS).slice() };
+}
+
+function applyAdminDataToForm() {
+  var data = loadAdminData();
+  var csrSel = document.getElementById('csrVal'), rgnSel = document.getElementById('rgnVal');
+  if (!csrSel || !rgnSel) return;
+  var prevCsr = csrSel.value, prevRgn = rgnSel.value;
+  csrSel.innerHTML = '<option value="">— Select your name —</option>';
+  data.csrs.forEach(function(c) { csrSel.innerHTML += '<option' + (c === prevCsr ? ' selected' : '') + '>' + c + '</option>'; });
+  rgnSel.innerHTML = '<option value="">— Select region —</option>';
+  data.regions.forEach(function(r) { rgnSel.innerHTML += '<option' + (r === prevRgn ? ' selected' : '') + '>' + r + '</option>'; });
+}
+
+// ── Secret tap (5× on logo) ────────────────────────────────
+var _tapCount = 0, _tapTimer = null;
+function secretTap() {
   _tapCount++;
-  if(_tapTimer)clearTimeout(_tapTimer);
-  if(_tapCount>=5){_tapCount=0;if(navigator.vibrate)navigator.vibrate(60);openAdmin();return;}
-  _tapTimer=setTimeout(function(){_tapCount=0;},3000);
+  if (_tapTimer) clearTimeout(_tapTimer);
+  if (_tapCount >= 5) { _tapCount = 0; if (navigator.vibrate) navigator.vibrate(60); openAdmin(); return; }
+  _tapTimer = setTimeout(function() { _tapCount = 0; }, 3000);
 }
 
-function openAdmin(){
-  document.getElementById('adminOverlay').style.display='block';
-  document.getElementById('adminLock').style.display='block';
-  document.getElementById('adminPanel').style.display='none';
-  document.getElementById('adminPwdInput').value='';
-  document.getElementById('adminPwdErr').style.display='none';
-  document.body.style.overflow='hidden';
-  setTimeout(function(){document.getElementById('adminPwdInput').focus();},200);
+// ── Open / close ───────────────────────────────────────────
+function openAdmin() {
+  document.getElementById('adminOverlay').style.display = 'block';
+  document.getElementById('adminLock').style.display = 'block';
+  document.getElementById('adminPanel').style.display = 'none';
+  document.getElementById('adminPwdInput').value = '';
+  document.getElementById('adminPwdErr').style.display = 'none';
+  document.body.style.overflow = 'hidden';
+  setTimeout(function() { document.getElementById('adminPwdInput').focus(); }, 200);
 }
-function closeAdmin(){document.getElementById('adminOverlay').style.display='none';document.body.style.overflow='';}
+function closeAdmin() { document.getElementById('adminOverlay').style.display = 'none'; document.body.style.overflow = ''; }
 
-function checkAdminPwd(){
-  var val=document.getElementById('adminPwdInput').value.trim();
-  if(val===ADMIN_PASSWORD){
-    document.getElementById('adminLock').style.display='none';document.getElementById('adminPanel').style.display='block';
-    var data=loadAdminData();_adminCsrs=data.csrs.slice();_adminRegions=data.regions.slice();renderAdminLists();
-  }else{document.getElementById('adminPwdErr').style.display='block';document.getElementById('adminPwdInput').value='';document.getElementById('adminPwdInput').focus();}
-}
-
-function renderAdminLists(){
-  var csrList=document.getElementById('csrList');
-  csrList.innerHTML=_adminCsrs.length?'':'<div style="font-size:12px;color:var(--muted);padding:6px 0">No CSRs added yet.</div>';
-  _adminCsrs.forEach(function(c,i){csrList.innerHTML+='<div class="admin-list-item"><span>'+c+'</span><button onclick="removeCsr('+i+')" title="Remove">🗑</button></div>';});
-  var rgnList=document.getElementById('regionList');
-  rgnList.innerHTML=_adminRegions.length?'':'<div style="font-size:12px;color:var(--muted);padding:6px 0">No regions added yet.</div>';
-  _adminRegions.forEach(function(r,i){rgnList.innerHTML+='<div class="admin-list-item"><span>'+r+'</span><button onclick="removeRegion('+i+')" title="Remove">🗑</button></div>';});
-}
-
-function addCsr(){var input=document.getElementById('newCsrInput');var val=input.value.trim();if(!val)return;if(_adminCsrs.indexOf(val)===-1)_adminCsrs.push(val);input.value='';renderAdminLists();}
-function removeCsr(i){_adminCsrs.splice(i,1);renderAdminLists();}
-function addRegion(){var input=document.getElementById('newRegionInput');var val=input.value.trim();if(!val)return;if(_adminRegions.indexOf(val)===-1)_adminRegions.push(val);input.value='';renderAdminLists();}
-function removeRegion(i){_adminRegions.splice(i,1);renderAdminLists();}
-
-function saveAdminSettings(){
-  _savedCsrs=_adminCsrs.slice();_savedRegions=_adminRegions.slice();applyAdminDataToForm();
-  var msg=document.getElementById('adminSaveMsg');msg.style.display='block';
-  setTimeout(function(){msg.style.display='none';closeAdmin();},1800);
+function checkAdminPwd() {
+  var val = document.getElementById('adminPwdInput').value.trim();
+  var stored = loadSettings();
+  if (val === (stored.pwd || ADMIN_PASSWORD)) {
+    document.getElementById('adminLock').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'block';
+    var data = loadAdminData();
+    _adminCsrs = data.csrs.slice(); _adminRegions = data.regions.slice();
+    renderAdminLists(); populateAdminFields();
+  } else {
+    document.getElementById('adminPwdErr').style.display = 'block';
+    document.getElementById('adminPwdInput').value = '';
+    document.getElementById('adminPwdInput').focus();
+  }
 }
 
-function fmtDate(d){if(!d)return'--';var s=String(d);if(s.length>=10)return s.substring(0,10);return s;}
-function shortName(n){var parts=n.split(' ');if(parts.length>=2)return parts[0]+' '+parts[1].charAt(0)+'.';return n;}
+// ── Render lists ───────────────────────────────────────────
+function renderAdminLists() {
+  var cl = document.getElementById('csrList');
+  cl.innerHTML = _adminCsrs.length ? '' : '<div style="font-size:12px;color:var(--muted);padding:6px 0">No CSRs yet.</div>';
+  _adminCsrs.forEach(function(c, i) {
+    cl.innerHTML += '<div class="admin-list-item"><span>' + c + '</span>'
+      + '<button onclick="removeCsr(' + i + ')" style="background:none;border:none;cursor:pointer;font-size:15px;color:#ef4444;padding:2px 6px">🗑</button></div>';
+  });
+  var rl = document.getElementById('regionList');
+  rl.innerHTML = _adminRegions.length ? '' : '<div style="font-size:12px;color:var(--muted);padding:6px 0">No regions yet.</div>';
+  _adminRegions.forEach(function(r, i) {
+    rl.innerHTML += '<div class="admin-list-item"><span>' + r + '</span>'
+      + '<button onclick="removeRegion(' + i + ')" style="background:none;border:none;cursor:pointer;font-size:15px;color:#ef4444;padding:2px 6px">🗑</button></div>';
+  });
+}
+function populateAdminFields() {
+  var s = loadSettings();
+  var sv = function(id, v) { var e = document.getElementById(id); if (e) e.value = v || ''; };
+  sv('adminGhToken',  s.ghToken);
+  sv('adminGhRepo',   s.ghRepo);
+  sv('adminGhPath',   s.ghPath);
+  sv('adminGhBranch', s.ghBranch || 'main');
+  sv('adminAppsUrl',  s.appsUrl || APPS_SCRIPT_URL);
+  sv('adminNewPwd',   '');
+}
+
+function addCsr()    { var i = document.getElementById('newCsrInput');    var v = i.value.trim(); if (!v) return; if (_adminCsrs.indexOf(v)    === -1) _adminCsrs.push(v);    i.value = ''; renderAdminLists(); }
+function removeCsr(i){ _adminCsrs.splice(i, 1); renderAdminLists(); }
+function addRegion() { var i = document.getElementById('newRegionInput'); var v = i.value.trim(); if (!v) return; if (_adminRegions.indexOf(v) === -1) _adminRegions.push(v); i.value = ''; renderAdminLists(); }
+function removeRegion(i){ _adminRegions.splice(i, 1); renderAdminLists(); }
+
+// ── Admin status message ───────────────────────────────────
+function adminMsg(txt, ok) {
+  var el = document.getElementById('adminSaveMsg');
+  el.style.display = 'block';
+  el.style.background = ok ? 'rgba(13,110,63,.25)' : 'rgba(239,68,68,.2)';
+  el.style.color = ok ? '#6ee7a8' : '#fca5a5';
+  el.textContent = txt;
+  if (ok) setTimeout(function() { el.style.display = 'none'; }, 4000);
+}
+
+// ── Save settings (persists to localStorage) ──────────────
+function saveAdminSettings() {
+  var gv = function(id) { var e = document.getElementById(id); return e ? e.value.trim() : ''; };
+  var newPwd = gv('adminNewPwd');
+  var existing = loadSettings();
+  var settings = {
+    csrs:      _adminCsrs.slice(),
+    regions:   _adminRegions.slice(),
+    pwd:       newPwd || existing.pwd || ADMIN_PASSWORD,
+    ghToken:   gv('adminGhToken'),
+    ghRepo:    gv('adminGhRepo'),
+    ghPath:    gv('adminGhPath'),
+    ghBranch:  gv('adminGhBranch') || 'main',
+    appsUrl:   gv('adminAppsUrl')  || APPS_SCRIPT_URL
+  };
+  saveSettings(settings);
+  // Apply live
+  if (settings.appsUrl) APPS_SCRIPT_URL = settings.appsUrl;
+  applyAdminDataToForm();
+  adminMsg('✅ Settings saved. Changes are now persistent.', true);
+}
+
+// ── Push entire HTML file to GitHub via Contents API ──────
+function pushToGitHub() {
+  var s = loadSettings();
+  var token = s.ghToken, repo = s.ghRepo, path = s.ghPath, branch = s.ghBranch || 'main';
+  if (!token || !repo || !path) { adminMsg('❌ Fill in Token, Repository and File Path first.', false); return; }
+  adminMsg('⏳ Reading current page source…', true);
+
+  // Grab full page HTML — inject latest CSR/region lists first
+  var html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+  var encoded = btoa(unescape(encodeURIComponent(html)));
+  var apiUrl  = 'https://api.github.com/repos/' + repo + '/contents/' + path;
+  var headers = { 'Authorization': 'token ' + token, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' };
+
+  // Step 1: get current SHA (needed for updates; undefined for new files)
+  adminMsg('⏳ Connecting to GitHub…', true);
+  fetch(apiUrl + '?ref=' + branch, { headers: headers })
+    .then(function(r) { return r.ok ? r.json() : null; })
+    .then(function(info) {
+      var body = {
+        message: 'Admin update · ' + new Date().toLocaleString('en-KE', { timeZone: 'Africa/Nairobi' }),
+        content: encoded,
+        branch:  branch
+      };
+      if (info && info.sha) body.sha = info.sha;
+      adminMsg('⏳ Pushing to GitHub…', true);
+      return fetch(apiUrl, { method: 'PUT', headers: headers, body: JSON.stringify(body) });
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(res) {
+      if (res.content && res.content.name) {
+        adminMsg('🚀 Pushed! ' + repo + ' / ' + path + ' updated on branch ' + branch, true);
+      } else {
+        adminMsg('❌ GitHub: ' + (res.message || JSON.stringify(res)), false);
+      }
+    })
+    .catch(function(e) { adminMsg('❌ Network error: ' + e.message, false); });
+}
+
+// ── Misc helpers ───────────────────────────────────────────
+function fmtDate(d) { if (!d) return '--'; var s = String(d); return s.length >= 10 ? s.substring(0, 10) : s; }
+function shortName(n) { var p = n.split(' '); return p.length >= 2 ? p[0] + ' ' + p[1].charAt(0) + '.' : n; }
+
+// Apply persisted settings on load
+(function() {
+  var s = loadSettings();
+  if (s.appsUrl) APPS_SCRIPT_URL = s.appsUrl;
+  applyAdminDataToForm();
+})();
 </script>
 
-<!-- ADMIN MODAL -->
-<div id="adminOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:8000;overflow-y:auto">
-  <div style="max-width:480px;margin:20px auto;padding:0 12px 40px">
+<!-- ════════ ADMIN MODAL ════════ -->
+<div id="adminOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.65);z-index:8000;overflow-y:auto">
+  <div style="max-width:500px;margin:20px auto;padding:0 14px 60px">
+
+    <!-- Lock screen -->
     <div id="adminLock" class="admin-card">
-      <div style="text-align:center;padding:10px 0 16px">
-        <div style="font-size:36px;margin-bottom:8px">🔒</div>
-        <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--text)">Admin Settings</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px">Enter password to continue</div>
+      <div style="text-align:center;padding:12px 0 18px">
+        <div style="font-size:40px;margin-bottom:8px">🔐</div>
+        <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--text)">Admin Panel</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">Authorised access only</div>
       </div>
       <input type="password" id="adminPwdInput" placeholder="Password" class="admin-input" onkeydown="if(event.key==='Enter')checkAdminPwd()"/>
-      <div id="adminPwdErr" style="color:var(--red);font-size:12px;text-align:center;margin-top:6px;display:none">Incorrect password</div>
+      <div id="adminPwdErr" style="color:#ef4444;font-size:12px;text-align:center;margin-top:6px;display:none">❌ Incorrect password</div>
       <button class="admin-btn-pri" onclick="checkAdminPwd()" style="margin-top:12px">Unlock →</button>
       <button class="admin-btn-sec" onclick="closeAdmin()" style="margin-top:8px">Cancel</button>
     </div>
+
+    <!-- Admin panel -->
     <div id="adminPanel" style="display:none">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-        <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:#fff">⚙️ Admin Settings</div>
-        <button onclick="closeAdmin()" style="background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer">✕</button>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:#fff">⚙️ Admin Panel</div>
+        <button onclick="closeAdmin()" style="background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:50%;width:34px;height:34px;font-size:17px;cursor:pointer">✕</button>
       </div>
+
+      <!-- ① CSR Names -->
       <div class="admin-card">
         <div class="admin-section-title">👤 CSR Names</div>
         <div id="csrList" class="admin-list"></div>
         <div style="display:flex;gap:8px;margin-top:10px">
-          <input type="text" id="newCsrInput" placeholder="Full name e.g. John Doe" class="admin-input" style="flex:1" onkeydown="if(event.key==='Enter')addCsr()"/>
+          <input type="text" id="newCsrInput" placeholder="Full name e.g. Jane Doe" class="admin-input" style="flex:1" onkeydown="if(event.key==='Enter')addCsr()"/>
           <button class="admin-btn-add" onclick="addCsr()">+ Add</button>
         </div>
+        <button class="admin-btn-sec" onclick="_adminCsrs=DEFAULT_CSRS.slice();renderAdminLists()" style="margin-top:8px;font-size:11px">↺ Reset to defaults</button>
       </div>
+
+      <!-- ② Regions -->
       <div class="admin-card" style="margin-top:12px">
         <div class="admin-section-title">📍 Regions</div>
         <div id="regionList" class="admin-list"></div>
@@ -1853,9 +1974,57 @@ function shortName(n){var parts=n.split(' ');if(parts.length>=2)return parts[0]+
           <input type="text" id="newRegionInput" placeholder="e.g. Western" class="admin-input" style="flex:1" onkeydown="if(event.key==='Enter')addRegion()"/>
           <button class="admin-btn-add" onclick="addRegion()">+ Add</button>
         </div>
+        <button class="admin-btn-sec" onclick="_adminRegions=DEFAULT_REGIONS.slice();renderAdminLists()" style="margin-top:8px;font-size:11px">↺ Reset to defaults</button>
       </div>
-      <button class="admin-btn-pri" onclick="saveAdminSettings()" style="margin-top:14px">💾 Save & Apply</button>
-      <div id="adminSaveMsg" style="text-align:center;font-size:12px;color:#6ee7a8;margin-top:8px;display:none">✅ Saved! Dropdowns updated.</div>
-      <div class="admin-card" style="margin-top:14px;text-align:center">
-        <div style="font-size:28px;margin-bottom:8px">ℹ️</div>
-        <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px">
+
+      <!-- ③ Apps Script URL -->
+      <div class="admin-card" style="margin-top:12px">
+        <div class="admin-section-title">🔗 Google Apps Script URL</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Update the deployment URL when you re-deploy the Apps Script</div>
+        <input type="text" id="adminAppsUrl" placeholder="https://script.google.com/macros/s/…/exec" class="admin-input"/>
+      </div>
+
+      <!-- ④ GitHub Deployment -->
+      <div class="admin-card" style="margin-top:12px">
+        <div class="admin-section-title">🐙 GitHub Deployment</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.6">
+          Push this app directly to your GitHub repo. Requires a <strong>Personal Access Token</strong> with <code>repo</code> scope.
+          If GitHub Pages is on, changes go live immediately.
+        </div>
+
+        <label style="font-size:11px;font-weight:700;color:var(--text);display:block;margin-bottom:3px">Personal Access Token (ghp_…)</label>
+        <input type="password" id="adminGhToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="admin-input" style="margin-bottom:10px"/>
+
+        <label style="font-size:11px;font-weight:700;color:var(--text);display:block;margin-bottom:3px">Repository</label>
+        <input type="text" id="adminGhRepo" placeholder="owner/repo-name" class="admin-input" style="margin-bottom:10px"/>
+
+        <label style="font-size:11px;font-weight:700;color:var(--text);display:block;margin-bottom:3px">File path in repo</label>
+        <input type="text" id="adminGhPath" placeholder="index.html  or  app/NKCC_Market_Visit.html" class="admin-input" style="margin-bottom:10px"/>
+
+        <label style="font-size:11px;font-weight:700;color:var(--text);display:block;margin-bottom:3px">Branch</label>
+        <input type="text" id="adminGhBranch" placeholder="main" class="admin-input" style="margin-bottom:12px"/>
+
+        <button class="admin-btn-pri" onclick="pushToGitHub()"
+          style="background:linear-gradient(135deg,#24292e,#1a1f24);display:flex;align-items:center;justify-content:center;gap:8px">
+          🚀 Push to GitHub
+        </button>
+      </div>
+
+      <!-- ⑤ Change Password -->
+      <div class="admin-card" style="margin-top:12px">
+        <div class="admin-section-title">🔑 Change Admin Password</div>
+        <input type="password" id="adminNewPwd" placeholder="New password (leave blank to keep current)" class="admin-input"/>
+      </div>
+
+      <!-- Save button -->
+      <button class="admin-btn-pri" onclick="saveAdminSettings()" style="margin-top:16px">💾 Save All Settings</button>
+
+      <!-- Status message -->
+      <div id="adminSaveMsg" style="display:none;margin-top:10px;padding:10px 14px;border-radius:10px;font-size:12px;font-weight:600;text-align:center"></div>
+
+    </div><!-- /adminPanel -->
+  </div>
+</div>
+
+</body>
+</html>
