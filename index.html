@@ -110,7 +110,6 @@ select.form-select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0
 input[type=file].cam-input{display:none}
 .photo-guide{display:flex;gap:6px;margin-top:10px;overflow-x:auto;padding-bottom:2px}
 .guide-chip{display:flex;align-items:center;gap:5px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:5px 10px;font-size:10px;color:var(--muted);white-space:nowrap;flex-shrink:0}
-/* ── ORDER BUILDER ─────────────────── */
 .toggle-switch{position:relative;display:inline-block;width:50px;height:28px;flex-shrink:0}
 .toggle-switch input{opacity:0;width:0;height:0}
 .toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#d1d5db;border-radius:28px;transition:.3s}
@@ -137,7 +136,6 @@ input[type=file].cam-input{display:none}
 .order-summary-val{font-weight:700;white-space:nowrap;opacity:1}
 .order-total-row{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:2px solid rgba(255,255,255,.25)}
 .no-order-banner{background:linear-gradient(135deg,#fef3c7,#fef9ee);border:1.5px solid #fcd68a;border-radius:12px;padding:16px;text-align:center;margin-top:10px}
-/* ── ORDER VIEW (dashboard tab) ──────── */
 .order-card{background:var(--surface);border-radius:14px;padding:0;margin-bottom:12px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.05);overflow:hidden}
 .order-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:13px 15px 11px;border-bottom:1px solid var(--border)}
 .order-card-outlet{font-size:14px;font-weight:700;color:var(--text);line-height:1.3}
@@ -156,12 +154,10 @@ input[type=file].cam-input{display:none}
 .order-no-items{font-size:12px;color:var(--muted);padding:4px 0;font-style:italic}
 .order-filter-search{padding:7px 11px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);flex:1;min-width:140px;outline:none}
 .order-filter-search:focus{border-color:var(--green)}
-/* ── DASHBOARD ─────────────────────── */
 .db-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-top:4px}
 .db-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--green-dark)}
 .db-subtitle{font-size:12px;color:var(--muted);margin-top:1px}
 .refresh-btn{background:var(--green-lt);border:1.5px solid #b6dfc9;color:var(--green-dark);border-radius:8px;padding:7px 12px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px}
-.refresh-btn.spinning .ref-ico{animation:sp .7s linear infinite}
 .filter-bar{background:var(--surface);border-radius:12px;padding:12px 14px;margin-bottom:14px;box-shadow:var(--shadow);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .filter-bar label{font-size:11px;font-weight:600;color:var(--muted);margin-bottom:0;white-space:nowrap}
 .filter-bar select{padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:100px}
@@ -173,8 +169,6 @@ input[type=file].cam-input{display:none}
 .dditem.active::after{content:'✓';margin-left:auto;font-weight:800;color:var(--green)}
 .filter-apply{background:var(--green);border:none;border-radius:8px;padding:7px 16px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;color:#fff;cursor:pointer;white-space:nowrap;box-shadow:0 3px 10px rgba(13,110,63,.3);transition:background .2s}
 .filter-apply:hover{background:var(--green-dark)}
-.filter-order-input{padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);flex:1;min-width:90px;outline:none;-webkit-appearance:none;appearance:none}
-.filter-order-input:focus{border-color:var(--green)}
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
 .stat-card{background:var(--surface);border-radius:12px;padding:14px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.04);position:relative;overflow:hidden}
 .stat-card::before{content:'';position:absolute;top:-10px;right:-10px;width:60px;height:60px;border-radius:50%;opacity:.08}
@@ -249,14 +243,12 @@ tbody td:first-child{font-weight:600}
 .prod-pill{background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:8px 12px;font-size:12px;display:flex;flex-direction:column;gap:2px;min-width:80px}
 .prod-pill-name{font-weight:700;color:var(--text)}
 .prod-pill-count{font-size:11px;color:var(--green);font-weight:600}
-/* ── ORDERS TABLE ── */
 .orders-table-wrap{overflow-x:auto;margin-top:8px}
 .orders-table{width:100%;border-collapse:collapse;font-size:12px;min-width:420px}
 .orders-table thead th{background:var(--green-lt);color:var(--green-dark);font-weight:700;padding:9px 11px;text-align:left;white-space:nowrap;border-bottom:2px solid #b6dfc9}
 .orders-table tbody tr{border-bottom:1px solid var(--border);transition:background .15s}
 .orders-table tbody tr:hover{background:#f8fffe}
 .orders-table tbody td{padding:9px 11px;color:var(--text);vertical-align:middle}
-/* ── PACK PILL ── */
 .pack-badge{display:inline-block;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:700;background:#f0f9ff;color:#0369a1;border:1px solid #bae6fd;white-space:nowrap}
 .admin-card{background:var(--surface);border-radius:var(--radius);padding:18px 16px;box-shadow:var(--shadow)}
 .admin-section-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--text);margin-bottom:10px}
@@ -278,18 +270,10 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwP9ughPjTaZtYpQY
 
 var PRODUCT_CATALOGUE = {"TFA":[{"code":"20","name":"GOLD CROWN TFA 1/2LT 1x 12","pack":"Cartons","price":636},{"code":"21","name":"KCC FRESH TFA 1x 12 x 1/2 lt","pack":"Cartons","price":624},{"code":"83","name":"TAIFA TFA 1*12*500 ML","pack":"Cartons","price":612},{"code":"29","name":"TAIFA TFA 1*24*250 ML","pack":"Cartons","price":678.48}],"TCA":[{"code":"23","name":"GOLD CROWN TCA1 2DCL 1x 21","pack":"Cartons","price":525},{"code":"27","name":"KCC FRESH TCA1 2DL 1x 21","pack":"Cartons","price":504},{"code":"12","name":"TAIFA TCA DCL 1*21*200 ML","pack":"Cartons","price":525},{"code":"28","name":"KCC SCHOOL TCA1 2DL 1x 21","pack":"Cartons","price":860}],"ESL":[{"code":"24","name":"ASEPTIC POUCH 18*500ML G/C","pack":"Cartons","price":612},{"code":"30","name":"ESL 450 ML","pack":"Cartons","price":540},{"code":"26a","name":"ESL GOLD CROWN 200 ML","pack":"Cartons","price":512},{"code":"13","name":"TAIFA ESL -200 ML","pack":"Cartons","price":445.2}],"TBA/UHT":[{"code":"18","name":"TBA G/C 1*12*1 LTR LACTOSE FREE","pack":"Packs","price":1920},{"code":"17","name":"LACTOSE FREE 12*500ML","pack":"Cartons","price":900},{"code":"71","name":"TBA GC 1LT","pack":"Cartons","price":1644},{"code":"73C","name":"UHT FULL CREAM 1L","pack":"Cartons","price":458},{"code":"73B","name":"UHT FULL CREAM WITH CUPS 1L","pack":"Cartons","price":1308},{"code":"81","name":"UHT FULL CREAM 500ML","pack":"Cartons","price":732}],"Water":[{"code":"500","name":"Gold Crown Water 1*24*300ML Bottle","pack":"Trays","price":456},{"code":"501","name":"Gold Crown Water 1*24*500ML Bottle","pack":"Trays","price":576},{"code":"502","name":"Gold Crown Water 1*12*1L Bottle","pack":"Trays","price":528},{"code":"503","name":"Gold Crown Water 1*12*1.5LTR Bottle","pack":"Trays","price":768}],"Mala":[{"code":"88","name":"PLAIN MALA (1x16) 1/2 (TR)","pack":"PCS","price":85},{"code":"110","name":"MALA TR-1LITRE","pack":"PCS","price":165},{"code":"69","name":"MALA 1L BOTTLE","pack":"PCS","price":165},{"code":"63","name":"PLAIN MALA 1/2 LT BOTTLE","pack":"PCS","price":85},{"code":"65","name":"12*500 ML SLEEVED MALA BOTTLE","pack":"Trays","price":956.28},{"code":"60","name":"BOTTLED MALA(1*12*250ML) SLEEVE","pack":"Trays","price":561.6},{"code":"15","name":"SWEETENED MALA -500 ML","pack":"Trays","price":1072.92},{"code":"10","name":"SWEETENED MALA 1L","pack":"PCS","price":175},{"code":"14","name":"SWEETENED MALA -250 ML","pack":"Trays","price":564.6},{"code":"134","name":"500ML FILPAK MALA","pack":"Crates","price":1260},{"code":"135","name":"MALA 200ML POUCH","pack":"Crates","price":630},{"code":"9","name":"SWEETEND MALA POUCH","pack":"Crates","price":1350}],"Yoghurts":[{"code":"201","name":"VANILLA YOGHURT 0.25 LT CUPS","pack":"Trays","price":696},{"code":"202","name":"VANILLA YOGHURT 0.5 LT CUPS","pack":"Trays","price":647.28},{"code":"36","name":"VANILLA CUP 100 ML","pack":"Trays","price":200},{"code":"204","name":"STRAWBERRY YOGHURT 0.25LT CUPS","pack":"Trays","price":696},{"code":"205","name":"STRAWBERRY YOGHURT 0.5LT CUPS","pack":"Trays","price":647.28},{"code":"216","name":"COCONUT YOGHURT 0.25LT CUPS","pack":"Trays","price":696},{"code":"217","name":"COCONUT YOGHURT 0.5LT CUPS","pack":"Trays","price":647.28},{"code":"219","name":"NATURAL YOGHURT 0.25LT CUPS","pack":"Trays","price":756},{"code":"220","name":"NATURAL YOGHURT 0.5LT CUPS","pack":"Trays","price":647.28},{"code":"210","name":"PINEAPPLE YOGHURT 0.25LT CUPS","pack":"Trays","price":696},{"code":"211","name":"PINEAPPLE YOGHURT 0.5LT CUPS","pack":"Trays","price":647.28},{"code":"40","name":"KCC VANILLA YOGHURT (1x16) 1/2LT (TR)","pack":"Trays","price":1612.16},{"code":"41","name":"KCC STRAWBERRY YOGHURT (1x16) 1/2LT (TR)","pack":"Trays","price":1612.16}],"Shakes":[{"code":"121","name":"TCA 1*21*200ML STRAWBERRY SHAKE","pack":"Trays","price":777},{"code":"120","name":"TCA 1*21*200ML CHOCOLATE SHAKE","pack":"Trays","price":777},{"code":"122","name":"TCA 1*21*200ML VANILLA SHAKE","pack":"Trays","price":777},{"code":"75","name":"STRAWBERRY FLAVOUR 1*24*250 ML SHAKES","pack":"Cartons","price":1440},{"code":"79","name":"VANILLA FLAVOUR 1*24*250 ML SHAKES","pack":"Cartons","price":1440},{"code":"77","name":"CHOCOLATE FLAVOUR 1*24*250 ML SHAKES","pack":"Cartons","price":1440}],"Cheese":[{"code":"432","name":"RINDLESS CHEDDAR 150gms*90","pack":"Cartons","price":280},{"code":"430","name":"RINDLESS CHEDDAR 250gms","pack":"Cartons","price":450},{"code":"433","name":"RINDLESS CHEDDAR 500 gms","pack":"Cartons","price":785},{"code":"436","name":"RINDLESS CHEDDAR 1 KG","pack":"Cartons","price":1345}],"Butter":[{"code":"600","name":"SALTED BUTTER TUBS 1*18* 0.5KG","pack":"Cartons","price":16516.62},{"code":"601","name":"SALTED BUTTER TUBS 1*24* 0.25KG","pack":"Cartons","price":12945.6},{"code":"602","name":"UNSALTED BUTTER TUBS 1*18* 0.5KG","pack":"Cartons","price":16516.62},{"code":"603","name":"UNSALTED BUTTER TUBS 1*24* 0.25KG","pack":"Cartons","price":12945.6},{"code":"604","name":"SALTED BUTTER 1*20*0.5KG","pack":"Cartons","price":18351.8},{"code":"605","name":"SALTED BUTTER 1*40*0.25KG","pack":"Cartons","price":21576},{"code":"646","name":"UNSALTED BUTTER 1*20* 0.5KG","pack":"Cartons","price":18351.8},{"code":"709","name":"SALTED MINI BUTTER 1x100x10 GMS x 12","pack":"Cartons","price":32532},{"code":"606","name":"SALTED MINI BUTTER TUB 1x24x8 GMS x 12","pack":"Cartons","price":7807.68},{"code":"757","name":"BULK UNSALTED BUTTER 10 KGS","pack":"Cartons","price":19400},{"code":"758","name":"BULK SALTED BUTTER 10 KGS","pack":"Cartons","price":19400}],"Powder":[{"code":"1036","name":"DRIED POWDER 1*12*400 GRMS","pack":"Bags","price":6408},{"code":"1037","name":"DRIED MILK POWDER 1*12*900 GRMS","pack":"Bags","price":14652},{"code":"1038","name":"DRIED POWDER 1*6*2.50 KG TIN","pack":"Bags","price":17670},{"code":"1031","name":"DRIED WHOLE MILK POWDER 1 x 25 KG BAG","pack":"Bags","price":22000},{"code":"1021","name":"DRIED SKIMMED MILK POWDER 1 x 25 KG BAG","pack":"Bags","price":21000}],"Ghee":[{"code":"885","name":"SUPERFINE GHEE 20 x 1/2KG TINS","pack":"Cartons","price":9440},{"code":"882","name":"SUPERFINE GHEE 12 x 1KG TINS","pack":"Cartons","price":10284},{"code":"876","name":"SUPERFINE GHEE 6 x 3KG TINS","pack":"Cartons","price":12327},{"code":"877","name":"SUPERFINE GHEE 6 x 2KG TINS","pack":"Cartons","price":8574},{"code":"851","name":"SUPERFINE GHEE 1 x 18KG PLASTIC","pack":"Buckets","price":17280}],"Fresh Milk":[{"code":"58","name":"GOLD CROWN 1X16X1LT (TR)","pack":"PCS","price":115},{"code":"68","name":"GOLD CROWN 1X16X500ML (TR)","pack":"PCS","price":65},{"code":"70","name":"KCC FRESH MILK 1X16X500ML (TR)","pack":"Crates","price":956.16},{"code":"55","name":"GOLD CROWN FILPAK 1X18X500ML POUCH","pack":"Crates","price":936},{"code":"59","name":"GOLD CROWN FILPAK 1X45X200ML POUCH","pack":"Crates","price":945},{"code":"84","name":"KCC FRESH FILPAK 1X18X500ML POUCH","pack":"Crates","price":936},{"code":"86","name":"KCC FRESH FILPAK 1X45X200ML POUCH","pack":"Crates","price":900},{"code":"85","name":"TAIFA FRESH FILPAK 1X18X500ML POUCH","pack":"Crates","price":900},{"code":"54","name":"TAIFA FRESH FILPAK 1X45X200ML POUCH","pack":"Crates","price":360},{"code":"97","name":"KCC FRESH MILK 500ML BOTTLE","pack":"PCS","price":70},{"code":"98","name":"GOLD CROWN FRESH MILK 500ML BOTTLE","pack":"PCS","price":70},{"code":"100","name":"GOLD CROWN FRESH MILK 1X35X1LT BOTTLE","pack":"PCS","price":130},{"code":"101","name":"GOLD CROWN FRESH MILK 1X18X2LT BOTTLE","pack":"PCS","price":250},{"code":"102","name":"GOLD CROWN FRESH MILK 1X10X3LT BOTTLE","pack":"PCS","price":390},{"code":"103","name":"GOLD CROWN STANDARD 1X35X1LT BOTTLE","pack":"PCS","price":130},{"code":"104","name":"GOLD CROWN STANDARD 1X18X2LT BOTTLE","pack":"PCS","price":250},{"code":"105","name":"GOLD CROWN STANDARD 1X10X3LT BOTTLE","pack":"PCS","price":390},{"code":"106","name":"GOLD CROWN LOWFAT 1X18X2LT BOTTLE","pack":"PCS","price":250},{"code":"107","name":"GOLD CROWN LOWFAT 1X10X3LT BOTTLE","pack":"PCS","price":390},{"code":"108","name":"GOLD CROWN FRESH MILK 5 LITRE BOTTLE","pack":"PCS","price":580},{"code":"51","name":"BULK FRESH MILK 50 LITRE CAN","pack":"PCS","price":4500},{"code":"50","name":"BULK FRESH MILK 20L PACK","pack":"PCS","price":2000}]};
 
-var ALL_PACK_TYPES = (function(){
-  var set = {};
-  Object.keys(PRODUCT_CATALOGUE).forEach(function(cat){
-    PRODUCT_CATALOGUE[cat].forEach(function(p){ if(p.pack) set[p.pack]=true; });
-  });
-  return Object.keys(set).sort();
-})();
-
 var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
 </script>
 
-<!-- ── HEADER ──────────────────────────────────────── -->
+<!-- HEADER -->
 <div class="hdr">
   <div style="display:flex;align-items:center;gap:10px;max-width:100%;position:relative;z-index:1">
     <img src="data:image/png;base64,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" alt="NKCC" onclick="secretTap()" style="height:40px;width:auto;border-radius:5px;background:#fff;padding:2px 4px;object-fit:contain;flex-shrink:0;cursor:pointer"/>
@@ -298,37 +282,36 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
   </div>
 </div>
 
-<!-- ── BOTTOM NAV ──────────────────────────────────── -->
+<!-- BOTTOM NAV -->
 <nav class="bnav">
   <button class="bnav-btn active" id="nav-form" onclick="switchPage('form')"><span class="bnav-ico">📝</span>New Visit</button>
   <button class="bnav-btn" id="nav-dashboard" onclick="handleDashboardNav()"><span class="bnav-ico">📊</span>Dashboard</button>
 </nav>
 
-<!-- ── DASHBOARD DROPDOWN (top-right) ── -->
+<!-- DASHBOARD DROPDOWN -->
 <div id="dbDropdown" style="display:none;position:fixed;top:58px;right:12px;z-index:600;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.18);min-width:220px;overflow:hidden;max-height:85vh;overflow-y:auto">
   <div style="padding:10px 14px 6px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Summary</div>
-  <div class="dditem active" id="dditem-overview"  onclick="selectView('overview')"><span>📊</span>Overview</div>
+  <div class="dditem active" id="dditem-overview" onclick="selectView('overview')"><span>📊</span>Overview</div>
   <div style="height:1px;background:var(--border);margin:4px 0"></div>
   <div style="padding:6px 14px 4px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Analytics</div>
-  <div class="dditem" id="dditem-target"    onclick="selectView('target')"><span>📍</span>CSR Monthly Target</div>
-  <div class="dditem" id="dditem-monthord"  onclick="selectView('monthord')"><span>📈</span>Orders by Month</div>
-  <div class="dditem" id="dditem-region"    onclick="selectView('region')"><span>🗺</span>Visits by Region</div>
-  <div class="dditem" id="dditem-outlet"    onclick="selectView('outlet')"><span>🏪</span>Outlet Types</div>
-  <div class="dditem" id="dditem-leaders"   onclick="selectView('leaders')"><span>🏆</span>CSR Leaderboard</div>
+  <div class="dditem" id="dditem-target"   onclick="selectView('target')"><span>📍</span>CSR Monthly Target</div>
+  <div class="dditem" id="dditem-monthord" onclick="selectView('monthord')"><span>📈</span>Orders by Month</div>
+  <div class="dditem" id="dditem-region"   onclick="selectView('region')"><span>🗺</span>Visits by Region</div>
+  <div class="dditem" id="dditem-outlet"   onclick="selectView('outlet')"><span>🏪</span>Outlet Types</div>
+  <div class="dditem" id="dditem-leaders"  onclick="selectView('leaders')"><span>🏆</span>CSR Leaderboard</div>
   <div style="height:1px;background:var(--border);margin:4px 0"></div>
   <div style="padding:6px 14px 4px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Records</div>
-  <div class="dditem" id="dditem-records"   onclick="selectView('records')"><span>📋</span>Visit Records</div>
-  <div class="dditem" id="dditem-orders"    onclick="selectView('orders')"><span>🧾</span>Orders</div>
-  <div class="dditem" id="dditem-photos"    onclick="selectView('photos')"><span>📷</span>Outlet Photos</div>
+  <div class="dditem" id="dditem-records" onclick="selectView('records')"><span>📋</span>Visit Records</div>
+  <div class="dditem" id="dditem-orders"  onclick="selectView('orders')"><span>🧾</span>Orders</div>
+  <div class="dditem" id="dditem-photos"  onclick="selectView('photos')"><span>📷</span>Outlet Photos</div>
   <div style="height:1px;background:var(--border);margin:4px 0"></div>
   <div style="padding:0 0 6px">
     <button class="dditem" onclick="loadDashboard();closeDropdown()"><span>&#8635;</span>Refresh Data</button>
   </div>
 </div>
-<!-- tap-outside overlay -->
 <div id="ddOverlay" onclick="closeDropdown()" style="display:none;position:fixed;inset:0;z-index:599"></div>
 
-<!-- ════════════ PAGE: FORM ════════════ -->
+<!-- PAGE: FORM -->
 <div class="page active" id="page-form">
   <div class="prog-wrap" id="progWrap">
     <div class="prog-steps">
@@ -360,7 +343,7 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
       <div class="card">
         <div class="field"><label for="csrVal">Staff Name <span class="req">*</span></label>
           <select id="csrVal" class="form-select">
-            <option value="">— Loading staff… —</option>
+            <option value="">⏳ Loading staff…</option>
           </select>
         </div>
       </div>
@@ -511,7 +494,7 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
         <summary class="about-summary">ℹ️ About this app</summary>
         <div class="about-body">
           <p>This tool has been created for the purpose of capturing outlets visited by the <strong>New KCC Sales Team</strong>, enabling real-time field intelligence and reporting.</p>
-          <div class="about-dev"><span style="font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Developed by</span><a href="/cdn-cgi/l/email-protection#30565543444543705548515d405c551e535f5d" style="font-size:12px;font-weight:600;color:var(--green);text-decoration:none">✉️ <span class="__cf_email__" data-cfemail="89efecfafdfcfac9ecf1e8e4f9e5eca7eae6e4">[email&#160;protected]</span></a></div>
+          <div class="about-dev"><span style="font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Developed by</span><a href="mailto:dev@nkcc.co.ke" style="font-size:12px;font-weight:600;color:var(--green);text-decoration:none">✉️ dev@nkcc.co.ke</a></div>
         </div>
       </details>
       <div class="err-msg" id="err4">Please sign out with your full name before submitting.</div>
@@ -531,7 +514,7 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
   </div>
 </div>
 
-<!-- ════════════ PAGE: DASHBOARD ════════════ -->
+<!-- PAGE: DASHBOARD -->
 <div class="page" id="page-dashboard">
   <div class="wrap">
     <div class="db-header">
@@ -539,7 +522,6 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
       <button onclick="toggleDropdown()" style="background:var(--green);border:none;border-radius:10px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;color:#fff;box-shadow:0 2px 8px rgba(13,110,63,.3);flex-shrink:0" title="Menu">&#9776;</button>
     </div>
 
-    <!-- ── FILTER BAR ─────────────────────────────── -->
     <div class="filter-bar">
       <label>Filter:</label>
       <select id="filterCSR" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:100px"><option value="">All CSRs</option></select>
@@ -562,8 +544,8 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
     </div>
 
     <div id="productPresenceSection" style="display:none"></div>
-
     <div id="dbContent"><div class="db-loading"><div class="spin-lg"></div><div>Loading data...</div></div></div>
+
     <div id="section-records" style="display:none">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
         <div class="db-subtitle" id="tableCount" style="font-size:13px"></div>
@@ -575,12 +557,7 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
     <div id="section-orders" style="display:none">
       <div class="db-subtitle" id="ordersSubtitle" style="font-size:13px;margin-bottom:12px"></div>
       <div class="chart-card">
-        <div class="chart-card-header">
-          <div>
-            <div class="chart-card-title">💰 Revenue by Team Member</div>
-            <div class="chart-card-sub">Total KSH orders generated per CSR</div>
-          </div>
-        </div>
+        <div class="chart-card-header"><div><div class="chart-card-title">💰 Revenue by Team Member</div><div class="chart-card-sub">Total KSH orders generated per CSR</div></div></div>
         <div class="chart-wrap-lg"><canvas id="chartOrdersCSR"></canvas></div>
         <div class="orders-table-wrap" style="margin-top:14px">
           <table class="orders-table" id="ordersCSRTable">
@@ -590,12 +567,7 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
         </div>
       </div>
       <div class="chart-card" style="margin-top:14px">
-        <div class="chart-card-header">
-          <div>
-            <div class="chart-card-title">🗃 Revenue by Packaging Type</div>
-            <div class="chart-card-sub">KSH breakdown per packaging format across all visits</div>
-          </div>
-        </div>
+        <div class="chart-card-header"><div><div class="chart-card-title">🗃 Revenue by Packaging Type</div><div class="chart-card-sub">KSH breakdown per packaging format</div></div></div>
         <div class="chart-wrap"><canvas id="chartOrdersPack"></canvas></div>
         <div class="orders-table-wrap" style="margin-top:14px">
           <table class="orders-table" id="ordersPackTable">
@@ -605,12 +577,7 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
         </div>
       </div>
       <div class="chart-card" style="margin-top:14px">
-        <div class="chart-card-header">
-          <div>
-            <div class="chart-card-title">📦 Revenue by Product Category</div>
-            <div class="chart-card-sub">Which product lines are generating the most orders</div>
-          </div>
-        </div>
+        <div class="chart-card-header"><div><div class="chart-card-title">📦 Revenue by Product Category</div><div class="chart-card-sub">Which product lines are generating the most orders</div></div></div>
         <div class="chart-wrap"><canvas id="chartOrdersCat"></canvas></div>
       </div>
     </div>
@@ -637,11 +604,10 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-
-// ════════════════════════════════════════════════════
+<script>
+// ═══════════════════════════════════════════════
 //  ORDER BUILDER STATE
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 var orderQtys = {};
 var activeCat = 'All';
 var noOrder = false;
@@ -753,9 +719,9 @@ function handleNoOrderToggle() {
   else updateOrderSummary();
 }
 
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 //  FORM STATE
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 var cur = 1;
 var locData = {lat:null,lng:null,acc:null,addr:null};
 var watchId = null;
@@ -772,9 +738,9 @@ window.addEventListener('DOMContentLoaded', function() {
   initOrderBuilder();
 });
 
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 //  PHOTO CAPTURE
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 function handlePhoto(event) {
   var file = event.target.files && event.target.files[0];
   if (!file) return;
@@ -842,9 +808,9 @@ function updatePhotoSummary() {
   grid.appendChild(thumb);
 }
 
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 //  PROGRESS
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 function updateProg() {
   for (var i=1;i<=4;i++) {
     var d=document.getElementById('d'+i), l=document.getElementById('l'+i);
@@ -860,9 +826,9 @@ function goTo(n){if(n>=cur)return;document.getElementById('step-'+cur).classList
 function next(from){if(!validate(from))return;document.getElementById('step-'+from).classList.remove('active');cur=from+1;document.getElementById('step-'+cur).classList.add('active');updateProg();if(cur===4)updatePhotoSummary();window.scrollTo({top:0,behavior:'smooth'});}
 function prev(from){document.getElementById('step-'+from).classList.remove('active');cur=from-1;document.getElementById('step-'+cur).classList.add('active');updateProg();window.scrollTo({top:0,behavior:'smooth'});}
 
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 //  VALIDATION
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 function validate(step) {
   var ok=true;
   if(step===1){
@@ -892,9 +858,9 @@ function validate(step) {
   return ok;
 }
 
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 //  LOCATION
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 function startLocation(){
   if(!navigator.geolocation){showLocStatus('error','Location not supported on this device.');return;}
   showLocStatus('scanning','Detecting location...');
@@ -948,9 +914,9 @@ function showLocStatus(state,msg,guide){
   else{box.classList.add('loc-err');icon.textContent='⚠️';icon.style.display='';text.innerHTML=msg+(guide||'');text.className='loc-simple-text';retry.style.display='inline-block';}
 }
 
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 //  SUBMIT
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 function submitForm(){
   if(!validate(4))return;
   var btn=document.getElementById('submitBtn');
@@ -1000,7 +966,7 @@ function resetForm(){
   document.querySelectorAll('input[type=text],input[type=tel],input[type=number],textarea').forEach(function(el){el.value='';});
   document.querySelectorAll('input[type=radio],input[type=checkbox]').forEach(function(el){el.checked=false;});
   document.getElementById('visitDate').value=new Date().toISOString().split('T')[0];
-  document.getElementById('rgnVal').value='';document.getElementById('csrVal').value='';
+  document.getElementById('rgnVal').value='';
   document.getElementById('submitBtn').disabled=false;document.getElementById('submitBtn').innerHTML='Submit Visit &#10003;';
   document.querySelectorAll('.err-msg').forEach(function(el){el.className='err-msg';});
   photoData=null;removePhoto();updatePhotoSummary();
@@ -1018,11 +984,12 @@ function resetForm(){
   renderProductList();updateOrderSummary();
   cur=1;document.getElementById('step-1').classList.add('active');updateProg();
   window.scrollTo({top:0,behavior:'smooth'});startLocation();
+  loadAndApplyStaff();
 }
 
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 //  DASHBOARD DATA
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 window.allRows=null;window.filteredRows=null;window.charts={};
 var _retryCount=0;
 
@@ -1032,18 +999,17 @@ function loadDashboard(){
   var cbName='nkcc_cb_'+Date.now();
   var script=document.createElement('script');
   var settled=false;
-  var timer=setTimeout(function(){if(settled)return;settled=true;cleanup();stopBtns();handleFetchFailure();},15000);
+  var timer=setTimeout(function(){if(settled)return;settled=true;cleanup();handleFetchFailure();},15000);
   window[cbName]=function(data){
-    if(settled)return;settled=true;clearTimeout(timer);cleanup();stopBtns();_retryCount=0;
+    if(settled)return;settled=true;clearTimeout(timer);cleanup();_retryCount=0;
     if(data.error){handleFetchFailure();return;}
     window.allRows=data.rows||[];
     populateFilters(window.allRows);applyFilters();
     var now=new Date().toLocaleTimeString('en-KE',{hour:'2-digit',minute:'2-digit'});
     document.getElementById('dbLastUpdated').textContent='✅ Updated '+now+' · '+window.allRows.length+' records';
   };
-  script.onerror=function(){if(settled)return;settled=true;clearTimeout(timer);cleanup();stopBtns();handleFetchFailure();};
+  script.onerror=function(){if(settled)return;settled=true;clearTimeout(timer);cleanup();handleFetchFailure();};
   function cleanup(){if(script.parentNode)script.parentNode.removeChild(script);try{delete window[cbName];}catch(e){window[cbName]=undefined;}}
-  function stopBtns(){}
   script.src=APPS_SCRIPT_URL+'?action=getData&callback='+cbName;
   document.head.appendChild(script);
 }
@@ -1068,9 +1034,9 @@ function populateFilters(rows){
   Object.keys(regions).sort().forEach(function(r){fRgn.innerHTML+='<option>'+r+'</option>';});
 }
 
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 //  PAGE NAVIGATION + DROPDOWN
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 var _currentView = 'overview';
 
 function switchPage(p){
@@ -1105,17 +1071,10 @@ function closeDropdown(){
 }
 
 var _viewTitles={
-  overview:'Dashboard',
-  target:'CSR Monthly Target',
-  monthord:'Orders by Month',
-  region:'Visits by Region',
-  outlet:'Outlet Types',
-  leaders:'CSR Leaderboard',
-  records:'Visit Records',
-  orders:'Orders',
-  photos:'Outlet Photos'
+  overview:'Dashboard',target:'CSR Monthly Target',monthord:'Orders by Month',
+  region:'Visits by Region',outlet:'Outlet Types',leaders:'CSR Leaderboard',
+  records:'Visit Records',orders:'Orders',photos:'Outlet Photos'
 };
-
 var _dbContentViews={overview:1,target:1,monthord:1,region:1,outlet:1,leaders:1};
 
 function selectView(v){
@@ -1130,34 +1089,30 @@ function selectView(v){
   document.getElementById('section-records').style.display=v==='records'?'block':'none';
   document.getElementById('section-orders').style.display=v==='orders'?'block':'none';
   document.getElementById('section-photos').style.display=v==='photos'?'block':'none';
-  if(v==='target')    renderViewTarget();
-  if(v==='monthord')  renderViewOrdersByMonth();
-  if(v==='region')    renderViewRegion();
-  if(v==='outlet')    renderViewOutletTypes();
-  if(v==='leaders')   renderViewLeaderboard();
-  if(v==='orders')    renderOrders(window.filteredRows||window.allRows||[]);
+  if(v==='target')   renderViewTarget();
+  if(v==='monthord') renderViewOrdersByMonth();
+  if(v==='region')   renderViewRegion();
+  if(v==='outlet')   renderViewOutletTypes();
+  if(v==='leaders')  renderViewLeaderboard();
+  if(v==='orders')   renderOrders(window.filteredRows||window.allRows||[]);
   var t=document.getElementById('dbViewTitle');
   if(t) t.textContent=_viewTitles[v]||'Dashboard';
   closeDropdown();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function showSection(s){ selectView(s); }
-
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 //  FILTERS
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 function applyFilters(){
   var btn=document.getElementById('applyBtn');
   if(btn){btn.textContent='⏳ Applying...';btn.disabled=true;}
   window._dashData=null;
-
   var csr=document.getElementById('filterCSR').value;
   var rgn=document.getElementById('filterRegion').value;
   var orderStatus=document.getElementById('filterOrderStatus').value;
   var dateFrom=document.getElementById('filterDateFrom').value;
   var dateTo=document.getElementById('filterDateTo').value;
-
   window.filteredRows=(window.allRows||[]).filter(function(r){
     if(csr&&r['CSR Name']!==csr) return false;
     if(rgn&&r['Region']!==rgn) return false;
@@ -1171,7 +1126,6 @@ function applyFilters(){
     }
     return true;
   });
-
   renderFilterSummary(window.filteredRows,{csr:csr,rgn:rgn,orderStatus:orderStatus,dateFrom:dateFrom,dateTo:dateTo});
   renderDashboard(window.filteredRows);
   renderProductPresence(window.filteredRows);
@@ -1179,7 +1133,6 @@ function applyFilters(){
   renderOrders(window.filteredRows);
   renderPhotos(window.filteredRows);
   selectView(_currentView);
-
   setTimeout(function(){ if(btn){btn.textContent='✓ Apply';btn.disabled=false;} },400);
 }
 
@@ -1237,9 +1190,9 @@ function downloadCSV(){
   document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
 }
 
-// ════════════════════════════════════════════════════
-//  RENDER DASHBOARD (KPIs + Charts)
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
+//  RENDER DASHBOARD
+// ═══════════════════════════════════════════════
 function renderDashboard(rows){
   if(!rows||rows.length===0){
     document.getElementById('dbContent').innerHTML='<div class="db-empty"><div class="db-empty-ico">📭</div><div style="font-weight:600;margin-bottom:6px">No data yet</div><div style="font-size:12px;color:var(--muted)">Submit your first market visit to see analytics here.</div></div>';
@@ -1257,8 +1210,7 @@ function renderDashboard(rows){
     if(r['New / Existing Customer']==='New')newCount++;
   });
   var activeCsrs=Object.keys(csrCounts).length;
-  var html='';
-  html+='<div class="stats-grid">';
+  var html='<div class="stats-grid">';
   html+=statCard('green','&#128203;',totalVisits,'Total Visits','All recorded visits');
   html+=statCard('amber','🧾','KSH '+fmtNum(Math.round(totalOrder)),'Total Orders','Combined order value');
   html+=statCard('blue','&#128100;',activeCsrs,'Active CSRs','CSRs with visits');
@@ -1298,8 +1250,7 @@ function renderViewTarget(){
   if(!allMonths.length)allMonths=[currentMonth];
   var trackMonth=allMonths[0];
   var trackLabel=(function(m){var p=m.split('-');return new Date(p[0],p[1]-1,1).toLocaleString('default',{month:'long',year:'numeric'});})(trackMonth);
-  // Use names from sheet (or fall back to any CSR seen in actual data)
-  var ALL_CSRS = _sheetCsrs.length ? _sheetCsrs : Object.keys(csrMonthCounts);
+  var ALL_CSRS=_sheetCsrs.length?_sheetCsrs:Object.keys(csrMonthCounts);
   var targetRows=ALL_CSRS.map(function(name){return{name:name,count:(csrMonthCounts[name]&&csrMonthCounts[name][trackMonth])||0};}).sort(function(a,b){return b.count-a.count;});
   var html='<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title">📍 CSR Monthly Target</div><div class="chart-card-sub">'+trackLabel+' · Target: '+TARGET+' visits per CSR</div></div>';
   html+='<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">';
@@ -1332,10 +1283,7 @@ function renderViewOrdersByMonth(){
 function renderViewRegion(){
   var d=getDashData(); var regionCounts=d.regionCounts;
   var rKeys=Object.keys(regionCounts); var rVals=rKeys.map(function(k){return regionCounts[k];});
-  if(!rKeys.length){
-    document.getElementById('dbContent').innerHTML='<div class="db-empty"><div class="db-empty-ico">🗺</div><div style="font-weight:600;margin-bottom:6px">No region data</div></div>';
-    return;
-  }
+  if(!rKeys.length){document.getElementById('dbContent').innerHTML='<div class="db-empty"><div class="db-empty-ico">🗺</div><div style="font-weight:600;margin-bottom:6px">No region data</div></div>';return;}
   document.getElementById('dbContent').innerHTML='<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title">🗺 Visits by Region</div><div class="chart-card-sub">Distribution across territories</div></div></div><div class="chart-wrap" style="height:280px"><canvas id="chartRegion"></canvas></div></div>';
   setTimeout(function(){
     destroyChart('chartRegion');
@@ -1347,10 +1295,7 @@ function renderViewRegion(){
 function renderViewOutletTypes(){
   var d=getDashData(); var outletCounts=d.outletCounts;
   var oKeys=Object.keys(outletCounts).sort(function(a,b){return outletCounts[b]-outletCounts[a];}); var oVals=oKeys.map(function(k){return outletCounts[k];});
-  if(!oKeys.length){
-    document.getElementById('dbContent').innerHTML='<div class="db-empty"><div class="db-empty-ico">🏪</div><div style="font-weight:600;margin-bottom:6px">No outlet data</div></div>';
-    return;
-  }
+  if(!oKeys.length){document.getElementById('dbContent').innerHTML='<div class="db-empty"><div class="db-empty-ico">🏪</div><div style="font-weight:600;margin-bottom:6px">No outlet data</div></div>';return;}
   document.getElementById('dbContent').innerHTML='<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title">🏪 Outlet Types</div><div class="chart-card-sub">Channel breakdown</div></div></div><div class="chart-wrap" style="height:280px"><canvas id="chartOutlet"></canvas></div></div>';
   setTimeout(function(){
     destroyChart('chartOutlet');
@@ -1375,10 +1320,10 @@ function renderViewLeaderboard(){
 
 function switchTargetMonth(month){
   var TARGET=100;
-  var ALL_CSRS = _sheetCsrs.length ? _sheetCsrs : Object.keys(csrMonthCounts);
   var rows=window.filteredRows||window.allRows||[];
   var csrMonthCounts={};
   rows.forEach(function(r){var name=r['CSR Name'];if(!name)return;var d=String(r['Date of Market Visit']).substring(0,7);if(!d)return;if(!csrMonthCounts[name])csrMonthCounts[name]={};csrMonthCounts[name][d]=(csrMonthCounts[name][d]||0)+1;});
+  var ALL_CSRS=_sheetCsrs.length?_sheetCsrs:Object.keys(csrMonthCounts);
   var targetRows=ALL_CSRS.map(function(name){return{name:name,count:(csrMonthCounts[name]&&csrMonthCounts[name][month])||0};}).sort(function(a,b){return b.count-a.count;});
   var html='';
   targetRows.forEach(function(r){
@@ -1398,11 +1343,7 @@ function renderProductPresence(rows){
   if(!rows||!rows.length){sec.style.display='none';return;}
   var productCounts={};
   rows.forEach(function(r){
-    if(r['NKCC Products']){
-      r['NKCC Products'].split(',').forEach(function(p){
-        var t=p.trim();if(t&&t!=='None')productCounts[t]=(productCounts[t]||0)+1;
-      });
-    }
+    if(r['NKCC Products']){r['NKCC Products'].split(',').forEach(function(p){var t=p.trim();if(t&&t!=='None')productCounts[t]=(productCounts[t]||0)+1;});}
   });
   var prodSorted=Object.entries(productCounts).sort(function(a,b){return b[1]-a[1];});
   if(!prodSorted.length){sec.style.display='none';return;}
@@ -1428,21 +1369,20 @@ function renderProductPresence(rows){
   sec.innerHTML=html;
   sec.style.display='block';
 }
+
 function fmtNum(n){return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');}
 
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 //  RENDER ORDERS SECTION
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 function renderOrders(rows){
   var el=document.getElementById('section-orders');if(!el)return;
   var ordersSubtitle=document.getElementById('ordersSubtitle');
-
   if(!rows||rows.length===0){
     el.innerHTML='<div class="db-empty"><div class="db-empty-ico">🧾</div><div style="font-weight:600;margin-bottom:6px">No orders to display</div><div style="font-size:12px;color:var(--muted)">Adjust filters or submit visits to see order data.</div></div>';
     if(ordersSubtitle)ordersSubtitle.textContent='';
     return;
   }
-
   var csrOrders={};
   rows.forEach(function(r){
     var name=r['CSR Name']||'Unknown';
@@ -1455,7 +1395,6 @@ function renderOrders(rows){
   var csrArr=Object.entries(csrOrders).map(function(e){return{name:e[0],visits:e[1].visits,orders:e[1].orders,zeros:e[1].zeros,total:e[1].total,avg:e[1].visits>0?e[1].total/e[1].visits:0};}).sort(function(a,b){return b.total-a.total;});
   var grandTotal=csrArr.reduce(function(s,c){return s+c.total;},0);
   if(ordersSubtitle)ordersSubtitle.textContent=csrArr.length+' CSRs · '+rows.length+' visits · KSH '+fmtNum(Math.round(grandTotal))+' total orders';
-
   var packOrders={};
   rows.forEach(function(r){
     var amt=parseFloat(String(r['Order Generated (KSH)']).replace(/,/g,''))||0;
@@ -1468,28 +1407,20 @@ function renderOrders(rows){
         if(!p.pack)return;
         var key=p.pack;
         if(!packOrders[key])packOrders[key]={total:0,count:0,cats:{}};
-        if(!seen[key]){
-          packOrders[key].total+=amt/(cats.length||1);
-          packOrders[key].count++;
-          seen[key]=true;
-        }
+        if(!seen[key]){packOrders[key].total+=amt/(cats.length||1);packOrders[key].count++;seen[key]=true;}
         packOrders[key].cats[cat]=true;
       });
     });
   });
   var packArr=Object.entries(packOrders).map(function(e){return{pack:e[0],total:e[1].total,count:e[1].count,cats:Object.keys(e[1].cats).join(', ')};}).sort(function(a,b){return b.total-a.total;});
-
   var catOrders={};
   rows.forEach(function(r){
     var amt=parseFloat(String(r['Order Generated (KSH)']).replace(/,/g,''))||0;
     if(amt<=0)return;
     var cats=String(r['NKCC Products']||'').split(',').map(function(p){return p.trim();}).filter(Boolean);
-    cats.forEach(function(cat){
-      catOrders[cat]=(catOrders[cat]||0)+(amt/(cats.length||1));
-    });
+    cats.forEach(function(cat){catOrders[cat]=(catOrders[cat]||0)+(amt/(cats.length||1));});
   });
   var catArr=Object.entries(catOrders).sort(function(a,b){return b[1]-a[1];});
-
   var csrBodyHTML='';
   csrArr.forEach(function(c,i){
     var rankEmoji=i===0?'🥇':i===1?'🥈':i===2?'🥉':''+(i+1);
@@ -1497,53 +1428,37 @@ function renderOrders(rows){
   });
   var csrBody=document.getElementById('ordersCSRBody');
   if(csrBody)csrBody.innerHTML=csrBodyHTML;
-
   var packBodyHTML='';
   packArr.forEach(function(p){
     packBodyHTML+='<tr><td><span class="pack-badge">'+p.pack+'</span></td><td style="color:var(--muted);font-size:11px">'+p.cats+'</td><td>'+p.count+'</td><td style="font-weight:700;color:var(--green-dark)">KSH '+fmtNum(Math.round(p.total))+'</td></tr>';
   });
   var packBody=document.getElementById('ordersPackBody');
   if(packBody)packBody.innerHTML=packBodyHTML||'<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:16px">No packaging data</td></tr>';
-
-  var COLORS=['#0d6e3f','#f5a623','#2563eb','#7c3aed','#0891b2','#d94f4f','#16a34a','#ea580c','#b45309','#6d28d9'];
-
   setTimeout(function(){
     var csrEl=document.getElementById('chartOrdersCSR');
     if(csrEl){
       destroyChart('chartOrdersCSR');
       var ctx=csrEl.getContext('2d');
-      window.charts['chartOrdersCSR']=new Chart(ctx,{
-        type:'bar',
-        data:{labels:csrArr.map(function(c){return shortName(c.name);}),datasets:[{label:'Total KSH',data:csrArr.map(function(c){return Math.round(c.total);}),backgroundColor:csrArr.map(function(_,i){return COLORS[i%COLORS.length];}),borderRadius:6,borderSkipped:false}]},
-        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return 'KSH '+fmtNum(ctx.parsed.y);}}}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return 'KSH '+fmtNum(v);}}}}}
-      });
+      window.charts['chartOrdersCSR']=new Chart(ctx,{type:'bar',data:{labels:csrArr.map(function(c){return shortName(c.name);}),datasets:[{label:'Total KSH',data:csrArr.map(function(c){return Math.round(c.total);}),backgroundColor:csrArr.map(function(_,i){return COLORS[i%COLORS.length];}),borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return 'KSH '+fmtNum(ctx.parsed.y);}}}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return 'KSH '+fmtNum(v);}}}}}});
     }
     var packEl=document.getElementById('chartOrdersPack');
     if(packEl&&packArr.length){
       destroyChart('chartOrdersPack');
       var ctx2=packEl.getContext('2d');
-      window.charts['chartOrdersPack']=new Chart(ctx2,{
-        type:'doughnut',
-        data:{labels:packArr.map(function(p){return p.pack;}),datasets:[{data:packArr.map(function(p){return Math.round(p.total);}),backgroundColor:COLORS,borderWidth:2,borderColor:'#fff'}]},
-        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:12,font:{size:11}}},tooltip:{callbacks:{label:function(ctx){return ctx.label+': KSH '+fmtNum(ctx.parsed);}}}}}
-      });
+      window.charts['chartOrdersPack']=new Chart(ctx2,{type:'doughnut',data:{labels:packArr.map(function(p){return p.pack;}),datasets:[{data:packArr.map(function(p){return Math.round(p.total);}),backgroundColor:COLORS,borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:12,font:{size:11}}},tooltip:{callbacks:{label:function(ctx){return ctx.label+': KSH '+fmtNum(ctx.parsed);}}}}}});
     }
     var catEl=document.getElementById('chartOrdersCat');
     if(catEl&&catArr.length){
       destroyChart('chartOrdersCat');
       var ctx3=catEl.getContext('2d');
-      window.charts['chartOrdersCat']=new Chart(ctx3,{
-        type:'bar',
-        data:{labels:catArr.map(function(c){return c[0];}),datasets:[{label:'KSH',data:catArr.map(function(c){return Math.round(c[1]);}),backgroundColor:catArr.map(function(_,i){return COLORS[i%COLORS.length];}),borderRadius:6,borderSkipped:false}]},
-        options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return 'KSH '+fmtNum(ctx.parsed.x);}}}},scales:{x:{beginAtZero:true,ticks:{callback:function(v){return 'KSH '+fmtNum(v);}}}}}
-      });
+      window.charts['chartOrdersCat']=new Chart(ctx3,{type:'bar',data:{labels:catArr.map(function(c){return c[0];}),datasets:[{label:'KSH',data:catArr.map(function(c){return Math.round(c[1]);}),backgroundColor:catArr.map(function(_,i){return COLORS[i%COLORS.length];}),borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return 'KSH '+fmtNum(ctx.parsed.x);}}}},scales:{x:{beginAtZero:true,ticks:{callback:function(v){return 'KSH '+fmtNum(v);}}}}}});
     }
   },60);
 }
 
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 //  RENDER TABLE
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 function renderTable(rows){
   document.getElementById('tableCount').textContent=(rows?rows.length:0)+' records';
   if(!rows||rows.length===0){
@@ -1562,51 +1477,27 @@ function renderTable(rows){
   document.getElementById('tableContent').innerHTML=html;
 }
 
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 //  RENDER PHOTOS
-// ════════════════════════════════════════════════════
-function getPhotoUrl(r){
-  return r['Photo URL']||r['photo1']||r['Photo 1']||r['photo_url']||r['PhotoURL']||r['Photo']||'';
-}
+// ═══════════════════════════════════════════════
+function getPhotoUrl(r){ return r['Photo URL']||r['photo1']||r['Photo 1']||r['photo_url']||r['PhotoURL']||r['Photo']||''; }
 function extractDriveId(url){
   if(!url) return '';
-  var m=url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-  if(m) return m[1];
-  m=url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-  if(m) return m[1];
-  m=url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-  if(m) return m[1];
+  var m=url.match(/\/d\/([a-zA-Z0-9_-]+)/); if(m) return m[1];
+  m=url.match(/[?&]id=([a-zA-Z0-9_-]+)/); if(m) return m[1];
+  m=url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/); if(m) return m[1];
   return '';
 }
-function driveThumbnailSrc(fileId){
-  return 'https://drive.google.com/uc?export=view&id='+fileId;
-}
-function driveThumbnailFallback1(fileId){
-  return 'https://drive.google.com/thumbnail?id='+fileId+'&sz=w600';
-}
-function driveThumbnailFallback2(fileId){
-  return 'https://lh3.googleusercontent.com/d/'+fileId+'=w400';
-}
+function driveThumbnailSrc(fileId){ return 'https://drive.google.com/uc?export=view&id='+fileId; }
+function driveThumbnailFallback1(fileId){ return 'https://drive.google.com/thumbnail?id='+fileId+'&sz=w600'; }
+function driveThumbnailFallback2(fileId){ return 'https://lh3.googleusercontent.com/d/'+fileId+'=w400'; }
 
 function renderPhotos(rows){
   var allRows=rows||[];
   var withPhotos=allRows.filter(function(r){return String(getPhotoUrl(r)).trim().length>5;});
   document.getElementById('photoCount').textContent=withPhotos.length+' photo'+(withPhotos.length!==1?'s':'')+' found';
   if(!withPhotos.length){
-    var noPhotoMsg='Photos will appear here once CSRs submit visits.';
-    if(allRows.length>0){
-      var firstRow=allRows[0];
-      var keys=Object.keys(firstRow);
-      var photoVal=String(firstRow['Photo URL']||'').trim();
-      var photoKey=keys.filter(function(k){return k.toLowerCase().includes('photo')||k.toLowerCase().includes('image');});
-      if(photoVal){
-        noPhotoMsg='Photo URL found but no file ID extracted. Value: "'+photoVal.substring(0,60)+'"';
-      } else if(photoKey.length){
-        var vals=photoKey.map(function(k){return k+'="'+String(firstRow[k]||'').substring(0,40)+'"';});
-        noPhotoMsg='Photo columns: '+vals.join(', ')+'. "Photo URL" column is empty in the sheet for these '+allRows.length+' records.';
-      }
-    }
-    document.getElementById('photoGallery').innerHTML='<div class="db-empty"><div class="db-empty-ico">📷</div><div style="font-weight:600;margin-bottom:6px">No photos yet</div><div style="font-size:12px;color:var(--muted)">'+noPhotoMsg+'</div></div>';
+    document.getElementById('photoGallery').innerHTML='<div class="db-empty"><div class="db-empty-ico">📷</div><div style="font-weight:600;margin-bottom:6px">No photos yet</div><div style="font-size:12px;color:var(--muted)">Photos will appear here once CSRs submit visits with outlet photos.</div></div>';
     return;
   }
   var sorted=withPhotos.slice().sort(function(a,b){return String(b['Date of Market Visit']||'').localeCompare(String(a['Date of Market Visit']||''));});
@@ -1619,10 +1510,10 @@ function renderPhotos(rows){
     var loc=r['Location Name']||'—';
     var url=String(getPhotoUrl(r)).trim();
     var fileId=extractDriveId(url);
-    var imgSrc   = fileId ? driveThumbnailSrc(fileId) : '';
-    var fb1      = fileId ? driveThumbnailFallback1(fileId) : '';
-    var fb2      = fileId ? driveThumbnailFallback2(fileId) : '';
-    var lbImgSrc = imgSrc;
+    var imgSrc=fileId?driveThumbnailSrc(fileId):'';
+    var fb1=fileId?driveThumbnailFallback1(fileId):'';
+    var fb2=fileId?driveThumbnailFallback2(fileId):'';
+    var lbImgSrc=imgSrc;
     var meta=encodeURIComponent(JSON.stringify({outlet:outlet,csr:csr,date:date,ts:ts,loc:loc,url:url,lbSrc:lbImgSrc,fileId:fileId}));
     var colours=['#0d6e3f','#2563eb','#7c3aed','#0891b2','#d97706','#dc2626'];
     var col=colours[(outlet.charCodeAt(0)||0)%colours.length];
@@ -1632,8 +1523,7 @@ function renderPhotos(rows){
     html+='<div style="position:relative;width:100%;aspect-ratio:4/3;background:'+col+'15;overflow:hidden;border-radius:10px 10px 0 0">';
     if(imgSrc){
       html+='<img src="'+imgSrc+'" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"'
-           +' onerror="'
-           +'if(this.dataset.fb===\'0\'){this.dataset.fb=\'1\';this.src=\''+fb1+'\';return;}'
+           +' onerror="if(this.dataset.fb===\'0\'){this.dataset.fb=\'1\';this.src=\''+fb1+'\';return;}'
            +'if(this.dataset.fb===\'1\'){this.dataset.fb=\'2\';this.src=\''+fb2+'\';return;}'
            +'this.style.display=\'none\';var f=document.getElementById(\''+fbId+'\');if(f)f.style.display=\'flex\';"'
            +' data-fb="0" />';
@@ -1648,9 +1538,9 @@ function renderPhotos(rows){
   document.getElementById('photoGallery').innerHTML=html;
 }
 
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 //  LIGHTBOX
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 function openLightbox(encodedSrc,encodedMeta){
   var imgSrc=decodeURIComponent(encodedSrc);var meta={};try{meta=JSON.parse(decodeURIComponent(encodedMeta));}catch(e){}
   var lbImg=document.getElementById('lbImg');
@@ -1664,9 +1554,7 @@ function openLightbox(encodedSrc,encodedMeta){
       if(lbImg.dataset.fb==='1'){lbImg.dataset.fb='2';lbImg.src=driveThumbnailFallback2(fileId);return;}
       lbImg.style.display='none';
     };
-  } else {
-    lbImg.style.display='none';
-  }
+  } else { lbImg.style.display='none'; }
   document.getElementById('lbMeta').innerHTML=
     '<div class="lb-meta-row"><span class="lb-meta-ico">🏪</span><div><div class="lb-meta-label">Outlet</div><div class="lb-meta-val">'+(meta.outlet||'—')+'</div></div></div>'
    +'<div class="lb-meta-row"><span class="lb-meta-ico">👤</span><div><div class="lb-meta-label">CSR</div><div class="lb-meta-val">'+(meta.csr||'—')+'</div></div></div>'
@@ -1678,114 +1566,126 @@ function openLightbox(encodedSrc,encodedMeta){
 }
 function closeLightbox(){document.getElementById('photoLightbox').style.display='none';document.body.style.overflow='';}
 
-// ════════════════════════════════════════════════════
-//  ADMIN PANEL
-// ════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
+//  STAFF LOADING — via Apps Script getStaff
+// ═══════════════════════════════════════════════
+var _sheetCsrs = [];
 var ADMIN_PASSWORD = "Festoo";
-// CSR names are no longer hardcoded — they are fetched live from the STAFF tab of the Google Sheet.
-// To configure, enter your Sheet ID in the Admin Panel → Google Sheet ID field.
-var DEFAULT_CSRS = []; // kept for backward-compat; sheet data takes precedence
 var DEFAULT_REGIONS = ['Nairobi North','Nairobi South','Eastern','Nairobi Tier I','Nairobi Tier II','Institutions / Exports'];
 
-// ── GOOGLE SHEETS STAFF LOADER ──────────────────────────────────────
-// Reads the STAFF tab (columns: A=Payroll, B=Name, C=Title, D=Region)
-// Uses the public Sheets JSON API (sheet must be shared "Anyone with the link can view").
-var _sheetCsrs = []; // populated after fetch; used everywhere ALL_CSRS was used
+// ── Fetch staff names from Apps Script (action=getStaff) ─────────────
+// This is more reliable than reading the sheet directly — no public
+// sharing required; the Apps Script has its own service account access.
+function fetchStaffFromScript(callback) {
+  var cbName = 'nkcc_staff_cb_' + Date.now();
+  var script  = document.createElement('script');
+  var settled = false;
 
-function getSheetId() {
-  try {
-    var s = localStorage.getItem('nkcc_settings');
-    if (s) { var p = JSON.parse(s); if (p.sheetId) return p.sheetId.trim(); }
-  } catch(e) {}
-  return '';
-}
+  var timer = setTimeout(function() {
+    if (settled) return;
+    settled = true;
+    cleanup();
+    callback(null, 'Staff load timed out. Check that the Apps Script is deployed and accessible.');
+  }, 12000);
 
-function fetchStaffFromSheet(callback) {
-  var sheetId = getSheetId();
-  if (!sheetId) {
-    // No sheet configured — fall back to locally saved CSRs (admin panel list)
-    callback(null, 'No Sheet ID configured. Enter it in Admin → Google Sheet ID.');
-    return;
+  window[cbName] = function(data) {
+    if (settled) return;
+    settled = true;
+    clearTimeout(timer);
+    cleanup();
+    if (data && data.staff && data.staff.length > 0) {
+      callback(data.staff, null);
+    } else if (data && data.error) {
+      callback(null, 'Apps Script error: ' + data.error);
+    } else {
+      callback(null, 'Staff list is empty. Check the STAFF tab has names in Column B.');
+    }
+  };
+
+  script.onerror = function() {
+    if (settled) return;
+    settled = true;
+    clearTimeout(timer);
+    cleanup();
+    callback(null, 'Could not reach Apps Script. Check your internet connection.');
+  };
+
+  function cleanup() {
+    if (script.parentNode) script.parentNode.removeChild(script);
+    try { delete window[cbName]; } catch(e) { window[cbName] = undefined; }
   }
-  // Use the public Sheets v4 export endpoint (no API key needed for public sheets)
-  var url = 'https://docs.google.com/spreadsheets/d/' + sheetId + '/gviz/tq?tqx=out:json&sheet=STAFF';
-  fetch(url)
-    .then(function(r) {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return r.text();
-    })
-    .then(function(text) {
-      // Strip the JSONP wrapper: google.visualization.Query.setResponse({...});
-      var json = text.replace(/^[^{]*/, '').replace(/\s*\);?\s*$/, '');
-      var data = JSON.parse(json);
-      var rows = (data.table && data.table.rows) || [];
-      var names = [];
-      rows.forEach(function(row) {
-        // Column B (index 1) = Name
-        var cell = row.c && row.c[1];
-        var name = cell && cell.v ? String(cell.v).trim() : '';
-        if (name && name.toLowerCase() !== 'name') names.push(name);
-      });
-      _sheetCsrs = names;
-      callback(names, null);
-    })
-    .catch(function(err) {
-      callback(null, 'Could not load staff from sheet: ' + err.message);
-    });
+
+  script.src = APPS_SCRIPT_URL + '?action=getStaff&callback=' + cbName;
+  document.head.appendChild(script);
 }
 
 function loadAndApplyStaff() {
   var csrSel = document.getElementById('csrVal');
   if (!csrSel) return;
+
   csrSel.innerHTML = '<option value="">⏳ Loading staff…</option>';
   csrSel.disabled = true;
-  fetchStaffFromSheet(function(names, err) {
+
+  fetchStaffFromScript(function(names, err) {
     csrSel.disabled = false;
-    if (err || !names || !names.length) {
-      // Fall back to locally saved list (from admin panel)
-      var saved = loadSettings();
-      var fallback = (saved.csrs && saved.csrs.length) ? saved.csrs : DEFAULT_CSRS;
-      if (fallback.length) {
-        _sheetCsrs = fallback;
-        csrSel.innerHTML = '<option value="">— Select your name —</option>';
-        fallback.forEach(function(n) { csrSel.innerHTML += '<option>' + n + '</option>'; });
-        if (err) console.warn('[Staff] Sheet error — using saved list. ' + err);
-      } else {
-        csrSel.innerHTML = '<option value="">⚠ Could not load staff</option>';
-        console.warn('[Staff] ' + err);
-      }
-    } else {
+
+    if (names && names.length > 0) {
+      // Success — populate from Apps Script
+      _sheetCsrs = names;
       csrSel.innerHTML = '<option value="">— Select your name —</option>';
-      names.forEach(function(n) { csrSel.innerHTML += '<option>' + n + '</option>'; });
+      names.forEach(function(n) {
+        csrSel.innerHTML += '<option value="' + n + '">' + n + '</option>';
+      });
+    } else {
+      // Failure — show a clear, actionable message
+      console.warn('[NKCC Staff] ' + (err || 'Unknown error'));
+      _sheetCsrs = [];
+      csrSel.innerHTML = '<option value="">⚠ Could not load staff — see console</option>';
+
+      // Optionally show a visible warning banner below the dropdown
+      var field = csrSel.closest('.field') || csrSel.parentNode;
+      var existing = field && field.querySelector('.staff-warn');
+      if (field && !existing) {
+        var warn = document.createElement('div');
+        warn.className = 'staff-warn';
+        warn.style.cssText = 'margin-top:6px;padding:8px 12px;background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;font-size:11px;color:#b91c1c;line-height:1.5';
+        warn.innerHTML = '⚠ Staff could not be loaded.<br>'
+          + 'Check: 1) Apps Script is deployed as "Anyone" can access, '
+          + '2) STAFF tab exists with names in Column B, '
+          + '3) Apps Script URL in Admin is correct.';
+        field.appendChild(warn);
+      }
     }
   });
 }
-var _adminCsrs = [], _adminRegions = [];
+
+// ═══════════════════════════════════════════════
+//  ADMIN PANEL
+// ═══════════════════════════════════════════════
+var _adminRegions = [];
 
 function loadSettings() {
   try { var s = localStorage.getItem('nkcc_settings'); if (s) return JSON.parse(s); } catch(e) {}
-  return { csrs: DEFAULT_CSRS.slice(), regions: DEFAULT_REGIONS.slice(), pwd: ADMIN_PASSWORD,
-           ghToken: '', ghRepo: '', ghPath: '', ghBranch: 'main', appsUrl: '', sheetId: '' };
+  return { regions: DEFAULT_REGIONS.slice(), pwd: ADMIN_PASSWORD, appsUrl: '', ghToken: '', ghRepo: '', ghPath: '', ghBranch: 'main' };
 }
 function saveSettings(obj) {
   try { localStorage.setItem('nkcc_settings', JSON.stringify(obj)); } catch(e) {}
 }
 
-function loadAdminData() {
-  var s = loadSettings();
-  return { csrs: (s.csrs || DEFAULT_CSRS).slice(), regions: (s.regions || DEFAULT_REGIONS).slice() };
-}
-
 function applyAdminDataToForm() {
-  var data = loadAdminData();
+  var s = loadSettings();
+  if (s.appsUrl) APPS_SCRIPT_URL = s.appsUrl;
+
+  // Populate regions dropdown
   var rgnSel = document.getElementById('rgnVal');
-  // Regions still come from admin panel settings
   if (rgnSel) {
+    var regions = (s.regions && s.regions.length) ? s.regions : DEFAULT_REGIONS;
     var prevRgn = rgnSel.value;
     rgnSel.innerHTML = '<option value="">— Select region —</option>';
-    data.regions.forEach(function(r) { rgnSel.innerHTML += '<option' + (r === prevRgn ? ' selected' : '') + '>' + r + '</option>'; });
+    regions.forEach(function(r) { rgnSel.innerHTML += '<option' + (r === prevRgn ? ' selected' : '') + '>' + r + '</option>'; });
   }
-  // CSR names always come from the Google Sheet
+
+  // Load staff via Apps Script
   loadAndApplyStaff();
 }
 
@@ -1814,9 +1714,10 @@ function checkAdminPwd() {
   if (val === (stored.pwd || ADMIN_PASSWORD)) {
     document.getElementById('adminLock').style.display = 'none';
     document.getElementById('adminPanel').style.display = 'block';
-    var data = loadAdminData();
-    _adminCsrs = data.csrs.slice(); _adminRegions = data.regions.slice();
-    renderAdminLists(); populateAdminFields();
+    var s = loadSettings();
+    _adminRegions = (s.regions && s.regions.length) ? s.regions.slice() : DEFAULT_REGIONS.slice();
+    renderAdminLists();
+    populateAdminFields();
   } else {
     document.getElementById('adminPwdErr').style.display = 'block';
     document.getElementById('adminPwdInput').value = '';
@@ -1825,36 +1726,27 @@ function checkAdminPwd() {
 }
 
 function renderAdminLists() {
-  var cl = document.getElementById('csrList');
-  cl.innerHTML = _adminCsrs.length ? '' : '<div style="font-size:12px;color:var(--muted);padding:6px 0">No CSRs yet.</div>';
-  _adminCsrs.forEach(function(c, i) {
-    cl.innerHTML += '<div class="admin-list-item"><span>' + c + '</span>'
-      + '<button onclick="removeCsr(' + i + ')" style="background:none;border:none;cursor:pointer;font-size:15px;color:#ef4444;padding:2px 6px">🗑</button></div>';
-  });
   var rl = document.getElementById('regionList');
   rl.innerHTML = _adminRegions.length ? '' : '<div style="font-size:12px;color:var(--muted);padding:6px 0">No regions yet.</div>';
   _adminRegions.forEach(function(r, i) {
     rl.innerHTML += '<div class="admin-list-item"><span>' + r + '</span>'
-      + '<button onclick="removeRegion(' + i + ')" style="background:none;border:none;cursor:pointer;font-size:15px;color:#ef4444;padding:2px 6px">🗑</button></div>';
+      + '<button onclick="removeRegion(' + i + ')">🗑</button></div>';
   });
 }
 
 function populateAdminFields() {
   var s = loadSettings();
   var sv = function(id, v) { var e = document.getElementById(id); if (e) e.value = v || ''; };
-  sv('adminGhToken',  s.ghToken);
-  sv('adminGhRepo',   s.ghRepo);
-  sv('adminGhPath',   s.ghPath);
+  sv('adminAppsUrl',  s.appsUrl  || APPS_SCRIPT_URL);
+  sv('adminGhToken',  s.ghToken  || '');
+  sv('adminGhRepo',   s.ghRepo   || '');
+  sv('adminGhPath',   s.ghPath   || '');
   sv('adminGhBranch', s.ghBranch || 'main');
-  sv('adminAppsUrl',  s.appsUrl || APPS_SCRIPT_URL);
-  sv('adminSheetId',  s.sheetId || '');
   sv('adminNewPwd',   '');
 }
 
-function addCsr()    { var i = document.getElementById('newCsrInput');    var v = i.value.trim(); if (!v) return; if (_adminCsrs.indexOf(v)    === -1) _adminCsrs.push(v);    i.value = ''; renderAdminLists(); }
-function removeCsr(i){ _adminCsrs.splice(i, 1); renderAdminLists(); }
-function addRegion() { var i = document.getElementById('newRegionInput'); var v = i.value.trim(); if (!v) return; if (_adminRegions.indexOf(v) === -1) _adminRegions.push(v); i.value = ''; renderAdminLists(); }
-function removeRegion(i){ _adminRegions.splice(i, 1); renderAdminLists(); }
+function addRegion()       { var i=document.getElementById('newRegionInput'); var v=i.value.trim(); if(!v)return; if(_adminRegions.indexOf(v)===-1)_adminRegions.push(v); i.value=''; renderAdminLists(); }
+function removeRegion(i)   { _adminRegions.splice(i,1); renderAdminLists(); }
 
 function adminMsg(txt, ok) {
   var el = document.getElementById('adminSaveMsg');
@@ -1865,85 +1757,62 @@ function adminMsg(txt, ok) {
   if (ok) setTimeout(function() { el.style.display = 'none'; }, 5000);
 }
 
-// ── SILENT AUTO-PUSH TO GITHUB (called after save) ──────────────────
 function pushToGitHubSilent(settings) {
-  var token = settings.ghToken, repo = settings.ghRepo, path = settings.ghPath, branch = settings.ghBranch || 'main';
-  if (!token || !repo || !path) return; // no credentials configured — skip silently
-
-  var html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-  var encoded = btoa(unescape(encodeURIComponent(html)));
-  var apiUrl  = 'https://api.github.com/repos/' + repo + '/contents/' + path;
-  var headers = { 'Authorization': 'token ' + token, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' };
-
-  adminMsg('⏳ Syncing changes to GitHub...', true);
-
-  fetch(apiUrl + '?ref=' + branch, { headers: headers })
-    .then(function(r) { return r.ok ? r.json() : null; })
-    .then(function(info) {
-      var body = {
-        message: 'Admin update · ' + new Date().toLocaleString('en-KE', { timeZone: 'Africa/Nairobi' }),
-        content: encoded,
-        branch:  branch
-      };
-      if (info && info.sha) body.sha = info.sha;
-      return fetch(apiUrl, { method: 'PUT', headers: headers, body: JSON.stringify(body) });
+  var token=settings.ghToken, repo=settings.ghRepo, path=settings.ghPath, branch=settings.ghBranch||'main';
+  if (!token||!repo||!path) return;
+  var html='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+  var encoded=btoa(unescape(encodeURIComponent(html)));
+  var apiUrl='https://api.github.com/repos/'+repo+'/contents/'+path;
+  var headers={'Authorization':'token '+token,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'};
+  adminMsg('⏳ Syncing to GitHub…', true);
+  fetch(apiUrl+'?ref='+branch,{headers:headers})
+    .then(function(r){return r.ok?r.json():null;})
+    .then(function(info){
+      var body={message:'Admin update · '+new Date().toLocaleString('en-KE',{timeZone:'Africa/Nairobi'}),content:encoded,branch:branch};
+      if(info&&info.sha)body.sha=info.sha;
+      return fetch(apiUrl,{method:'PUT',headers:headers,body:JSON.stringify(body)});
     })
-    .then(function(r) { return r.json(); })
-    .then(function(res) {
-      if (res.content && res.content.name) {
-        adminMsg('✅ Saved & pushed to GitHub. Changes are live!', true);
-      } else {
-        adminMsg('✅ Settings saved locally. GitHub push failed: ' + (res.message || 'unknown error'), false);
-      }
+    .then(function(r){return r.json();})
+    .then(function(res){
+      if(res.content&&res.content.name){adminMsg('✅ Saved & pushed to GitHub!',true);}
+      else{adminMsg('✅ Settings saved locally. GitHub push failed: '+(res.message||'unknown'),false);}
     })
-    .catch(function(e) {
-      adminMsg('✅ Settings saved locally. GitHub sync error: ' + e.message, false);
-    });
+    .catch(function(e){adminMsg('✅ Settings saved locally. GitHub error: '+e.message,false);});
 }
 
-// ── SAVE ALL SETTINGS — now auto-pushes to GitHub ───────────────────
 function saveAdminSettings() {
-  var gv = function(id) { var e = document.getElementById(id); return e ? e.value.trim() : ''; };
-  var newPwd = gv('adminNewPwd');
-  var existing = loadSettings();
-  var settings = {
-    csrs:      _adminCsrs.slice(),
-    regions:   _adminRegions.slice(),
-    pwd:       newPwd || existing.pwd || ADMIN_PASSWORD,
-    ghToken:   gv('adminGhToken'),
-    ghRepo:    gv('adminGhRepo'),
-    ghPath:    gv('adminGhPath'),
-    ghBranch:  gv('adminGhBranch') || 'main',
-    appsUrl:   gv('adminAppsUrl')  || APPS_SCRIPT_URL,
-    sheetId:   gv('adminSheetId')
+  var gv=function(id){var e=document.getElementById(id);return e?e.value.trim():'';};
+  var newPwd=gv('adminNewPwd');
+  var existing=loadSettings();
+  var settings={
+    regions:_adminRegions.slice(),
+    pwd:newPwd||existing.pwd||ADMIN_PASSWORD,
+    appsUrl:gv('adminAppsUrl')||APPS_SCRIPT_URL,
+    ghToken:gv('adminGhToken'),
+    ghRepo:gv('adminGhRepo'),
+    ghPath:gv('adminGhPath'),
+    ghBranch:gv('adminGhBranch')||'main'
   };
   saveSettings(settings);
-  if (settings.appsUrl) APPS_SCRIPT_URL = settings.appsUrl;
-  applyAdminDataToForm(); // reloads regions + triggers sheet fetch for CSRs
-
-  // Auto-push to GitHub if credentials are configured
+  if(settings.appsUrl) APPS_SCRIPT_URL=settings.appsUrl;
+  applyAdminDataToForm();
   pushToGitHubSilent(settings);
-
-  // Show immediate local save confirmation if no GH credentials
-  if (!settings.ghToken || !settings.ghRepo || !settings.ghPath) {
-    adminMsg('✅ Settings saved. Configure GitHub credentials below to enable auto-deploy.', true);
+  if(!settings.ghToken||!settings.ghRepo||!settings.ghPath){
+    adminMsg('✅ Settings saved. Staff reloaded from Apps Script.',true);
   }
 }
 
-// Keep pushToGitHub as a manual fallback (used nowhere in UI now but available)
-function pushToGitHub() { pushToGitHubSilent(loadSettings()); }
+function fmtDate(d){if(!d)return '--';var s=String(d);return s.length>=10?s.substring(0,10):s;}
+function shortName(n){var p=n.split(' ');return p.length>=2?p[0]+' '+p[1].charAt(0)+'.':n;}
 
-function fmtDate(d) { if (!d) return '--'; var s = String(d); return s.length >= 10 ? s.substring(0, 10) : s; }
-function shortName(n) { var p = n.split(' '); return p.length >= 2 ? p[0] + ' ' + p[1].charAt(0) + '.' : n; }
-
-(function() {
-  var s = loadSettings();
-  if (s.appsUrl) APPS_SCRIPT_URL = s.appsUrl;
-  applyAdminDataToForm();
+// Apply settings on load
+(function(){
+  var s=loadSettings();
+  if(s.appsUrl) APPS_SCRIPT_URL=s.appsUrl;
 })();
 </script>
 
-<!-- ════════ ADMIN MODAL ════════ -->
+<!-- ADMIN MODAL -->
 <div id="adminOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.65);z-index:8000;overflow-y:auto">
   <div style="max-width:500px;margin:20px auto;padding:0 14px 60px">
 
@@ -1967,19 +1836,18 @@ function shortName(n) { var p = n.split(' '); return p.length >= 2 ? p[0] + ' ' 
         <button onclick="closeAdmin()" style="background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:50%;width:34px;height:34px;font-size:17px;cursor:pointer">✕</button>
       </div>
 
-      <!-- ① Google Sheet ID (Staff Source) -->
-      <div class="admin-card">
-        <div class="admin-section-title">📊 Staff Google Sheet</div>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:8px">
-          Staff names are loaded live from the <strong>STAFF</strong> tab of your Google Sheet (Column B = Name).<br>
-          The sheet must be shared as <em>"Anyone with the link can view"</em>. Paste the Sheet ID below (the long string in the URL between <code>/d/</code> and <code>/edit</code>).
+      <!-- Staff info banner -->
+      <div class="admin-card" style="margin-bottom:12px">
+        <div class="admin-section-title">👥 Staff List</div>
+        <div style="background:var(--green-lt);border:1px solid #b6dfc9;border-radius:9px;padding:10px 13px;font-size:12px;color:var(--green-dark);line-height:1.6">
+          Staff names are loaded automatically from the <strong>STAFF</strong> tab of your Google Sheet via the Apps Script.<br><br>
+          To add or remove staff, edit Column B of the <strong>STAFF</strong> tab directly in Google Sheets — changes reflect immediately on next page load.
         </div>
-        <input type="text" id="adminSheetId" placeholder="e.g. 1xZEUK-y7pKrr4RINiww_PmHG4IK…" class="admin-input"/>
-        <button class="admin-btn-sec" onclick="loadAndApplyStaff();adminMsg('🔄 Reloading staff from sheet…',true)" style="margin-top:8px;font-size:11px">🔄 Reload Staff Now</button>
+        <button class="admin-btn-sec" onclick="loadAndApplyStaff();adminMsg('🔄 Reloading staff from Apps Script…',true)" style="margin-top:10px;font-size:12px">🔄 Reload Staff Now</button>
       </div>
 
-      <!-- ② Regions -->
-      <div class="admin-card" style="margin-top:12px">
+      <!-- Regions -->
+      <div class="admin-card" style="margin-bottom:12px">
         <div class="admin-section-title">📍 Regions</div>
         <div id="regionList" class="admin-list"></div>
         <div style="display:flex;gap:8px;margin-top:10px">
@@ -1989,33 +1857,34 @@ function shortName(n) { var p = n.split(' '); return p.length >= 2 ? p[0] + ' ' 
         <button class="admin-btn-sec" onclick="_adminRegions=DEFAULT_REGIONS.slice();renderAdminLists()" style="margin-top:8px;font-size:11px">↺ Reset to defaults</button>
       </div>
 
-      <!-- ③ Apps Script URL — HIDDEN from UI, still saved/loaded internally -->
-      <div class="admin-card" style="margin-top:12px;display:none" id="appsScriptSection">
-        <div class="admin-section-title">🔗 Google Apps Script URL</div>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Update the deployment URL when you re-deploy the Apps Script</div>
+      <!-- Apps Script URL -->
+      <div class="admin-card" style="margin-bottom:12px">
+        <div class="admin-section-title">🔗 Apps Script URL</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Update this if you redeploy the Apps Script with a new URL.</div>
         <input type="text" id="adminAppsUrl" placeholder="https://script.google.com/macros/s/…/exec" class="admin-input"/>
       </div>
 
-      <!-- ④ GitHub Deployment — HIDDEN from UI, credentials still saved/loaded for auto-push -->
-      <div class="admin-card" style="margin-top:12px;display:none" id="ghDeploySection">
+      <!-- GitHub Deployment (hidden in UI, credentials still saved for auto-push) -->
+      <div class="admin-card" style="margin-bottom:12px;display:none">
         <div class="admin-section-title">🐙 GitHub Deployment</div>
-        <label style="font-size:11px;font-weight:700;color:var(--text);display:block;margin-bottom:3px">Personal Access Token (ghp_…)</label>
         <input type="password" id="adminGhToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="admin-input" style="margin-bottom:10px"/>
-        <label style="font-size:11px;font-weight:700;color:var(--text);display:block;margin-bottom:3px">Repository</label>
         <input type="text" id="adminGhRepo" placeholder="owner/repo-name" class="admin-input" style="margin-bottom:10px"/>
-        <label style="font-size:11px;font-weight:700;color:var(--text);display:block;margin-bottom:3px">File path in repo</label>
         <input type="text" id="adminGhPath" placeholder="index.html" class="admin-input" style="margin-bottom:10px"/>
-        <label style="font-size:11px;font-weight:700;color:var(--text);display:block;margin-bottom:3px">Branch</label>
-        <input type="text" id="adminGhBranch" placeholder="main" class="admin-input" style="margin-bottom:12px"/>
+        <input type="text" id="adminGhBranch" placeholder="main" class="admin-input"/>
       </div>
 
-      <!-- ⑤ Change Password -->
-      <div class="admin-card" style="margin-top:12px">
+      <!-- Change Password -->
+      <div class="admin-card" style="margin-bottom:12px">
         <div class="admin-section-title">🔑 Change Admin Password</div>
         <input type="password" id="adminNewPwd" placeholder="New password (leave blank to keep current)" class="admin-input"/>
       </div>
 
-      <!-- Save button -->
-      <button class="admin-btn-pri" onclick="saveAdminSettings()" style="margin-top:16px">💾 Save All Settings</button>
+      <div id="adminSaveMsg" style="display:none;padding:10px 14px;border-radius:9px;font-size:13px;font-weight:600;margin-bottom:10px"></div>
+      <button class="admin-btn-pri" onclick="saveAdminSettings()">💾 Save All Settings</button>
+      <button class="admin-btn-sec" onclick="closeAdmin()" style="margin-top:8px">Close</button>
+    </div>
+  </div>
+</div>
 
-      <!-- St
+</body>
+</html>
