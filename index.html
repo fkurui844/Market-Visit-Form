@@ -893,21 +893,56 @@ function startLocation(){
 }
 
 function reverseGeo(lat,lng,acc){
-  fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lng+'&format=json&zoom=18&addressdetails=1')
+  // zoom=19 gives the most granular detail (individual building/entrance level)
+  var url='https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lng+'&format=json&zoom=19&addressdetails=1';
+  fetch(url,{headers:{'Accept-Language':'en'}})
     .then(function(r){return r.json();})
     .then(function(d){
-      if(!d||!d.address){showLocStatus('ok','Location detected');return;}
-      var a=d.address,parts=[];
-      if(a.amenity)parts.push(a.amenity);else if(a.building)parts.push(a.building);else if(a.shop)parts.push(a.shop);
-      var streetPart='';
-      if(a.road||a.street||a.pedestrian||a.footway){var road=a.road||a.street||a.pedestrian||a.footway;streetPart=(a.house_number?a.house_number+' ':'')+road;}
-      if(streetPart)parts.push(streetPart);
-      if(a.suburb||a.neighbourhood||a.quarter||a.estate)parts.push(a.suburb||a.neighbourhood||a.quarter||a.estate);
-      if(a.city||a.town||a.village)parts.push(a.city||a.town||a.village);
-      var name=parts.length?parts.join(', '):(d.display_name||'').split(',').slice(0,3).join(', ');
-      locData.addr=name;showLocStatus('ok','📍 '+name);
+      if(!d||!d.address){showLocStatus('ok','📍 Location detected');return;}
+      var a=d.address;
+      var parts=[];
+
+      // 1. Named place (shop, amenity, building, office, etc.)
+      var place=a.amenity||a.shop||a.office||a.leisure||a.tourism||a.building_name||a.building||a.man_made||'';
+      if(place)parts.push(place);
+
+      // 2. Street — combine house number + road name
+      var road=a.road||a.street||a.pedestrian||a.footway||a.path||a.service||a.residential||'';
+      if(road){
+        var streetPart=(a.house_number?a.house_number+' ':'')+road;
+        parts.push(streetPart);
+      }
+
+      // 3. Sub-locality (estate, neighbourhood, suburb, ward)
+      var sub=a.estate||a.neighbourhood||a.quarter||a.suburb||a.village||'';
+      if(sub && sub!==road) parts.push(sub);
+
+      // 4. City / town
+      var city=a.city||a.town||a.county||'';
+      if(city) parts.push(city);
+
+      // If we got nothing useful, fall back to the first 3 segments of display_name
+      var name=parts.length ? parts.join(', ') : (d.display_name||'').split(',').slice(0,3).join(', ').trim();
+
+      // If street is still missing, do a second lookup at zoom=16 to try to get the road name
+      if(!road && parts.length){
+        fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lng+'&format=json&zoom=16&addressdetails=1',{headers:{'Accept-Language':'en'}})
+          .then(function(r2){return r2.json();})
+          .then(function(d2){
+            if(d2&&d2.address){
+              var a2=d2.address;
+              var road2=a2.road||a2.street||a2.pedestrian||a2.footway||a2.residential||'';
+              if(road2&&parts.indexOf(road2)===-1){parts.splice(place?1:0,0,(a2.house_number?a2.house_number+' ':'')+road2);}
+            }
+            var finalName=parts.length?parts.join(', '):name;
+            locData.addr=finalName;showLocStatus('ok','📍 '+finalName);
+          })
+          .catch(function(){locData.addr=name;showLocStatus('ok','📍 '+name);});
+      } else {
+        locData.addr=name;showLocStatus('ok','📍 '+name);
+      }
     })
-    .catch(function(){showLocStatus('ok','Location detected');});
+    .catch(function(){showLocStatus('ok','📍 Location detected');});
 }
 
 function showLocStatus(state,msg,guide){
