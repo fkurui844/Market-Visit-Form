@@ -729,6 +729,11 @@ var bestAcc = Infinity;
 var stepLabels = ['Visit Info','Customer Details','Order Builder','Notes & Sign-Off'];
 var photoData = null;
 
+// Apply saved settings BEFORE DOMContentLoaded so APPS_SCRIPT_URL is correct when staff loads
+(function(){
+  try { var s = localStorage.getItem('nkcc_settings'); if (s) { var p = JSON.parse(s); if (p && p.appsUrl) APPS_SCRIPT_URL = p.appsUrl; } } catch(e) {}
+})();
+
 window.addEventListener('DOMContentLoaded', function() {
   document.getElementById('visitDate').value = new Date().toISOString().split('T')[0];
   startLocation();
@@ -1573,50 +1578,103 @@ var _sheetCsrs = [];
 var ADMIN_PASSWORD = "Festoo";
 var DEFAULT_REGIONS = ['Nairobi North','Nairobi South','Eastern','Nairobi Tier I','Nairobi Tier II','Institutions / Exports'];
 
-// ── Fetch staff names from Apps Script (action=getStaff) ─────────────
-// This is more reliable than reading the sheet directly — no public
-// sharing required; the Apps Script has its own service account access.
+// ── Fetch staff names — 3 strategies, in order of reliability ────────
+// Strategy 1: Google Sheets public CSV (fastest — no Apps Script needed)
+// Strategy 2: Apps Script fetch()
+// Strategy 3: Apps Script JSONP (last resort — bypasses CORS)
 function fetchStaffFromScript(callback) {
-  var cbName = 'nkcc_staff_cb_' + Date.now();
-  var script  = document.createElement('script');
-  var settled = false;
+  var SHEET_ID   = '1xZEUK-y7pKrr4RINiww_PmHG4IKFSOvXlU4aQCOPaqI';
+  var SHEET_NAME = 'Staff';
+  var csvUrl = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID
+             + '/gviz/tq?tqx=out:csv&sheet=' + encodeURIComponent(SHEET_NAME);
 
-  var timer = setTimeout(function() {
-    if (settled) return;
-    settled = true;
-    cleanup();
-    callback(null, 'Staff load timed out. Check that the Apps Script is deployed and accessible.');
-  }, 12000);
-
-  window[cbName] = function(data) {
-    if (settled) return;
-    settled = true;
-    clearTimeout(timer);
-    cleanup();
-    if (data && data.staff && data.staff.length > 0) {
-      callback(data.staff, null);
-    } else if (data && data.error) {
-      callback(null, 'Apps Script error: ' + data.error);
-    } else {
-      callback(null, 'Staff list is empty. Check the STAFF tab has names in Column B.');
-    }
-  };
-
-  script.onerror = function() {
-    if (settled) return;
-    settled = true;
-    clearTimeout(timer);
-    cleanup();
-    callback(null, 'Could not reach Apps Script. Check your internet connection.');
-  };
-
-  function cleanup() {
-    if (script.parentNode) script.parentNode.removeChild(script);
-    try { delete window[cbName]; } catch(e) { window[cbName] = undefined; }
+  // Strategy 1: Read directly from the public Google Sheet CSV export
+  function trySheet() {
+    fetch(csvUrl, { redirect: 'follow' })
+      .then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.text();
+      })
+      .then(function(csv) {
+        var lines = csv.trim().split('\n');
+        var names = [];
+        for (var i = 1; i < lines.length; i++) {
+          // Split on comma but respect quoted fields
+          var cols = lines[i].match(/(".*?"|[^",]+)(?=,|$)/g) || lines[i].split(',');
+          if (cols.length >= 2) {
+            var name = cols[1].replace(/^[\s"]+|[\s"]+$/g, '').trim();
+            if (name && name.toLowerCase() !== 'name') names.push(name);
+          }
+        }
+        if (names.length > 0) {
+          callback(names, null);
+        } else {
+          tryAppsScript();
+        }
+      })
+      .catch(function() {
+        tryAppsScript();
+      });
   }
 
-  script.src = APPS_SCRIPT_URL + '?action=getStaff&callback=' + cbName;
-  document.head.appendChild(script);
+  // Strategy 2: Apps Script via fetch()
+  function tryAppsScript() {
+    fetch(APPS_SCRIPT_URL + '?action=getStaff', { redirect: 'follow' })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data && data.staff && data.staff.length > 0) {
+          callback(data.staff, null);
+        } else if (data && data.error) {
+          tryJsonp();
+        } else {
+          callback(null, 'Staff list is empty. Check the STAFF tab has names in Column B.');
+        }
+      })
+      .catch(function() {
+        tryJsonp();
+      });
+  }
+
+  // Strategy 3: Apps Script JSONP
+  function tryJsonp() {
+    var cbName = 'nkcc_staff_cb_' + Date.now();
+    var script  = document.createElement('script');
+    var settled = false;
+
+    var timer = setTimeout(function() {
+      if (settled) return;
+      settled = true; cleanup();
+      callback(null, 'Staff load timed out. Ensure the Google Sheet is shared as "Anyone with the link can view", the STAFF tab exists with names in Column B, and the Apps Script URL in Admin is correct.');
+    }, 12000);
+
+    window[cbName] = function(data) {
+      if (settled) return;
+      settled = true; clearTimeout(timer); cleanup();
+      if (data && data.staff && data.staff.length > 0) {
+        callback(data.staff, null);
+      } else if (data && data.error) {
+        callback(null, 'Apps Script error: ' + data.error);
+      } else {
+        callback(null, 'Staff list is empty. Check the STAFF tab has names in Column B.');
+      }
+    };
+
+    script.onerror = function() {
+      if (settled) return;
+      settled = true; clearTimeout(timer); cleanup();
+      callback(null, 'All staff-load methods failed. Ensure the Google Sheet is shared as "Anyone with the link can view" and the Apps Script URL in Admin is correct.');
+    };
+
+    function cleanup() {
+      if (script.parentNode) script.parentNode.removeChild(script);
+      try { delete window[cbName]; } catch(e) { window[cbName] = undefined; }
+    }
+
+    script.src = APPS_SCRIPT_URL + '?action=getStaff&callback=' + cbName;
+    document.head.appendChild(script);
+  }
+
+  trySheet(); // always start with the sheet — fastest and most reliable
 }
 
 function loadAndApplyStaff() {
@@ -1650,9 +1708,15 @@ function loadAndApplyStaff() {
         warn.className = 'staff-warn';
         warn.style.cssText = 'margin-top:6px;padding:8px 12px;background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;font-size:11px;color:#b91c1c;line-height:1.5';
         warn.innerHTML = '⚠ Staff could not be loaded.<br>'
+          + (err ? err + '<br><br>' : '')
           + 'Check: 1) Apps Script is deployed as "Anyone" can access, '
           + '2) STAFF tab exists with names in Column B, '
           + '3) Apps Script URL in Admin is correct.';
+        var retryBtn = document.createElement('button');
+        retryBtn.textContent = '🔄 Retry';
+        retryBtn.style.cssText = 'margin-top:7px;padding:5px 12px;background:#b91c1c;color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit';
+        retryBtn.onclick = function() { warn.remove(); loadAndApplyStaff(); };
+        warn.appendChild(retryBtn);
         field.appendChild(warn);
       }
     }
@@ -1805,11 +1869,7 @@ function saveAdminSettings() {
 function fmtDate(d){if(!d)return '--';var s=String(d);return s.length>=10?s.substring(0,10):s;}
 function shortName(n){var p=n.split(' ');return p.length>=2?p[0]+' '+p[1].charAt(0)+'.':n;}
 
-// Apply settings on load
-(function(){
-  var s=loadSettings();
-  if(s.appsUrl) APPS_SCRIPT_URL=s.appsUrl;
-})();
+// (Settings already applied before DOMContentLoaded above)
 </script>
 
 <!-- ADMIN MODAL -->
