@@ -379,6 +379,14 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
           </div>
           <!-- Hidden real value field used by form validation & submission -->
           <input type="hidden" id="csrVal" />
+          <!-- Auto-filled title display -->
+          <div id="csrTitleBox" style="display:none;align-items:center;gap:8px;margin-top:8px;padding:9px 13px;background:var(--green-lt);border:1.5px solid rgba(13,110,63,.2);border-radius:10px">
+            <span style="font-size:15px">🪪</span>
+            <div>
+              <div style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.05em">Job Title</div>
+              <div id="csrTitleVal" style="font-size:13px;font-weight:600;color:var(--green-dark);margin-top:1px"></div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="card">
@@ -1784,16 +1792,22 @@ function fetchStaffFromScript(callback) {
       .then(function(csv) {
         var lines = csv.trim().split('\n');
         var names = [];
+        var staffMap = {}; // name → {title, region}
         for (var i = 1; i < lines.length; i++) {
-          // Split on comma but respect quoted fields
-          var cols = lines[i].match(/(".*?"|[^",]+)(?=,|$)/g) || lines[i].split(',');
+          var cols = lines[i].match(/(".*?"|[^",\r]+)(?=,|$)/g) || lines[i].split(',');
+          var clean = function(s){ return (s||'').replace(/^[\s"]+|[\s"]+$/g,'').trim(); };
           if (cols.length >= 2) {
-            var name = cols[1].replace(/^[\s"]+|[\s"]+$/g, '').trim();
-            if (name && name.toLowerCase() !== 'name') names.push(name);
+            var name   = clean(cols[1]);
+            var title  = cols.length >= 3 ? clean(cols[2]) : '';
+            var region = cols.length >= 4 ? clean(cols[3]) : '';
+            if (name && name.toLowerCase() !== 'name') {
+              names.push(name);
+              staffMap[name] = { title: title, region: region };
+            }
           }
         }
         if (names.length > 0) {
-          callback(names, null);
+          callback(names, null, staffMap);
         } else {
           tryAppsScript();
         }
@@ -1896,11 +1910,39 @@ function fetchRegionsFromSheet(callback) {
 
 // ── Searchable staff dropdown ────────────────────────────────────────
 var _csrAllNames = [];
+var _staffMap    = {}; // name → {title, region}
 var _csrOpen     = false;
 
 function setCsrValue(name) {
   document.getElementById('csrVal').value    = name;
   document.getElementById('csrSearch').value = name;
+
+  // Auto-fill title
+  var info = _staffMap[name] || {};
+  var titleBox = document.getElementById('csrTitleBox');
+  var titleVal = document.getElementById('csrTitleVal');
+  if (titleBox && titleVal) {
+    if (info.title) {
+      titleVal.textContent = info.title;
+      titleBox.style.display = 'flex';
+    } else {
+      titleBox.style.display = 'none';
+    }
+  }
+
+  // Auto-select matching region
+  if (info.region) {
+    var rgnSel = document.getElementById('rgnVal');
+    if (rgnSel) {
+      for (var i = 0; i < rgnSel.options.length; i++) {
+        if (rgnSel.options[i].value === info.region || rgnSel.options[i].text === info.region) {
+          rgnSel.selectedIndex = i;
+          break;
+        }
+      }
+    }
+  }
+
   closeCsrDropdown();
 }
 
@@ -1978,12 +2020,13 @@ function loadAndApplyStaff() {
   inp.placeholder = '⏳ Loading staff…';
   inp.disabled    = true;
 
-  fetchStaffFromScript(function(names, err) {
+  fetchStaffFromScript(function(names, err, staffMap) {
     inp.disabled = false;
 
     if (names && names.length > 0) {
       _sheetCsrs   = names;
       _csrAllNames = names.slice().sort();
+      _staffMap    = staffMap || {};
       inp.placeholder = '🔍 Search your name…';
     } else {
       console.warn('[NKCC Staff] ' + (err || 'Unknown error'));
