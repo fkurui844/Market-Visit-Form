@@ -1677,6 +1677,37 @@ function fetchStaffFromScript(callback) {
   trySheet(); // always start with the sheet — fastest and most reliable
 }
 
+// ── Fetch regions from Column D of the Staff sheet ───────────────────
+function fetchRegionsFromSheet(callback) {
+  var SHEET_ID   = '1xZEUK-y7pKrr4RINiww_PmHG4IKFSOvXlU4aQCOPaqI';
+  var SHEET_NAME = 'Staff';
+  var csvUrl = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID
+             + '/gviz/tq?tqx=out:csv&sheet=' + encodeURIComponent(SHEET_NAME);
+
+  fetch(csvUrl, { redirect: 'follow' })
+    .then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.text();
+    })
+    .then(function(csv) {
+      var lines = csv.trim().split('\n');
+      var seen  = {};
+      var regions = [];
+      for (var i = 1; i < lines.length; i++) {
+        var cols = lines[i].match(/(".*?"|[^",\r]+)(?=,|$)/g) || lines[i].split(',');
+        if (cols.length >= 4) {
+          var reg = cols[3].replace(/^[\s"]+|[\s"]+$/g, '').trim();
+          if (reg && reg.toLowerCase() !== 'region' && !seen[reg]) {
+            seen[reg] = true;
+            regions.push(reg);
+          }
+        }
+      }
+      callback(regions.length > 0 ? regions : null);
+    })
+    .catch(function() { callback(null); });
+}
+
 function loadAndApplyStaff() {
   var csrSel = document.getElementById('csrVal');
   if (!csrSel) return;
@@ -1740,16 +1771,26 @@ function applyAdminDataToForm() {
   var s = loadSettings();
   if (s.appsUrl) APPS_SCRIPT_URL = s.appsUrl;
 
-  // Populate regions dropdown
+  // Populate regions dropdown — first try the Google Sheet, fall back to saved/default
   var rgnSel = document.getElementById('rgnVal');
   if (rgnSel) {
-    var regions = (s.regions && s.regions.length) ? s.regions : DEFAULT_REGIONS;
     var prevRgn = rgnSel.value;
-    rgnSel.innerHTML = '<option value="">— Select region —</option>';
-    regions.forEach(function(r) { rgnSel.innerHTML += '<option' + (r === prevRgn ? ' selected' : '') + '>' + r + '</option>'; });
+    rgnSel.innerHTML = '<option value="">⏳ Loading regions…</option>';
+    rgnSel.disabled = true;
+
+    fetchRegionsFromSheet(function(sheetRegions) {
+      rgnSel.disabled = false;
+      var regions = (sheetRegions && sheetRegions.length)
+        ? sheetRegions
+        : ((s.regions && s.regions.length) ? s.regions : DEFAULT_REGIONS);
+      rgnSel.innerHTML = '<option value="">— Select region —</option>';
+      regions.forEach(function(r) {
+        rgnSel.innerHTML += '<option' + (r === prevRgn ? ' selected' : '') + '>' + r + '</option>';
+      });
+    });
   }
 
-  // Load staff via Apps Script
+  // Load staff via Google Sheet (with Apps Script fallback)
   loadAndApplyStaff();
 }
 
@@ -1900,7 +1941,7 @@ function shortName(n){var p=n.split(' ');return p.length>=2?p[0]+' '+p[1].charAt
       <div class="admin-card" style="margin-bottom:12px">
         <div class="admin-section-title">👥 Staff List</div>
         <div style="background:var(--green-lt);border:1px solid #b6dfc9;border-radius:9px;padding:10px 13px;font-size:12px;color:var(--green-dark);line-height:1.6">
-          Staff names are loaded automatically from the <strong>STAFF</strong> tab of your Google Sheet via the Apps Script.<br><br>
+          Staff names and Regions are loaded automatically from the <strong>Staff</strong> tab of your Google Sheet — Column B = Name, Column D = Region. No Apps Script needed for these.<br><br>
           To add or remove staff, edit Column B of the <strong>STAFF</strong> tab directly in Google Sheets — changes reflect immediately on next page load.
         </div>
         <button class="admin-btn-sec" onclick="loadAndApplyStaff();adminMsg('🔄 Reloading staff from Apps Script…',true)" style="margin-top:10px;font-size:12px">🔄 Reload Staff Now</button>
