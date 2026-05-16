@@ -261,6 +261,22 @@ tbody td:first-child{font-weight:600}
 .admin-btn-pri:hover{background:var(--green-dark)}
 .admin-btn-sec{width:100%;padding:10px;background:var(--bg);color:var(--muted);border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer}
 .admin-btn-add{padding:10px 16px;background:var(--green-lt);color:var(--green-dark);border:1.5px solid #b6dfc9;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+/* ── Mock Location Blocker ─────────────────── */
+#mockLocOverlay{position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;background:linear-gradient(160deg,#1a0a0a 0%,#2d0f0f 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow-y:auto}
+.mock-shield{font-size:64px;margin-bottom:16px;animation:shieldpulse 2s ease-in-out infinite}
+@keyframes shieldpulse{0%,100%{transform:scale(1);filter:drop-shadow(0 0 8px rgba(255,80,80,.4))}50%{transform:scale(1.08);filter:drop-shadow(0 0 20px rgba(255,80,80,.8))}}
+.mock-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-.02em}
+.mock-sub{font-size:13px;color:#f87171;font-weight:600;margin-bottom:20px;line-height:1.5}
+.mock-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,100,100,.25);border-radius:16px;padding:18px;width:100%;max-width:400px;margin-bottom:16px;text-align:left}
+.mock-card-title{font-size:11px;font-weight:700;color:#fca5a5;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.mock-step{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:12px;color:#fecaca;line-height:1.6}
+.mock-step-num{background:#ef4444;color:#fff;border-radius:50%;width:20px;height:20px;min-width:20px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;margin-top:1px}
+.mock-reasons{background:rgba(255,255,255,.04);border:1px solid rgba(255,100,100,.15);border-radius:12px;padding:14px;width:100%;max-width:400px;margin-bottom:20px;text-align:left}
+.mock-reason-item{font-size:11px;color:#fca5a5;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.06);line-height:1.5}
+.mock-reason-item:last-child{border-bottom:none}
+.mock-retry-btn{background:linear-gradient(135deg,#16a34a,#0d6e3f);color:#fff;border:none;border-radius:12px;padding:14px 32px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:-.01em;box-shadow:0 4px 16px rgba(13,110,63,.4)}
+.mock-retry-btn:active{transform:scale(.97)}
+.mock-footer{font-size:10px;color:rgba(255,255,255,.3);margin-top:16px;line-height:1.6}
 </style>
 </head>
 <body>
@@ -866,6 +882,108 @@ function validate(step) {
 // ═══════════════════════════════════════════════
 //  LOCATION
 // ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════
+//  MOCK / FAKE GPS DETECTION
+// ═══════════════════════════════════════════════
+var _mockDetected = false;
+var _mockReasons  = [];
+
+function detectMockLocation(pos, onResult) {
+  _mockReasons = [];
+  var c = pos.coords;
+
+  // ── Signal 1: isMock flag (Android exposes this directly) ──
+  if (c.isMock === true || pos.isMock === true) {
+    _mockReasons.push('🔴 Device reported isMock = true (Android mock location API)');
+  }
+
+  // ── Signal 2: Impossibly perfect accuracy ──
+  // Real GPS on a phone is rarely better than 4m; mocks often report exactly 0, 1, 2, or 3
+  if (c.accuracy !== null && c.accuracy < 4 && c.accuracy >= 0) {
+    _mockReasons.push('🔴 Accuracy is suspiciously perfect (' + c.accuracy + 'm) — real GPS is rarely this precise');
+  }
+
+  // ── Signal 3: All auxiliary sensors null/zero (real devices have altitude, speed, heading) ──
+  var allNull = (c.altitude === null || c.altitude === 0) &&
+                (c.altitudeAccuracy === null || c.altitudeAccuracy === 0) &&
+                (c.speed === null || c.speed === 0) &&
+                (c.heading === null || c.heading === 0 || isNaN(c.heading));
+  // Only flag if accuracy is also extremely tight — combination is suspicious
+  if (allNull && c.accuracy !== null && c.accuracy < 8) {
+    _mockReasons.push('🔴 All motion sensors (altitude, speed, heading) report null/zero with tight accuracy — typical of mock apps');
+  }
+
+  // ── Signal 4: Coordinates are suspiciously round numbers ──
+  // Real GPS has messy decimals; mocks often use round coords
+  var latStr = String(c.latitude),  lngStr = String(c.longitude);
+  var latDec = latStr.includes('.') ? latStr.split('.')[1].length : 0;
+  var lngDec = lngStr.includes('.') ? lngStr.split('.')[1].length : 0;
+  if (latDec <= 2 && lngDec <= 2) {
+    _mockReasons.push('🔴 Coordinates have very few decimal places (' + c.latitude + ', ' + c.longitude + ') — real GPS is much more precise');
+  }
+
+  // ── Signal 5: Timestamp anomaly — position timestamp vs wall clock ──
+  var posTime  = pos.timestamp;
+  var wallTime = Date.now();
+  var drift    = Math.abs(wallTime - posTime);
+  if (drift > 30000) { // more than 30 seconds off
+    _mockReasons.push('🔴 Position timestamp is ' + Math.round(drift/1000) + 's off system clock — may indicate a replayed/spoofed location');
+  }
+
+  // ── Signal 6: Reverse-geocode sanity check ──
+  // After getting an address, compare it to a known reference point
+  // (we verify the country at minimum — a Nairobi-based app should never be in USA/Europe)
+  // This runs async; we do it as a secondary check
+  var lat = c.latitude, lng = c.longitude;
+
+  // Basic bounds check — NKCC operates in Kenya roughly: lat 4.6 to -4.7, lng 33.9 to 41.9
+  var inKenya = lat >= -4.72 && lat <= 4.62 && lng >= 33.89 && lng <= 41.91;
+  if (!inKenya) {
+    _mockReasons.push('🔴 Coordinates (' + lat.toFixed(4) + ', ' + lng.toFixed(4) + ') are outside Kenya — location appears to be faked');
+  }
+
+  // ── Signal 7: Check navigator for Developer Options / ADB indicators ──
+  // navigator.userAgentData may expose hints on modified/developer builds
+  // We also check if webdriver is active (automation)
+  if (navigator.webdriver === true) {
+    _mockReasons.push('🔴 Browser automation (WebDriver) detected — device may be remotely controlled');
+  }
+
+  var detected = _mockReasons.length > 0;
+  onResult(detected, _mockReasons);
+}
+
+function showMockBlocker(reasons) {
+  _mockDetected = true;
+  var overlay = document.getElementById('mockLocOverlay');
+  var list    = document.getElementById('mockReasonsList');
+  if (!overlay) return;
+
+  // Build reasons list
+  if (list) {
+    list.innerHTML = '<div class="mock-card-title">⚠️ Reasons flagged (' + reasons.length + ')</div>'
+      + reasons.map(function(r) {
+          return '<div class="mock-reason-item">' + r + '</div>';
+        }).join('');
+  }
+
+  overlay.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function hideMockBlocker() {
+  var overlay = document.getElementById('mockLocOverlay');
+  if (overlay) overlay.style.display = 'none';
+  document.body.style.overflow = '';
+  _mockDetected = false;
+  _mockReasons  = [];
+}
+
+function recheckMockLocation() {
+  hideMockBlocker();
+  startLocation();
+}
+
 function startLocation(){
   if(!navigator.geolocation){showLocStatus('error','Location not supported on this device.');return;}
   showLocStatus('scanning','Detecting location...');
@@ -875,12 +993,22 @@ function startLocation(){
   watchId=navigator.geolocation.watchPosition(
     function(pos){
       var lat=pos.coords.latitude,lng=pos.coords.longitude,acc=Math.round(pos.coords.accuracy);
-      if(acc<bestAcc){
-        bestAcc=acc;locData.lat=lat.toFixed(7);locData.lng=lng.toFixed(7);locData.acc=acc;
-        if(reverseGeoTimer)clearTimeout(reverseGeoTimer);
-        reverseGeoTimer=setTimeout(function(){reverseGeo(lat,lng,acc);},600);
-        if(acc<=20){navigator.geolocation.clearWatch(watchId);watchId=null;}
-      }
+
+      // ── Run mock detection on every position update ──
+      detectMockLocation(pos, function(isMock, reasons) {
+        if (isMock) {
+          navigator.geolocation.clearWatch(watchId); watchId = null;
+          showMockBlocker(reasons);
+          return; // do not store or display the fake location
+        }
+        // Legitimate position — proceed normally
+        if(acc<bestAcc){
+          bestAcc=acc;locData.lat=lat.toFixed(7);locData.lng=lng.toFixed(7);locData.acc=acc;
+          if(reverseGeoTimer)clearTimeout(reverseGeoTimer);
+          reverseGeoTimer=setTimeout(function(){reverseGeo(lat,lng,acc);},600);
+          if(acc<=20){navigator.geolocation.clearWatch(watchId);watchId=null;}
+        }
+      });
     },
     function(err){
       navigator.geolocation.clearWatch(watchId);watchId=null;
@@ -958,6 +1086,11 @@ function showLocStatus(state,msg,guide){
 //  SUBMIT
 // ═══════════════════════════════════════════════
 function submitForm(){
+  // Hard block if mock location was detected at any point this session
+  if (_mockDetected) {
+    showMockBlocker(_mockReasons.length ? _mockReasons : ['🔴 Mock location was detected during this session. Please uninstall any fake GPS app and restart.']);
+    return;
+  }
   if(!validate(4))return;
   var btn=document.getElementById('submitBtn');
   btn.disabled=true;btn.innerHTML='<span class="spin"></span>Saving...';
@@ -2022,5 +2155,22 @@ function shortName(n){var p=n.split(' ');return p.length>=2?p[0]+' '+p[1].charAt
   </div>
 </div>
 
+<!-- ── Mock Location Blocker Overlay ── -->
+<div id="mockLocOverlay" style="display:none">
+  <div class="mock-shield">🛡️</div>
+  <div class="mock-title">Location Spoofing Detected</div>
+  <div class="mock-sub">A fake GPS or mock location app is active on this device.<br>You cannot submit a market visit with a spoofed location.</div>
+  <div class="mock-reasons" id="mockReasonsList"></div>
+  <div class="mock-card">
+    <div class="mock-card-title">📋 How to fix this</div>
+    <div class="mock-step"><div class="mock-step-num">1</div><div>Open your phone's <strong style="color:#fff">Settings → Apps</strong> (or Application Manager)</div></div>
+    <div class="mock-step"><div class="mock-step-num">2</div><div>Search for apps like <strong style="color:#fff">Fake GPS, Mock Location, GPS Joystick, Location Changer, Hola, VPNa</strong> or similar</div></div>
+    <div class="mock-step"><div class="mock-step-num">3</div><div><strong style="color:#fff">Uninstall</strong> any such app completely — disabling is not enough</div></div>
+    <div class="mock-step"><div class="mock-step-num">4</div><div>On Android: Go to <strong style="color:#fff">Settings → Developer Options</strong> and set <strong style="color:#fff">"Select mock location app"</strong> to <em>None</em></div></div>
+    <div class="mock-step"><div class="mock-step-num">5</div><div>Tap <strong style="color:#fff">Check Again</strong> below once done</div></div>
+  </div>
+  <button class="mock-retry-btn" onclick="recheckMockLocation()">✅ Check Again</button>
+  <div class="mock-footer">NKCC Market Visit System • Location integrity is required<br>All checks are logged. Tampering is a disciplinary offence.</div>
+</div>
 </body>
 </html>
