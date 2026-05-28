@@ -316,6 +316,98 @@ input.ns-focus:focus,select.ns-focus:focus{border-color:#2563eb;box-shadow:0 0 0
 .mock-retry-btn{background:linear-gradient(135deg,#16a34a,#0d6e3f);color:#fff;border:none;border-radius:12px;padding:14px 32px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:-.01em;box-shadow:0 4px 16px rgba(13,110,63,.4)}
 .mock-retry-btn:active{transform:scale(.97)}
 .mock-footer{font-size:10px;color:rgba(255,255,255,.3);margin-top:16px;line-height:1.6}
+
+/* ── Welcome / Landing Page ─────────────────────────── */
+#page-welcome{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:24px 20px 90px;
+  background:var(--bg);
+}
+.wlc-logo{
+  font-family:'Syne',sans-serif;
+  font-size:13px;
+  font-weight:800;
+  color:#fff;
+  letter-spacing:-.01em;
+  background:var(--green);
+  padding:6px 16px;
+  border-radius:20px;
+  margin-bottom:28px;
+}
+.wlc-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(22px,6vw,30px);
+  font-weight:800;
+  color:var(--text);
+  text-align:center;
+  line-height:1.2;
+  margin-bottom:12px;
+}
+.wlc-sub{
+  font-size:14px;
+  color:var(--muted);
+  text-align:center;
+  line-height:1.6;
+  max-width:320px;
+  margin-bottom:36px;
+}
+.wlc-cards{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  width:100%;
+  max-width:360px;
+}
+.wlc-card{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  padding:22px 20px;
+  border-radius:18px;
+  border:2px solid transparent;
+  cursor:pointer;
+  transition:transform .15s,box-shadow .15s,border-color .15s;
+  -webkit-tap-highlight-color:transparent;
+  text-align:left;
+  background:var(--surface);
+  box-shadow:0 3px 14px rgba(0,0,0,.07);
+  width:100%;
+}
+.wlc-card:active{transform:scale(.97);}
+.wlc-card.sales{border-color:var(--green);}
+.wlc-card.ns{border-color:#2563eb;}
+.wlc-card-ico{
+  font-size:36px;
+  flex-shrink:0;
+  line-height:1;
+}
+.wlc-card-text{}
+.wlc-card-label{
+  font-family:'Syne',sans-serif;
+  font-size:16px;
+  font-weight:800;
+  margin-bottom:4px;
+}
+.wlc-card.sales .wlc-card-label{color:var(--green);}
+.wlc-card.ns .wlc-card-label{color:#2563eb;}
+.wlc-card-desc{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.5;
+}
+.wlc-arrow{
+  margin-left:auto;
+  font-size:20px;
+  color:var(--muted);
+  flex-shrink:0;
+}
+.wlc-card.sales .wlc-arrow{color:var(--green);}
+.wlc-card.ns .wlc-arrow{color:#2563eb;}
+
 </style>
 </head>
 <body>
@@ -356,11 +448,6 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
   <div class="dditem" id="dditem-outlet"   onclick="selectView('outlet')"><span>🏪</span>Outlet Types</div>
   <div class="dditem" id="dditem-leaders"  onclick="selectView('leaders')"><span>🏆</span>CSR Leaderboard</div>
   <div style="height:1px;background:var(--border);margin:4px 0"></div>
-  <div style="padding:6px 14px 4px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:#1e3a8a;text-transform:uppercase;letter-spacing:.07em">Non-Sales Staff</div>
-  <div class="dditem" id="dditem-nsoverview" onclick="selectView('nsoverview')" style="color:#1e3a8a"><span>🏢</span>NS Overview</div>
-  <div class="dditem" id="dditem-nstarget"   onclick="selectView('nstarget')"   style="color:#1e3a8a"><span>📍</span>NS Monthly Target</div>
-  <div class="dditem" id="dditem-nsrecords"  onclick="selectView('nsrecords')"  style="color:#1e3a8a"><span>📋</span>NS Visit Records</div>
-  <div style="height:1px;background:var(--border);margin:4px 0"></div>
   <div style="padding:6px 14px 4px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Records</div>
   <div class="dditem" id="dditem-records" onclick="selectView('records')"><span>📋</span>Visit Records</div>
   <div class="dditem" id="dditem-orders"  onclick="selectView('orders')"><span>🧾</span>Orders</div>
@@ -372,8 +459,33 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
 </div>
 <div id="ddOverlay" onclick="closeDropdown()" style="display:none;position:fixed;inset:0;z-index:599"></div>
 
+<!-- PAGE: WELCOME -->
+<div class="page active" id="page-welcome">
+  <div class="wlc-logo">NKCC Market Visit</div>
+  <div class="wlc-title">Welcome to<br>Market Visit Form</div>
+  <div class="wlc-sub">This is where you record customer visits and negotiate for Orders. Please select your staff type to get started.</div>
+  <div class="wlc-cards">
+    <button class="wlc-card sales" onclick="chooseStaffType('form')" aria-label="Sales Staff">
+      <div class="wlc-card-ico">📝</div>
+      <div class="wlc-card-text">
+        <div class="wlc-card-label">Sales Staff</div>
+        <div class="wlc-card-desc">Record outlet visits, place orders and capture customer details.</div>
+      </div>
+      <div class="wlc-arrow">›</div>
+    </button>
+    <button class="wlc-card ns" onclick="chooseStaffType('nonsales')" aria-label="Non-Sales Staff">
+      <div class="wlc-card-ico">🏢</div>
+      <div class="wlc-card-text">
+        <div class="wlc-card-label">Non-Sales Staff</div>
+        <div class="wlc-card-desc">Log field visits, outlet insights and market intelligence.</div>
+      </div>
+      <div class="wlc-arrow">›</div>
+    </button>
+  </div>
+</div>
+
 <!-- PAGE: FORM -->
-<div class="page active" id="page-form">
+<div class="page" id="page-form">
   <div class="prog-wrap" id="progWrap">
     <div class="prog-steps">
       <div class="sdot active" id="d1" onclick="goTo(1)">1</div><div class="sline" id="l1"></div>
@@ -663,32 +775,6 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
     <div id="section-photos" style="display:none">
       <div class="db-subtitle" id="photoCount" style="font-size:13px;margin-bottom:10px"></div>
       <div id="photoGallery"></div>
-    </div>
-
-    <!-- NS OVERVIEW -->
-    <div id="section-nsoverview" style="display:none">
-      <div style="background:linear-gradient(135deg,#1e3a8a,#2563eb);border-radius:12px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:10px">
-        <span style="font-size:22px">🏢</span>
-        <div><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#fff">Non-Sales Staff</div><div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:1px">Field visit activity summary</div></div>
-      </div>
-      <div id="nsStatsGrid"></div>
-      <div id="nsRegionCard" style="margin-top:14px"></div>
-      <div id="nsOutletCard" style="margin-top:14px"></div>
-      <div id="nsDeptCard" style="margin-top:14px"></div>
-    </div>
-
-    <!-- NS MONTHLY TARGET -->
-    <div id="section-nstarget" style="display:none">
-      <div id="nsTargetContent"></div>
-    </div>
-
-    <!-- NS VISIT RECORDS -->
-    <div id="section-nsrecords" style="display:none">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-        <div class="db-subtitle" id="nsTableCount" style="font-size:13px"></div>
-        <button class="filter-download" onclick="downloadNsCSV()">&#11015; Export CSV</button>
-      </div>
-      <div id="nsTableContent"></div>
     </div>
 
     <div style="padding:20px 0 8px;text-align:center">
@@ -1094,6 +1180,8 @@ var photoData = null;
 
 window.addEventListener('DOMContentLoaded', function() {
   document.getElementById('visitDate').value = new Date().toISOString().split('T')[0];
+  // Start on welcome page
+  document.getElementById('nav-form').classList.remove('active');
   startLocation();
   loadDashboard();
   setInterval(loadDashboard, 5 * 60 * 1000);
@@ -1474,6 +1562,10 @@ function showSuccess(){
   document.getElementById('progWrap').style.display='none';
   window.scrollTo({top:0,behavior:'smooth'});
 }
+function chooseStaffType(type){
+  switchPage(type);
+}
+
 
 function resetForm(){
   document.getElementById('success-screen').style.display='none';
@@ -1555,12 +1647,12 @@ function populateFilters(rows){
 var _currentView = 'overview';
 
 function switchPage(p){
-  ['form','dashboard','nonsales'].forEach(function(id){
+  ['welcome','form','dashboard','nonsales'].forEach(function(id){
     document.getElementById('page-'+id).classList.remove('active');
-    document.getElementById('nav-'+id).classList.remove('active');
+    var navEl=document.getElementById('nav-'+id);if(navEl)navEl.classList.remove('active');
   });
   document.getElementById('page-'+p).classList.add('active');
-  document.getElementById('nav-'+p).classList.add('active');
+  var navActEl=document.getElementById('nav-'+p);if(navActEl)navActEl.classList.add('active');
   if(p==='dashboard') loadDashboard();
   if(p==='form') updatePhotoSummary();
   if(p==='nonsales'){ nsUpdatePhotoSummary(); nsStartLocation(); }
@@ -1589,14 +1681,13 @@ function closeDropdown(){
 var _viewTitles={
   overview:'Dashboard',target:'CSR Monthly Target',monthord:'Orders by Month',
   region:'Visits by Region',outlet:'Outlet Types',leaders:'CSR Leaderboard',
-  records:'Visit Records',orders:'Orders',photos:'Outlet Photos',
-  nsoverview:'Non-Sales Overview',nstarget:'NS Monthly Target',nsrecords:'NS Visit Records'
+  records:'Visit Records',orders:'Orders',photos:'Outlet Photos'
 };
 var _dbContentViews={overview:1,target:1,monthord:1,region:1,outlet:1,leaders:1};
 
 function selectView(v){
   _currentView=v;
-  ['overview','target','monthord','region','outlet','leaders','records','orders','photos','nsoverview','nstarget','nsrecords'].forEach(function(k){
+  ['overview','target','monthord','region','outlet','leaders','records','orders','photos'].forEach(function(k){
     var el=document.getElementById('dditem-'+k);
     if(el) el.className='dditem'+(k===v?' active':'');
   });
@@ -1606,18 +1697,12 @@ function selectView(v){
   document.getElementById('section-records').style.display=v==='records'?'block':'none';
   document.getElementById('section-orders').style.display=v==='orders'?'block':'none';
   document.getElementById('section-photos').style.display=v==='photos'?'block':'none';
-  document.getElementById('section-nsoverview').style.display=v==='nsoverview'?'block':'none';
-  document.getElementById('section-nstarget').style.display=v==='nstarget'?'block':'none';
-  document.getElementById('section-nsrecords').style.display=v==='nsrecords'?'block':'none';
-  if(v==='target')     renderViewTarget();
-  if(v==='monthord')   renderViewOrdersByMonth();
-  if(v==='region')     renderViewRegion();
-  if(v==='outlet')     renderViewOutletTypes();
-  if(v==='leaders')    renderViewLeaderboard();
-  if(v==='orders')     renderOrders(window.filteredRows||window.allRows||[]);
-  if(v==='nsoverview') renderNsOverview(window.filteredRows||window.allRows||[]);
-  if(v==='nstarget')   renderNsTarget(window.filteredRows||window.allRows||[]);
-  if(v==='nsrecords')  renderNsRecords(window.filteredRows||window.allRows||[]);
+  if(v==='target')   renderViewTarget();
+  if(v==='monthord') renderViewOrdersByMonth();
+  if(v==='region')   renderViewRegion();
+  if(v==='outlet')   renderViewOutletTypes();
+  if(v==='leaders')  renderViewLeaderboard();
+  if(v==='orders')   renderOrders(window.filteredRows||window.allRows||[]);
   var t=document.getElementById('dbViewTitle');
   if(t) t.textContent=_viewTitles[v]||'Dashboard';
   closeDropdown();
@@ -2864,148 +2949,6 @@ function fmtDate(d){if(!d)return '--';var s=String(d);return s.length>=10?s.subs
 function shortName(n){var p=n.split(' ');return p.length>=2?p[0]+' '+p[1].charAt(0)+'.':n;}
 
 // (Settings already applied before DOMContentLoaded above)
-
-// ═══════════════════════════════════════════════
-//  NON-SALES STAFF DASHBOARD VIEWS
-// ═══════════════════════════════════════════════
-function getNsRows(rows){
-  return (rows||[]).filter(function(r){return r['Form Type']==='Non-Sales Field Visit'||r['formType']==='Non-Sales Field Visit'||String(r['Staff Type']||'').toLowerCase().indexOf('non')!==-1;});
-}
-
-function nsStatCard(ico,val,label,sub,color){
-  color=color||'#2563eb';
-  return '<div class="stat-card" style="border-left:4px solid '+color+';padding:14px 16px">'
-    +'<div style="font-size:22px;margin-bottom:4px">'+ico+'</div>'
-    +'<div style="font-family:\'Syne\',sans-serif;font-size:22px;font-weight:800;color:'+color+'">'+val+'</div>'
-    +'<div style="font-size:12px;font-weight:600;color:var(--text);margin-top:2px">'+label+'</div>'
-    +'<div style="font-size:10px;color:var(--muted);margin-top:2px">'+sub+'</div>'
-    +'</div>';
-}
-
-function renderNsOverview(rows){
-  var nsRows=getNsRows(rows);
-  var sg=document.getElementById('nsStatsGrid');
-  var rc=document.getElementById('nsRegionCard');
-  var oc=document.getElementById('nsOutletCard');
-  var dc=document.getElementById('nsDeptCard');
-  if(!nsRows.length){
-    sg.innerHTML='<div class="db-empty"><div class="db-empty-ico">🏢</div><div style="font-weight:600;margin-bottom:6px">No Non-Sales visits yet</div><div style="font-size:12px;color:var(--muted)">Non-Sales field visits will appear here once submitted.</div></div>';
-    rc.innerHTML='';oc.innerHTML='';dc.innerHTML='';return;
-  }
-  var totalVisits=nsRows.length,totalOrder=0,staffCounts={},regionCounts={},outletCounts={},deptCounts={},newCount=0;
-  nsRows.forEach(function(r){
-    var amt=parseFloat(String(r['Order Generated (KSH)']||0).replace(/,/g,''))||0;
-    totalOrder+=amt;
-    if(r['CSR Name'])staffCounts[r['CSR Name']]=(staffCounts[r['CSR Name']]||0)+1;
-    if(r['Region'])regionCounts[r['Region']]=(regionCounts[r['Region']]||0)+1;
-    if(r['Outlet Type'])outletCounts[r['Outlet Type']]=(outletCounts[r['Outlet Type']]||0)+1;
-    if(r['Department'])deptCounts[r['Department']]=(deptCounts[r['Department']]||0)+1;
-    if(r['New / Existing Customer']==='New')newCount++;
-  });
-  var activeStaff=Object.keys(staffCounts).length;
-  sg.innerHTML='<div class="stats-grid">'
-    +nsStatCard('🏢',totalVisits,'Total NS Visits','All field visits','#2563eb')
-    +nsStatCard('💰','KSH '+fmtNum(Math.round(totalOrder)),'Total Orders','Combined order value','#7c3aed')
-    +nsStatCard('👤',activeStaff,'Active NS Staff','Staff with visits','#0891b2')
-    +nsStatCard('🆕',newCount,'New Customers','First-time outlets','#0d6e3f')
-    +'</div>';
-  // Region breakdown
-  var rKeys=Object.keys(regionCounts).sort(function(a,b){return regionCounts[b]-regionCounts[a];});
-  var rMax=rKeys.length?regionCounts[rKeys[0]]:1;
-  var rHtml='<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title" style="color:#1e3a8a">🗺 Visits by Region</div><div class="chart-card-sub">Non-Sales staff territory coverage</div></div></div>';
-  rKeys.forEach(function(k){var pct=Math.round((regionCounts[k]/rMax)*100);rHtml+='<div class="target-row"><div class="target-name">'+k+'</div><div class="target-bar-wrap"><div class="target-bar"><div class="target-bar-fill" style="width:'+pct+'%;background:#2563eb"></div></div></div><div class="target-count" style="color:#2563eb">'+regionCounts[k]+'</div></div>';});
-  rc.innerHTML=rHtml+'</div>';
-  // Outlet type breakdown
-  var oKeys=Object.keys(outletCounts).sort(function(a,b){return outletCounts[b]-outletCounts[a];});
-  var oMax=oKeys.length?outletCounts[oKeys[0]]:1;
-  var oHtml='<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title" style="color:#1e3a8a">🏪 Outlet Types</div><div class="chart-card-sub">Channel distribution</div></div></div>';
-  oKeys.forEach(function(k){var pct=Math.round((outletCounts[k]/oMax)*100);oHtml+='<div class="target-row"><div class="target-name">'+k+'</div><div class="target-bar-wrap"><div class="target-bar"><div class="target-bar-fill" style="width:'+pct+'%;background:#7c3aed"></div></div></div><div class="target-count" style="color:#7c3aed">'+outletCounts[k]+'</div></div>';});
-  oc.innerHTML=oHtml+'</div>';
-  // Department breakdown
-  var dKeys=Object.keys(deptCounts).sort(function(a,b){return deptCounts[b]-deptCounts[a];});
-  if(dKeys.length){
-    var dMax=deptCounts[dKeys[0]]||1;
-    var dHtml='<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title" style="color:#1e3a8a">🏷 By Department</div><div class="chart-card-sub">Which departments are visiting the field</div></div></div>';
-    dKeys.forEach(function(k){var pct=Math.round((deptCounts[k]/dMax)*100);dHtml+='<div class="target-row"><div class="target-name">'+k+'</div><div class="target-bar-wrap"><div class="target-bar"><div class="target-bar-fill" style="width:'+pct+'%;background:#0891b2"></div></div></div><div class="target-count" style="color:#0891b2">'+deptCounts[k]+'</div></div>';});
-    dc.innerHTML=dHtml+'</div>';
-  } else { dc.innerHTML=''; }
-}
-
-function renderNsTarget(rows){
-  var nsRows=getNsRows(rows);
-  var el=document.getElementById('nsTargetContent');
-  if(!nsRows.length){el.innerHTML='<div class="db-empty"><div class="db-empty-ico">📍</div><div style="font-weight:600;margin-bottom:6px">No NS visit data</div></div>';return;}
-  var TARGET=30;
-  var today=new Date();
-  var currentMonth=today.getFullYear()+'-'+(String(today.getMonth()+1).padStart(2,'0'));
-  var staffMonthCounts={};
-  nsRows.forEach(function(r){var name=r['CSR Name'];if(!name)return;var dm=String(r['Date of Market Visit']).substring(0,7);if(!dm)return;if(!staffMonthCounts[name])staffMonthCounts[name]={};staffMonthCounts[name][dm]=(staffMonthCounts[name][dm]||0)+1;});
-  var allMonthsSet={};nsRows.forEach(function(r){var dm=String(r['Date of Market Visit']).substring(0,7);if(dm)allMonthsSet[dm]=true;});
-  var allMonths=Object.keys(allMonthsSet).sort().reverse();
-  if(!allMonths.length)allMonths=[currentMonth];
-  var trackMonth=allMonths[0];
-  var trackLabel=(function(m){var p=m.split('-');return new Date(p[0],p[1]-1,1).toLocaleString('default',{month:'long',year:'numeric'});})(trackMonth);
-  var allStaff=Object.keys(staffMonthCounts);
-  var targetRows=allStaff.map(function(name){return{name:name,count:(staffMonthCounts[name]&&staffMonthCounts[name][trackMonth])||0};}).sort(function(a,b){return b.count-a.count;});
-  var html='<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title" style="color:#1e3a8a">📍 NS Monthly Target</div><div class="chart-card-sub">'+trackLabel+' · Target: '+TARGET+' visits per staff</div></div>';
-  if(allMonths.length>1){html+='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">';allMonths.forEach(function(m){var p=m.split('-');var lbl=new Date(p[0],p[1]-1,1).toLocaleString('default',{month:'short',year:'2-digit'});html+='<button onclick="switchNsTargetMonth(\''+m+'\')" id="nstmBtn_'+m.replace('-','_')+'" style="background:'+(m===trackMonth?'#2563eb':'var(--bg)')+';color:'+(m===trackMonth?'#fff':'var(--muted)')+';border:1.5px solid '+(m===trackMonth?'#2563eb':'var(--border)')+';border-radius:6px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer">'+lbl+'</button>';});html+='</div>';}
-  html+='</div><div id="nsTargetRows">';
-  targetRows.forEach(function(r){var pct=Math.min(100,Math.round((r.count/TARGET)*100));var over=r.count>TARGET;var barColor=pct>=100?'#0d6e3f':pct>=60?'#f5a623':'#d94f4f';var status=pct>=100?'✅':pct>=60?'🟡':'🔴';html+='<div class="target-row"><div class="target-name">'+r.name+'</div><div class="target-bar-wrap"><div class="target-bar"><div class="target-bar-fill" style="width:'+pct+'%;background:'+barColor+'"></div></div></div><div class="target-count" style="color:'+barColor+'">'+(over?'<span>⭐ </span>':'')+r.count+'/'+TARGET+'</div><div class="target-pct">'+status+' '+pct+'%</div></div>';});
-  html+='</div></div>';
-  el.innerHTML=html;
-}
-
-function switchNsTargetMonth(month){
-  var TARGET=30;
-  var nsRows=getNsRows(window.filteredRows||window.allRows||[]);
-  var staffMonthCounts={};
-  nsRows.forEach(function(r){var name=r['CSR Name'];if(!name)return;var d=String(r['Date of Market Visit']).substring(0,7);if(!d)return;if(!staffMonthCounts[name])staffMonthCounts[name]={};staffMonthCounts[name][d]=(staffMonthCounts[name][d]||0)+1;});
-  var allStaff=Object.keys(staffMonthCounts);
-  var targetRows=allStaff.map(function(name){return{name:name,count:(staffMonthCounts[name]&&staffMonthCounts[name][month])||0};}).sort(function(a,b){return b.count-a.count;});
-  var html='';
-  targetRows.forEach(function(r){var pct=Math.min(100,Math.round((r.count/TARGET)*100));var over=r.count>TARGET;var barColor=pct>=100?'#0d6e3f':pct>=60?'#f5a623':'#d94f4f';var status=pct>=100?'✅':pct>=60?'🟡':'🔴';html+='<div class="target-row"><div class="target-name">'+r.name+'</div><div class="target-bar-wrap"><div class="target-bar"><div class="target-bar-fill" style="width:'+pct+'%;background:'+barColor+'"></div></div></div><div class="target-count" style="color:'+barColor+'">'+(over?'<span>⭐ </span>':'')+r.count+'/'+TARGET+'</div><div class="target-pct">'+status+' '+pct+'%</div></div>';});
-  if(document.getElementById('nsTargetRows'))document.getElementById('nsTargetRows').innerHTML=html;
-  document.querySelectorAll('[id^="nstmBtn_"]').forEach(function(btn){var isActive=btn.id==='nstmBtn_'+month.replace('-','_');btn.style.background=isActive?'#2563eb':'var(--bg)';btn.style.color=isActive?'#fff':'var(--muted)';btn.style.borderColor=isActive?'#2563eb':'var(--border)';});
-}
-
-function renderNsRecords(rows){
-  var nsRows=getNsRows(rows);
-  var tc=document.getElementById('nsTableCount');
-  var tb=document.getElementById('nsTableContent');
-  if(tc)tc.textContent=nsRows.length+' NS visit'+(nsRows.length!==1?'s':'');
-  if(!nsRows.length){
-    tb.innerHTML='<div class="db-empty"><div class="db-empty-ico">📭</div><div style="font-weight:600;margin-bottom:6px">No NS records found</div><div style="font-size:12px;color:var(--muted)">Non-Sales visit records will appear here.</div></div>';return;
-  }
-  var sorted=nsRows.slice().sort(function(a,b){return String(b['Timestamp']||'').localeCompare(String(a['Timestamp']||''));});
-  var html='<div class="card"><div class="table-wrap"><table><thead><tr><th>Date</th><th>Staff</th><th>Dept</th><th>Outlet</th><th>Region</th><th>Type</th><th>Status</th><th>Order (KSH)</th></tr></thead><tbody>';
-  sorted.forEach(function(r){
-    var status=r['New / Existing Customer']||'';
-    var badgeCls=status==='New'?'badge-new':'badge-existing';
-    var dept=r['Department']||'—';
-    html+='<tr><td>'+fmtDate(r['Date of Market Visit'])+'</td>'
-      +'<td>'+shortName(r['CSR Name']||'')+'</td>'
-      +'<td style="font-size:10px;color:var(--muted)">'+dept.substring(0,14)+'</td>'
-      +'<td style="max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+((r['Outlet / Customer Name']||'').substring(0,18))+'</td>'
-      +'<td>'+((r['Region']||'').replace('Nairobi ',''))+'</td>'
-      +'<td><span class="badge badge-out">'+((r['Outlet Type']||'').substring(0,10))+'</span></td>'
-      +'<td><span class="badge '+badgeCls+'">'+status+'</span></td>'
-      +'<td style="font-weight:700;color:#2563eb">'+fmtNum(parseFloat(String(r['Order Generated (KSH)']||0).replace(/,/g,''))||0)+'</td>'
-      +'</tr>';
-  });
-  html+='</tbody></table></div></div>';
-  tb.innerHTML=html;
-}
-
-function downloadNsCSV(){
-  var nsRows=getNsRows(window.filteredRows||window.allRows||[]);
-  if(!nsRows.length){alert('No NS data to export.');return;}
-  var keys=Object.keys(nsRows[0]);
-  var csv=keys.join(',')+'\n';
-  nsRows.forEach(function(r){csv+=keys.map(function(k){var v=String(r[k]||'').replace(/"/g,'""');return '"'+v+'"';}).join(',')+'\\n';});
-  var a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
-  a.download='NS_Visit_Records_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
-}
-
 </script>
 
 <!-- ADMIN MODAL -->
