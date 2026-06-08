@@ -597,7 +597,14 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
 
     <div class="filter-bar">
       <label>Filter:</label>
-      <select id="filterCSR" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:100px"><option value="">All CSRs</option></select>
+      <div id="csrSearchWrap" style="position:relative;flex:1;min-width:100px">
+        <input type="text" id="filterCSRInput" placeholder="All CSRs" autocomplete="off"
+          style="width:100%;padding:6px 28px 6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;outline:none;box-sizing:border-box"
+          onfocus="openCsrDropdown()" oninput="filterCsrDropdown()" onblur="setTimeout(closeCsrDropdown,200)"/>
+        <span style="position:absolute;right:8px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:10px;color:var(--muted)">&#9662;</span>
+        <div id="csrDropdownList" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.12);z-index:700;max-height:200px;overflow-y:auto"></div>
+        <input type="hidden" id="filterCSR" value=""/>
+      </div>
       <select id="filterRegion" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:100px"><option value="">All Regions</option></select>
       <select id="filterOrderStatus" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:140px;outline:none">
         <option value="">🧾 Orders Generated</option>
@@ -1508,14 +1515,57 @@ function handleFetchFailure(){
   if(document.getElementById('tableContent')) document.getElementById('tableContent').innerHTML=friendly;
 }
 
+var _allCsrNames=[];
 function populateFilters(rows){
   var csrs={},regions={};
   rows.forEach(function(r){if(r['CSR Name'])csrs[r['CSR Name']]=true;if(r['Region'])regions[r['Region']]=true;});
-  var fCsr=document.getElementById('filterCSR'),fRgn=document.getElementById('filterRegion');
-  fCsr.innerHTML='<option value="">All CSRs</option>';
-  Object.keys(csrs).sort().forEach(function(c){fCsr.innerHTML+='<option>'+c+'</option>';});
+  _allCsrNames=Object.keys(csrs).sort();
+  buildCsrList(_allCsrNames);
+  var fRgn=document.getElementById('filterRegion');
   fRgn.innerHTML='<option value="">All Regions</option>';
   Object.keys(regions).sort().forEach(function(r){fRgn.innerHTML+='<option>'+r+'</option>';});
+}
+function buildCsrList(names){
+  var list=document.getElementById('csrDropdownList');
+  if(!list)return;
+  list.innerHTML='';
+  function makeItem(val,label,muted){
+    var d=document.createElement('div');
+    d.style.cssText='padding:8px 12px;font-size:12px;cursor:pointer;border-bottom:1px solid #f3f4f6;color:'+(muted?'var(--muted)':'var(--text)');
+    d.textContent=label;
+    d.addEventListener('mousedown',function(){selectCsr(val,label);});
+    d.addEventListener('mouseover',function(){d.style.background='var(--green-lt)';});
+    d.addEventListener('mouseout',function(){d.style.background='';});
+    return d;
+  }
+  list.appendChild(makeItem('','All CSRs',true));
+  names.forEach(function(n){ list.appendChild(makeItem(n,n,false)); });
+}
+function openCsrDropdown(){
+  var q=(document.getElementById('filterCSRInput').value||'').toLowerCase().trim();
+  var names=q?_allCsrNames.filter(function(n){return n.toLowerCase().includes(q);}):_allCsrNames;
+  buildCsrList(names);
+  document.getElementById('csrDropdownList').style.display='block';
+  document.getElementById('filterCSRInput').style.borderColor='var(--green)';
+}
+function filterCsrDropdown(){
+  var q=(document.getElementById('filterCSRInput').value||'').toLowerCase().trim();
+  var names=q?_allCsrNames.filter(function(n){return n.toLowerCase().includes(q);}):_allCsrNames;
+  buildCsrList(names);
+  document.getElementById('filterCSR').value='';
+  document.getElementById('csrDropdownList').style.display='block';
+}
+function closeCsrDropdown(){
+  document.getElementById('csrDropdownList').style.display='none';
+  document.getElementById('filterCSRInput').style.borderColor='';
+  // If typed text doesn't match a selection, restore display to match hidden value
+  var val=document.getElementById('filterCSR').value;
+  document.getElementById('filterCSRInput').value=val||'';
+}
+function selectCsr(val, label){
+  document.getElementById('filterCSR').value=val;
+  document.getElementById('filterCSRInput').value=label||val;
+  document.getElementById('csrDropdownList').style.display='none';
 }
 
 // ═══════════════════════════════════════════════
@@ -1652,7 +1702,7 @@ function renderFilterSummary(rows, f){
 }
 
 function clearFilters(){
-  document.getElementById('filterCSR').value='';
+  document.getElementById('filterCSR').value='';document.getElementById('filterCSRInput').value='';
   document.getElementById('filterRegion').value='';
   document.getElementById('filterOrderStatus').value='';
   document.getElementById('filterDateFrom').value='';
@@ -1724,29 +1774,26 @@ function getDashData(){
 }
 
 function renderViewTarget(){
-  var d=getDashData(); var rows=d.rows;
-  var TARGET=100;
-  var today=new Date();
-  var currentMonth=today.getFullYear()+'-'+(String(today.getMonth()+1).padStart(2,'0'));
-  var csrMonthCounts={};
-  rows.forEach(function(r){var name=r['CSR Name'];if(!name)return;var dm=String(r['Date of Market Visit']).substring(0,7);if(!dm)return;if(!csrMonthCounts[name])csrMonthCounts[name]={};csrMonthCounts[name][dm]=(csrMonthCounts[name][dm]||0)+1;});
-  var allMonthsSet={};rows.forEach(function(r){var dm=String(r['Date of Market Visit']).substring(0,7);if(dm)allMonthsSet[dm]=true;});
-  var allMonths=Object.keys(allMonthsSet).sort().reverse();
-  if(!allMonths.length)allMonths=[currentMonth];
-  var trackMonth=allMonths[0];
-  var trackLabel=(function(m){var p=m.split('-');return new Date(p[0],p[1]-1,1).toLocaleString('default',{month:'long',year:'numeric'});})(trackMonth);
-  var ALL_CSRS=_sheetCsrs.length?_sheetCsrs:Object.keys(csrMonthCounts);
-  var targetRows=ALL_CSRS.map(function(name){return{name:name,count:(csrMonthCounts[name]&&csrMonthCounts[name][trackMonth])||0};}).sort(function(a,b){return b.count-a.count;});
-  var html='<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title">📍 CSR Monthly Target</div><div class="chart-card-sub">'+trackLabel+' · Target: '+TARGET+' visits per CSR</div></div>';
-  html+='<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">';
-  if(allMonths.length>1){allMonths.forEach(function(m){var p=m.split('-');var lbl=new Date(p[0],p[1]-1,1).toLocaleString('default',{month:'short',year:'2-digit'});html+='<button onclick="switchTargetMonth(\''+m+'\')" id="tmBtn_'+m.replace('-','_')+'" style="background:'+(m===trackMonth?'var(--green)':'var(--bg)')+';color:'+(m===trackMonth?'#fff':'var(--muted)')+';border:1.5px solid '+(m===trackMonth?'var(--green)':'var(--border)')+';border-radius:6px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer">'+lbl+'</button>';});}
-  html+='</div></div><div id="targetRows">';
-  targetRows.forEach(function(r){
-    var pct=Math.min(100,Math.round((r.count/TARGET)*100));var over=r.count>TARGET;
-    var barColor=pct>=100?'#0d6e3f':pct>=60?'#f5a623':'#d94f4f';var status=pct>=100?'✅':pct>=60?'🟡':'🔴';
-    html+='<div class="target-row"><div class="target-name">'+r.name+'</div><div class="target-bar-wrap"><div class="target-bar"><div class="target-bar-fill" style="width:'+pct+'%;background:'+barColor+'"></div></div></div><div class="target-count" style="color:'+barColor+'">'+(over?'<span title="Exceeded">⭐ </span>':'')+r.count+'/'+TARGET+'</div><div class="target-pct">'+status+' '+pct+'%</div></div>';
+  var d=getDashData(); var csrCounts=d.csrCounts;
+  var sorted=Object.entries(csrCounts).sort(function(a,b){return b[1]-a[1];});
+  var maxCount=sorted.length>0?sorted[0][1]:1;
+  if(!sorted.length){
+    document.getElementById('dbContent').innerHTML='<div class="db-empty"><div class="db-empty-ico">📍</div><div style="font-weight:600;margin-bottom:6px">No visit data</div></div>';
+    return;
+  }
+  var html='<div class="chart-card"><div class="chart-card-header"><div><div class="chart-card-title">📍 Visits by CSR</div><div class="chart-card-sub">Ranked highest to lowest &middot; '+sorted.length+' CSR'+(sorted.length!==1?'s':'')+'</div></div></div>';
+  sorted.forEach(function(pair,i){
+    var pct=Math.round((pair[1]/maxCount)*100);
+    var medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
+    var barColor=i===0?'#0d6e3f':i===1?'#6b7280':i===2?'#b45309':'var(--green)';
+    html+='<div class="target-row">'
+      +'<div style="min-width:22px;font-size:13px;text-align:center;margin-right:6px">'+(medal||'<span style="font-size:11px;color:var(--muted);font-weight:700">'+(i+1)+'</span>')+'</div>'
+      +'<div class="target-name">'+pair[0]+'</div>'
+      +'<div class="target-bar-wrap"><div class="target-bar"><div class="target-bar-fill" style="width:'+pct+'%;background:'+barColor+'"></div></div></div>'
+      +'<div style="font-family:\'Syne\',sans-serif;font-size:16px;font-weight:800;color:var(--text);min-width:32px;text-align:right">'+pair[1]+'</div>'
+      +'</div>';
   });
-  html+='</div></div>';
+  html+='</div>';
   document.getElementById('dbContent').innerHTML=html;
 }
 
@@ -1803,22 +1850,6 @@ function renderViewLeaderboard(){
   document.getElementById('dbContent').innerHTML=html;
 }
 
-function switchTargetMonth(month){
-  var TARGET=100;
-  var rows=window.filteredRows||window.allRows||[];
-  var csrMonthCounts={};
-  rows.forEach(function(r){var name=r['CSR Name'];if(!name)return;var d=String(r['Date of Market Visit']).substring(0,7);if(!d)return;if(!csrMonthCounts[name])csrMonthCounts[name]={};csrMonthCounts[name][d]=(csrMonthCounts[name][d]||0)+1;});
-  var ALL_CSRS=_sheetCsrs.length?_sheetCsrs:Object.keys(csrMonthCounts);
-  var targetRows=ALL_CSRS.map(function(name){return{name:name,count:(csrMonthCounts[name]&&csrMonthCounts[name][month])||0};}).sort(function(a,b){return b.count-a.count;});
-  var html='';
-  targetRows.forEach(function(r){
-    var pct=Math.min(100,Math.round((r.count/TARGET)*100));var over=r.count>TARGET;
-    var barColor=pct>=100?'#0d6e3f':pct>=60?'#f5a623':'#d94f4f';var status=pct>=100?'✅':pct>=60?'🟡':'🔴';
-    html+='<div class="target-row"><div class="target-name">'+r.name+'</div><div class="target-bar-wrap"><div class="target-bar"><div class="target-bar-fill" style="width:'+pct+'%;background:'+barColor+'"></div></div></div><div class="target-count" style="color:'+barColor+'">'+(over?'<span title="Exceeded">⭐ </span>':'')+r.count+'/'+TARGET+'</div><div class="target-pct">'+status+' '+pct+'%</div></div>';
-  });
-  if(document.getElementById('targetRows'))document.getElementById('targetRows').innerHTML=html;
-  document.querySelectorAll('[id^="tmBtn_"]').forEach(function(btn){var isActive=btn.id==='tmBtn_'+month.replace('-','_');btn.style.background=isActive?'var(--green)':'var(--bg)';btn.style.color=isActive?'#fff':'var(--muted)';btn.style.borderColor=isActive?'var(--green)':'var(--border)';});
-}
 
 function statCard(color,ico,val,label,sub){return '<div class="stat-card '+color+'"><div class="stat-ico">'+ico+'</div><div class="stat-val">'+val+'</div><div class="stat-label">'+label+'</div><div style="font-size:10px;color:var(--muted);margin-top:2px">'+sub+'</div></div>';}
 
