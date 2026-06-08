@@ -339,8 +339,7 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
 
 <!-- BOTTOM NAV -->
 <nav class="bnav">
-  <button class="bnav-btn active" id="nav-form" onclick="switchPage('form')"><span class="bnav-ico">📝</span>Sales Staff</button>
-  <button class="bnav-btn" id="nav-nonsales" onclick="switchPage('nonsales')"><span class="bnav-ico">🏢</span>Non-Sales Staff</button>
+  <button class="bnav-btn active" id="nav-form" onclick="switchPage('form')"><span class="bnav-ico">📝</span>Record Visit</button>
   <button class="bnav-btn" id="nav-dashboard" onclick="handleDashboardNav()"><span class="bnav-ico">📊</span>Dashboard</button>
 </nav>
 
@@ -1526,10 +1525,10 @@ var _currentView = 'overview';
 function switchPage(p){
   ['form','dashboard','nonsales'].forEach(function(id){
     document.getElementById('page-'+id).classList.remove('active');
-    document.getElementById('nav-'+id).classList.remove('active');
+    var navEl=document.getElementById('nav-'+id);if(navEl)navEl.classList.remove('active');
   });
   document.getElementById('page-'+p).classList.add('active');
-  document.getElementById('nav-'+p).classList.add('active');
+  var navActive=document.getElementById('nav-'+p);if(navActive)navActive.classList.add('active');
   if(p==='dashboard') loadDashboard();
   if(p==='form') updatePhotoSummary();
   if(p==='nonsales'){ nsUpdatePhotoSummary(); nsStartLocation(); }
