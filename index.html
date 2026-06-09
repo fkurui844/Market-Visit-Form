@@ -221,6 +221,16 @@ tbody td:first-child{font-weight:600}
 .lb-meta-val{font-size:13px;color:#fff;font-weight:600;line-height:1.3}
 .db-loading{text-align:center;padding:40px 20px;color:var(--muted)}
 .db-loading .spin-lg{display:inline-block;width:36px;height:36px;border:3px solid var(--green-lt);border-top-color:var(--green);border-radius:50%;animation:sp .8s linear infinite;margin-bottom:12px}
+@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+.sk{border-radius:8px;background:linear-gradient(90deg,var(--bg) 25%,var(--border) 50%,var(--bg) 75%);background-size:800px 100%;animation:shimmer 1.4s infinite linear}
+.sk-card{background:var(--surface);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+.sk-title{height:14px;width:45%;margin-bottom:14px}
+.sk-stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+.sk-stat{height:80px;border-radius:12px}
+.sk-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.sk-label{height:11px;border-radius:6px;flex-shrink:0}
+.sk-bar{height:11px;border-radius:6px;flex:1}
+.sk-num{height:11px;border-radius:6px;width:28px;flex-shrink:0}
 .db-empty{text-align:center;padding:40px 20px;color:var(--muted)}
 .db-empty-ico{font-size:40px;margin-bottom:10px}
 .lb-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
@@ -270,38 +280,7 @@ tbody td:first-child{font-weight:600}
 .csr-opt:hover,.csr-opt.active{background:var(--green-lt);color:var(--green-dark)}
 .csr-opt mark{background:transparent;color:var(--green);font-weight:700}
 .csr-opt-empty{padding:12px 14px;font-size:13px;color:var(--muted);text-align:center}
-#csrInputBox:focus-within{border-color:var(--green);box-shadow:0 0 0 3px rgba(13,110,63,.1)}
-/* ── Non-Sales Blue Theme ──────────────────── */
-.ns-accent{color:#2563eb}
-.ns-step-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:#1e3a8a;margin-bottom:3px}
-.ns-badge{display:inline-block;background:#eff6ff;border:1.5px solid #bfdbfe;color:#1e40af;border-radius:20px;padding:3px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
-.ns-header-bar{background:linear-gradient(135deg,#1e3a8a,#2563eb);height:4px;position:sticky;top:0;z-index:99}
-.ns-prog-wrap{background:var(--surface);padding:12px 20px;box-shadow:var(--shadow);position:sticky;top:4px;z-index:100}
-.ns-sdot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;border:2px solid var(--border);color:var(--muted);background:var(--surface);transition:all .3s;cursor:pointer}
-.ns-sdot.active{border-color:#2563eb;background:#2563eb;color:#fff;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
-.ns-sdot.done{border-color:#2563eb;background:#eff6ff;color:#2563eb}
-.ns-sline.done{background:#2563eb}
-.ns-btn-pri{background:#2563eb;color:#fff;box-shadow:0 4px 14px rgba(37,99,235,.3)}
-.ns-btn-pri:hover{background:#1e3a8a}
-.ns-btn-sub{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;box-shadow:0 4px 14px rgba(37,99,235,.35);font-size:15px}
-input.ns-focus:focus,select.ns-focus:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.1)}
-.ns-opt input:checked+label{border-color:#2563eb;background:#eff6ff;color:#1e3a8a}
-.ns-opt input:checked+label::before{background:#2563eb;border-color:#2563eb}
-.ns-opt.cb input:checked+label::before{background:#2563eb url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='8'%3E%3Cpath d='M1 4l3 3 5-6' stroke='white' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/10px no-repeat;border-color:#2563eb}
-.ns-photo-header-ico{width:36px;height:36px;background:linear-gradient(135deg,#1e3a8a,#2563eb);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.ns-order-summary-box{background:linear-gradient(135deg,#1e3a8a,#2563eb);border-radius:14px;padding:16px;margin-top:14px;color:#fff}
-.ns-cat-pill.active{background:#2563eb;border-color:#2563eb;color:#fff;box-shadow:0 2px 8px rgba(37,99,235,.25)}
-.ns-prod-row.has-qty{border-color:#2563eb;background:#eff6ff}
-.ns-qty-btn.plus{border-color:#2563eb;background:#eff6ff;color:#1e3a8a}
-.ns-suc-ico{width:72px;height:72px;background:#eff6ff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 16px;border:3px solid #2563eb}
-.ns-suc-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#1e3a8a;margin-bottom:6px}
-.ns-banner{background:linear-gradient(135deg,#1e3a8a,#2563eb);padding:10px 14px;position:relative;overflow:hidden}
-.ns-banner::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.05)}
-.ns-loc-simple.ns-loc-ok{border-color:#2563eb;background:#eff6ff}
-.ns-loc-simple.ns-loc-ok .loc-simple-text{color:#1e3a8a;font-weight:600}
-.ns-loc-simple.ns-loc-scanning{border-color:#93c5fd;background:#eff6ff}
-.ns-loc-simple.ns-loc-scanning .loc-simple-text{color:#1e3a8a}
-/* ── Mock Location Blocker ─────────────────── */
+#csrInputBox:focus-within{border-color:var(--green);box-shadow:0 0 0 3px rgba(13,110,63,.1)}/* ── Mock Location Blocker ─────────────────── */
 #mockLocOverlay{position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;background:linear-gradient(160deg,#1a0a0a 0%,#2d0f0f 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow-y:auto}
 .mock-shield{font-size:64px;margin-bottom:16px;animation:shieldpulse 2s ease-in-out infinite}
 @keyframes shieldpulse{0%,100%{transform:scale(1);filter:drop-shadow(0 0 8px rgba(255,80,80,.4))}50%{transform:scale(1.08);filter:drop-shadow(0 0 20px rgba(255,80,80,.8))}}
@@ -327,6 +306,40 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwP9ughPjTaZtYpQY
 var PRODUCT_CATALOGUE = {"TFA":[{"code":"20","name":"GOLD CROWN TFA 1/2LT 1x 12","pack":"Cartons","price":636},{"code":"21","name":"KCC FRESH TFA 1x 12 x 1/2 lt","pack":"Cartons","price":624},{"code":"83","name":"TAIFA TFA 1*12*500 ML","pack":"Cartons","price":612},{"code":"29","name":"TAIFA TFA 1*24*250 ML","pack":"Cartons","price":678.48}],"TCA":[{"code":"23","name":"GOLD CROWN TCA1 2DCL 1x 21","pack":"Cartons","price":525},{"code":"27","name":"KCC FRESH TCA1 2DL 1x 21","pack":"Cartons","price":504},{"code":"12","name":"TAIFA TCA DCL 1*21*200 ML","pack":"Cartons","price":525},{"code":"28","name":"KCC SCHOOL TCA1 2DL 1x 21","pack":"Cartons","price":860}],"ESL":[{"code":"24","name":"ASEPTIC POUCH 18*500ML G/C","pack":"Cartons","price":612},{"code":"30","name":"ESL 450 ML","pack":"Cartons","price":540},{"code":"26a","name":"ESL GOLD CROWN 200 ML","pack":"Cartons","price":512},{"code":"13","name":"TAIFA ESL -200 ML","pack":"Cartons","price":445.2}],"TBA/UHT":[{"code":"18","name":"TBA G/C 1*12*1 LTR LACTOSE FREE","pack":"Packs","price":1920},{"code":"17","name":"LACTOSE FREE 12*500ML","pack":"Cartons","price":900},{"code":"71","name":"TBA GC 1LT","pack":"Cartons","price":1644},{"code":"73C","name":"UHT FULL CREAM 1L","pack":"Cartons","price":458},{"code":"73B","name":"UHT FULL CREAM WITH CUPS 1L","pack":"Cartons","price":1308},{"code":"81","name":"UHT FULL CREAM 500ML","pack":"Cartons","price":732}],"Water":[{"code":"500","name":"Gold Crown Water 1*24*300ML Bottle","pack":"Trays","price":456},{"code":"501","name":"Gold Crown Water 1*24*500ML Bottle","pack":"Trays","price":576},{"code":"502","name":"Gold Crown Water 1*12*1L Bottle","pack":"Trays","price":528},{"code":"503","name":"Gold Crown Water 1*12*1.5LTR Bottle","pack":"Trays","price":768}],"Mala":[{"code":"88","name":"PLAIN MALA (1x16) 1/2 (TR)","pack":"PCS","price":85},{"code":"110","name":"MALA TR-1LITRE","pack":"PCS","price":165},{"code":"69","name":"MALA 1L BOTTLE","pack":"PCS","price":165},{"code":"63","name":"PLAIN MALA 1/2 LT BOTTLE","pack":"PCS","price":85},{"code":"65","name":"12*500 ML SLEEVED MALA BOTTLE","pack":"Trays","price":956.28},{"code":"60","name":"BOTTLED MALA(1*12*250ML) SLEEVE","pack":"Trays","price":561.6},{"code":"15","name":"SWEETENED MALA -500 ML","pack":"Trays","price":1072.92},{"code":"10","name":"SWEETENED MALA 1L","pack":"PCS","price":175},{"code":"14","name":"SWEETENED MALA -250 ML","pack":"Trays","price":564.6},{"code":"134","name":"500ML FILPAK MALA","pack":"Crates","price":1260},{"code":"135","name":"MALA 200ML POUCH","pack":"Crates","price":630},{"code":"9","name":"SWEETEND MALA POUCH","pack":"Crates","price":1350}],"Yoghurts":[{"code":"201","name":"VANILLA YOGHURT 0.25 LT CUPS","pack":"Trays","price":696},{"code":"202","name":"VANILLA YOGHURT 0.5 LT CUPS","pack":"Trays","price":647.28},{"code":"36","name":"VANILLA CUP 100 ML","pack":"Trays","price":200},{"code":"204","name":"STRAWBERRY YOGHURT 0.25LT CUPS","pack":"Trays","price":696},{"code":"205","name":"STRAWBERRY YOGHURT 0.5LT CUPS","pack":"Trays","price":647.28},{"code":"216","name":"COCONUT YOGHURT 0.25LT CUPS","pack":"Trays","price":696},{"code":"217","name":"COCONUT YOGHURT 0.5LT CUPS","pack":"Trays","price":647.28},{"code":"219","name":"NATURAL YOGHURT 0.25LT CUPS","pack":"Trays","price":756},{"code":"220","name":"NATURAL YOGHURT 0.5LT CUPS","pack":"Trays","price":647.28},{"code":"210","name":"PINEAPPLE YOGHURT 0.25LT CUPS","pack":"Trays","price":696},{"code":"211","name":"PINEAPPLE YOGHURT 0.5LT CUPS","pack":"Trays","price":647.28},{"code":"40","name":"KCC VANILLA YOGHURT (1x16) 1/2LT (TR)","pack":"Trays","price":1612.16},{"code":"41","name":"KCC STRAWBERRY YOGHURT (1x16) 1/2LT (TR)","pack":"Trays","price":1612.16}],"Shakes":[{"code":"121","name":"TCA 1*21*200ML STRAWBERRY SHAKE","pack":"Trays","price":777},{"code":"120","name":"TCA 1*21*200ML CHOCOLATE SHAKE","pack":"Trays","price":777},{"code":"122","name":"TCA 1*21*200ML VANILLA SHAKE","pack":"Trays","price":777},{"code":"75","name":"STRAWBERRY FLAVOUR 1*24*250 ML SHAKES","pack":"Cartons","price":1440},{"code":"79","name":"VANILLA FLAVOUR 1*24*250 ML SHAKES","pack":"Cartons","price":1440},{"code":"77","name":"CHOCOLATE FLAVOUR 1*24*250 ML SHAKES","pack":"Cartons","price":1440}],"Cheese":[{"code":"432","name":"RINDLESS CHEDDAR 150gms*90","pack":"Cartons","price":280},{"code":"430","name":"RINDLESS CHEDDAR 250gms","pack":"Cartons","price":450},{"code":"433","name":"RINDLESS CHEDDAR 500 gms","pack":"Cartons","price":785},{"code":"436","name":"RINDLESS CHEDDAR 1 KG","pack":"Cartons","price":1345}],"Butter":[{"code":"600","name":"SALTED BUTTER TUBS 1*18* 0.5KG","pack":"Cartons","price":16516.62},{"code":"601","name":"SALTED BUTTER TUBS 1*24* 0.25KG","pack":"Cartons","price":12945.6},{"code":"602","name":"UNSALTED BUTTER TUBS 1*18* 0.5KG","pack":"Cartons","price":16516.62},{"code":"603","name":"UNSALTED BUTTER TUBS 1*24* 0.25KG","pack":"Cartons","price":12945.6},{"code":"604","name":"SALTED BUTTER 1*20*0.5KG","pack":"Cartons","price":18351.8},{"code":"605","name":"SALTED BUTTER 1*40*0.25KG","pack":"Cartons","price":21576},{"code":"646","name":"UNSALTED BUTTER 1*20* 0.5KG","pack":"Cartons","price":18351.8},{"code":"709","name":"SALTED MINI BUTTER 1x100x10 GMS x 12","pack":"Cartons","price":32532},{"code":"606","name":"SALTED MINI BUTTER TUB 1x24x8 GMS x 12","pack":"Cartons","price":7807.68},{"code":"757","name":"BULK UNSALTED BUTTER 10 KGS","pack":"Cartons","price":19400},{"code":"758","name":"BULK SALTED BUTTER 10 KGS","pack":"Cartons","price":19400}],"Powder":[{"code":"1036","name":"DRIED POWDER 1*12*400 GRMS","pack":"Bags","price":6408},{"code":"1037","name":"DRIED MILK POWDER 1*12*900 GRMS","pack":"Bags","price":14652},{"code":"1038","name":"DRIED POWDER 1*6*2.50 KG TIN","pack":"Bags","price":17670},{"code":"1031","name":"DRIED WHOLE MILK POWDER 1 x 25 KG BAG","pack":"Bags","price":22000},{"code":"1021","name":"DRIED SKIMMED MILK POWDER 1 x 25 KG BAG","pack":"Bags","price":21000}],"Ghee":[{"code":"885","name":"SUPERFINE GHEE 20 x 1/2KG TINS","pack":"Cartons","price":9440},{"code":"882","name":"SUPERFINE GHEE 12 x 1KG TINS","pack":"Cartons","price":10284},{"code":"876","name":"SUPERFINE GHEE 6 x 3KG TINS","pack":"Cartons","price":12327},{"code":"877","name":"SUPERFINE GHEE 6 x 2KG TINS","pack":"Cartons","price":8574},{"code":"851","name":"SUPERFINE GHEE 1 x 18KG PLASTIC","pack":"Buckets","price":17280}],"Fresh Milk":[{"code":"58","name":"GOLD CROWN 1X16X1LT (TR)","pack":"PCS","price":115},{"code":"68","name":"GOLD CROWN 1X16X500ML (TR)","pack":"PCS","price":65},{"code":"70","name":"KCC FRESH MILK 1X16X500ML (TR)","pack":"Crates","price":956.16},{"code":"55","name":"GOLD CROWN FILPAK 1X18X500ML POUCH","pack":"Crates","price":936},{"code":"59","name":"GOLD CROWN FILPAK 1X45X200ML POUCH","pack":"Crates","price":945},{"code":"84","name":"KCC FRESH FILPAK 1X18X500ML POUCH","pack":"Crates","price":936},{"code":"86","name":"KCC FRESH FILPAK 1X45X200ML POUCH","pack":"Crates","price":900},{"code":"85","name":"TAIFA FRESH FILPAK 1X18X500ML POUCH","pack":"Crates","price":900},{"code":"54","name":"TAIFA FRESH FILPAK 1X45X200ML POUCH","pack":"Crates","price":360},{"code":"97","name":"KCC FRESH MILK 500ML BOTTLE","pack":"PCS","price":70},{"code":"98","name":"GOLD CROWN FRESH MILK 500ML BOTTLE","pack":"PCS","price":70},{"code":"100","name":"GOLD CROWN FRESH MILK 1X35X1LT BOTTLE","pack":"PCS","price":130},{"code":"101","name":"GOLD CROWN FRESH MILK 1X18X2LT BOTTLE","pack":"PCS","price":250},{"code":"102","name":"GOLD CROWN FRESH MILK 1X10X3LT BOTTLE","pack":"PCS","price":390},{"code":"103","name":"GOLD CROWN STANDARD 1X35X1LT BOTTLE","pack":"PCS","price":130},{"code":"104","name":"GOLD CROWN STANDARD 1X18X2LT BOTTLE","pack":"PCS","price":250},{"code":"105","name":"GOLD CROWN STANDARD 1X10X3LT BOTTLE","pack":"PCS","price":390},{"code":"106","name":"GOLD CROWN LOWFAT 1X18X2LT BOTTLE","pack":"PCS","price":250},{"code":"107","name":"GOLD CROWN LOWFAT 1X10X3LT BOTTLE","pack":"PCS","price":390},{"code":"108","name":"GOLD CROWN FRESH MILK 5 LITRE BOTTLE","pack":"PCS","price":580},{"code":"51","name":"BULK FRESH MILK 50 LITRE CAN","pack":"PCS","price":4500},{"code":"50","name":"BULK FRESH MILK 20L PACK","pack":"PCS","price":2000}]};
 
 var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
+var _catalogueLoaded = false;
+
+function fetchCatalogue() {
+  if (_catalogueLoaded) return;
+  var cbName = 'cb_cat_' + Date.now();
+  var script = document.createElement('script');
+  var timer = setTimeout(function() {
+    cleanup(); // fallback already in place, silently continue
+  }, 6000);
+  function cleanup() { clearTimeout(timer); if (script.parentNode) script.parentNode.removeChild(script); try { delete window[cbName]; } catch(e) { window[cbName]=undefined; } }
+  window[cbName] = function(data) {
+    cleanup();
+    if (data && typeof data === 'object' && Object.keys(data).length > 0) {
+      PRODUCT_CATALOGUE = data;
+      ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
+      _catalogueLoaded = true;
+      try { localStorage.setItem('mvf_catalogue', JSON.stringify({ts: Date.now(), data: data})); } catch(e) {}
+      initOrderBuilder(); // re-render with fresh catalogue
+    }
+  };
+  // Try cached first (max 24h old)
+  try {
+    var cached = JSON.parse(localStorage.getItem('mvf_catalogue') || 'null');
+    if (cached && cached.data && (Date.now() - cached.ts) < 86400000) {
+      PRODUCT_CATALOGUE = cached.data;
+      ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
+      _catalogueLoaded = true;
+      initOrderBuilder();
+      // Still fetch fresh in background
+    }
+  } catch(e) {}
+  script.src = APPS_SCRIPT_URL + '?action=getCatalogue&callback=' + cbName;
+  document.head.appendChild(script);
+}
 </script>
 
 <!-- HEADER -->
@@ -339,8 +352,13 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
 </div>
 
 <!-- BOTTOM NAV -->
+<div id="queueBar" style="display:none;position:fixed;bottom:64px;left:0;right:0;z-index:490;background:#fef3c7;border-top:1.5px solid #fcd68a;padding:8px 16px;align-items:center;gap:10px;font-size:12px;font-weight:600;color:#7a4800">
+  <span style="font-size:14px">📶</span>
+  <span id="queueBarCount" style="flex:1">0 visits queued offline</span>
+  <button id="queueBarBtn" onclick="retryQueue()" style="background:#0d6e3f;color:#fff;border:none;border-radius:8px;padding:5px 12px;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer">Retry Now</button>
+</div>
 <nav class="bnav">
-  <button class="bnav-btn active" id="nav-form" onclick="switchPage('form')"><span class="bnav-ico">📝</span>Record Visit</button>
+  <button class="bnav-btn active" id="nav-form" onclick="switchPage('form')" style="position:relative"><span class="bnav-ico">📝</span>Record Visit<span id="queueBadge" style="display:none;position:absolute;top:6px;right:10px;background:#ef4444;color:#fff;border-radius:10px;min-width:18px;height:18px;font-size:10px;font-weight:800;align-items:center;justify-content:center;padding:0 4px"></span></button>
   <button class="bnav-btn" id="nav-dashboard" onclick="handleDashboardNav()"><span class="bnav-ico">📊</span>Dashboard</button>
 </nav>
 
@@ -359,7 +377,6 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
   <div style="padding:6px 14px 4px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Records</div>
   <div class="dditem" id="dditem-records" onclick="selectView('records')"><span>📋</span>Visit Records</div>
   <div class="dditem" id="dditem-orders"  onclick="selectView('orders')"><span>🧾</span>Orders</div>
-  <div class="dditem" id="dditem-photos"  onclick="selectView('photos')"><span>📷</span>Outlet Photos</div>
   <div style="height:1px;background:var(--border);margin:4px 0"></div>
   <div style="padding:0 0 6px">
     <button class="dditem" onclick="loadDashboard();closeDropdown()"><span>&#8635;</span>Refresh Data</button>
@@ -548,6 +565,7 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
       <div class="suc-ico">&#9989;</div>
       <h2>Visit Recorded!</h2>
       <p>Saved to the NKCC Google Sheet successfully.</p>
+      <div id="successQueueMsg" style="display:none;background:#fef3c7;border:1.5px solid #fcd68a;border-radius:10px;padding:10px 14px;font-size:12px;color:#7a4800;font-weight:600;display:flex;gap:8px;align-items:center;max-width:320px;margin:0 auto 16px;text-align:left"></div>
       <button class="btn btn-pri" onclick="resetForm()" style="max-width:220px;margin:0 auto;display:block">+ Record Another Visit</button>
     </div>
   </div>
@@ -571,11 +589,18 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
         <div id="csrDropdownList" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.12);z-index:700;max-height:200px;overflow-y:auto"></div>
         <input type="hidden" id="filterCSR" value=""/>
       </div>
-      <select id="filterRegion" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:100px"><option value="">All Regions</option></select>
-      <select id="filterOrderStatus" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:140px;outline:none">
-        <option value="">🧾 Orders Generated</option>
-        <option value="with">With Orders Only</option>
-        <option value="zero">Zero Orders Only</option>
+      <div id="rgnSearchWrap" style="position:relative;flex:1;min-width:100px">
+        <input type="text" id="filterRegionInput" placeholder="All Regions" autocomplete="off"
+          style="width:100%;padding:6px 28px 6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;outline:none;box-sizing:border-box"
+          onfocus="openRgnDropdown()" oninput="filterRgnDropdown()" onblur="setTimeout(closeRgnDropdown,200)"/>
+        <span style="position:absolute;right:8px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:10px;color:var(--muted)">&#9662;</span>
+        <div id="rgnDropdownList" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.12);z-index:700;max-height:200px;overflow-y:auto"></div>
+        <input type="hidden" id="filterRegion" value=""/>
+      </div>
+      <select id="filterOrderStatus" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:140px;outline:none;appearance:auto;-webkit-appearance:auto">
+        <option value="">🧾 All Orders</option>
+        <option value="with">With Orders</option>
+        <option value="zero">Zero Orders</option>
       </select>
       <input type="date" id="filterDateFrom" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:110px"/>
       <input type="date" id="filterDateTo" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--surface);cursor:pointer;flex:1;min-width:110px"/>
@@ -590,7 +615,7 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
     </div>
 
     <div id="productPresenceSection" style="display:none"></div>
-    <div id="dbContent"><div class="db-loading"><div class="spin-lg"></div><div>Loading data...</div></div></div>
+    <div id="dbContent"><div id="dbSkeleton"></div></div>
 
     <div id="section-records" style="display:none">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
@@ -642,258 +667,6 @@ var ALL_CATEGORIES = Object.keys(PRODUCT_CATALOGUE);
 </div>
 
 <!-- PAGE: NON-SALES FIELD VISIT -->
-<div class="page" id="page-nonsales">
-  <!-- Blue accent bar at top -->
-  <div class="ns-banner">
-    <div style="display:flex;align-items:center;gap:10px;max-width:100%;position:relative;z-index:1">
-      <div style="flex:1">
-        <div style="font-family:'Syne',sans-serif;font-size:clamp(11px,3.5vw,17px);font-weight:800;color:#fff;letter-spacing:-.01em;line-height:1.2">Field Visit — Non-Sales</div>
-        <div style="font-size:10px;color:rgba(255,255,255,.7);margin-top:2px">For staff outside the sales team visiting market</div>
-      </div>
-      <span class="ns-badge" style="background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3);color:#fff;flex-shrink:0">Field</span>
-    </div>
-  </div>
-
-  <!-- Progress bar -->
-  <div class="ns-prog-wrap" id="nsProgWrap">
-    <div class="prog-steps">
-      <div class="ns-sdot active" id="nsd1" onclick="nsGoTo(1)">1</div><div class="sline ns-sline" id="nsl1"></div>
-      <div class="ns-sdot" id="nsd2" onclick="nsGoTo(2)">2</div><div class="sline ns-sline" id="nsl2"></div>
-      <div class="ns-sdot" id="nsd3" onclick="nsGoTo(3)">3</div><div class="sline ns-sline" id="nsl3"></div>
-      <div class="ns-sdot" id="nsd4" onclick="nsGoTo(4)">4</div>
-    </div>
-    <div class="prog-label" id="nsplab">Step <strong>1</strong> of 4 &mdash; Visit Info</div>
-  </div>
-
-  <div class="wrap">
-
-    <!-- NS STEP 1: VISIT INFO -->
-    <div class="step active" id="nsstep-1">
-      <h2 class="ns-step-title">Visit Information</h2>
-      <p class="step-sub">Tell us when, where, and who is doing this visit.</p>
-
-      <div class="card">
-        <div class="field"><label for="nsVisitDate">Date of Market Visit <span class="req">*</span></label>
-          <input type="date" id="nsVisitDate" class="ns-focus"/>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="field"><label for="nsDept">Department <span class="req">*</span></label>
-          <select id="nsDept" class="form-select ns-focus">
-            <option value="">— Select department —</option>
-            <option>Human Resource</option>
-            <option>ICT</option>
-            <option>Marketing</option>
-            <option>Production</option>
-            <option>Finance</option>
-            <option>Logistics</option>
-            <option>Legal</option>
-            <option>Audit</option>
-            <option>Cooperate</option>
-            <option>Strategy</option>
-            <option>Quality</option>
-            <option>Others</option>
-          </select>
-        </div>
-        <div class="field"><label for="nsStaffName">Your Full Name <span class="req">*</span></label>
-          <input type="text" id="nsStaffName" class="ns-focus" placeholder="e.g. Jane Wanjiru"/>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="field"><label for="nsRegion">Region / Area <span class="req">*</span></label>
-          <select id="nsRegion" class="form-select ns-focus">
-            <option value="">— Select region —</option>
-            <option>Nairobi North</option><option>Nairobi South</option><option>Eastern</option>
-            <option>Nairobi Tier I</option><option>Nairobi Tier II</option><option>Institutions / Exports</option>
-          </select>
-        </div>
-
-      </div>
-
-      <div class="card">
-        <div class="field">
-          <label>Visit Location <span style="font-weight:400;color:var(--muted);font-size:10px;">— auto-detected</span></label>
-          <div class="loc-simple loc-scanning ns-loc-simple" id="nsLocBox">
-            <span class="loc-simple-icon" id="nsLocIcon">📡</span>
-            <span class="loc-simple-text loc-pulse" id="nsLocText">Detecting location...</span>
-            <button type="button" class="loc-retry-btn" id="nsLocRetry" onclick="nsStartLocation()" style="display:none;border-color:#2563eb;color:#2563eb">Retry</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="err-msg" id="nserr1">Please fill in all required fields and wait for location to be detected.</div>
-      <div class="btn-row"><button class="btn btn-pri ns-btn-pri" onclick="nsNext(1)">Continue &rarr;</button></div>
-    </div>
-
-    <!-- NS STEP 2: CUSTOMER DETAILS -->
-    <div class="step" id="nsstep-2">
-      <h2 class="ns-step-title">Customer Details</h2>
-      <p class="step-sub">Tell us about the outlet you are visiting.</p>
-      <div class="card">
-        <div class="field"><label for="nsOutletName">Outlet / Customer Name <span class="req">*</span></label>
-          <input type="text" id="nsOutletName" class="ns-focus" placeholder="e.g. Mama Pima Shop"/>
-        </div>
-        <div class="field"><label>New / Existing Customer <span class="req">*</span></label>
-          <div class="opts">
-            <div class="opt ns-opt"><input type="radio" name="nsCustStatus" id="nscs1" value="New"/><label for="nscs1">New</label></div>
-            <div class="opt ns-opt"><input type="radio" name="nsCustStatus" id="nscs2" value="Existing"/><label for="nscs2">Existing</label></div>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="field"><label for="nsContactPerson">Contact Person <span class="req">*</span></label>
-          <input type="text" id="nsContactPerson" class="ns-focus" placeholder="Full name"/>
-        </div>
-        <div class="field"><label for="nsTelephone">Telephone No. <span class="req">*</span></label>
-          <input type="tel" id="nsTelephone" class="ns-focus" placeholder="e.g. 0712 345 678"/>
-        </div>
-        <div class="field"><label for="nsDistributor">Distributor Serving Outlet <span class="req">*</span></label>
-          <input type="text" id="nsDistributor" class="ns-focus" placeholder="Distributor name"/>
-        </div>
-      </div>
-      <div class="card">
-        <div class="field"><label>Outlet Type <span class="req">*</span></label>
-          <div class="opts">
-            <div class="opt ns-opt"><input type="radio" name="nsOutletType" id="nsot1" value="Wholesale"/><label for="nsot1">Wholesale</label></div>
-            <div class="opt ns-opt"><input type="radio" name="nsOutletType" id="nsot2" value="Retail"/><label for="nsot2">Retail</label></div>
-            <div class="opt ns-opt"><input type="radio" name="nsOutletType" id="nsot3" value="Agent"/><label for="nsot3">Agent</label></div>
-            <div class="opt ns-opt"><input type="radio" name="nsOutletType" id="nsot4" value="Street Vendors"/><label for="nsot4">Street Vendors</label></div>
-            <div class="opt ns-opt"><input type="radio" name="nsOutletType" id="nsot5" value="Supermarkets"/><label for="nsot5">Supermarkets</label></div>
-            <div class="opt ns-opt"><input type="radio" name="nsOutletType" id="nsot6" value="Petrol Station"/><label for="nsot6">Petrol Station</label></div>
-          </div>
-        </div>
-      </div>
-      <div class="err-msg" id="nserr2">Please fill in all required fields before continuing.</div>
-      <div class="btn-row"><button class="btn btn-sec" onclick="nsPrev(2)">&larr; Back</button><button class="btn btn-pri ns-btn-pri" onclick="nsNext(2)">Continue &rarr;</button></div>
-    </div>
-
-    <!-- NS STEP 3: ORDER BUILDER -->
-    <div class="step" id="nsstep-3">
-      <h2 class="ns-step-title">Order Builder</h2>
-      <p class="step-sub">Add products ordered by the outlet, or record a zero-order visit.</p>
-      <div class="card" style="margin-bottom:14px">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
-          <div>
-            <div style="font-size:13px;font-weight:700;color:var(--text)">🚫 No Order This Visit</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:3px">Toggle on if the outlet placed no order today</div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="nsNoOrderToggle" onchange="nsHandleNoOrderToggle()"/>
-            <span class="toggle-slider" style="--tw-bg:none"></span>
-          </label>
-        </div>
-      </div>
-      <div id="nsOrderBuilderPanel">
-        <div style="overflow-x:auto;padding-bottom:6px;margin-bottom:10px;-webkit-overflow-scrolling:touch">
-          <div style="display:flex;gap:6px;min-width:max-content" id="nsCatPills"></div>
-        </div>
-        <div style="margin-bottom:10px">
-          <input type="text" id="nsProductSearch" placeholder="🔍 Search product name or code..." oninput="nsFilterProducts()"/>
-        </div>
-        <div id="nsProductList" style="display:flex;flex-direction:column;gap:7px;max-height:400px;overflow-y:auto;padding-right:2px;scroll-behavior:smooth"></div>
-        <div id="nsOrderSummaryBox" style="display:none;margin-top:14px">
-          <div class="ns-order-summary-box">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-              <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff">🧾 Order Summary</div>
-              <button onclick="nsClearAllOrder()" style="background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);border-radius:7px;padding:4px 11px;font-size:11px;font-weight:700;color:#fff;cursor:pointer">Clear All</button>
-            </div>
-            <div id="nsSummaryLines"></div>
-            <div class="order-total-row">
-              <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,.8)">TOTAL ORDER VALUE</div>
-              <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#fff" id="nsOrderTotalDisplay">KSH 0</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="nsNoOrderBanner" style="display:none">
-        <div class="no-order-banner">
-          <div style="font-size:32px;margin-bottom:8px">📋</div>
-          <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:#92400e;margin-bottom:4px">Zero Order Recorded</div>
-          <div style="font-size:12px;color:#a16207;line-height:1.6">This visit will be submitted with <strong>KSH 0</strong> order value.<br>Use the Notes section on the next step to add context.</div>
-        </div>
-      </div>
-      <input type="hidden" id="nsOrderAmt" value="0"/>
-      <input type="hidden" id="nsOrderItemsJSON" value="[]"/>
-
-      <!-- Outlet Photo -->
-      <div class="photo-section" id="nsPhotoSection" style="margin-top:14px">
-        <div class="photo-header">
-          <div class="ns-photo-header-ico">📸</div>
-          <div class="photo-header-text">
-            <strong>Outlet Photo <span class="req">*</span></strong>
-            <span>📌 Stand outside &amp; take a photo of the outlet front/entrance</span>
-          </div>
-        </div>
-        <div style="background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:9px;padding:10px 13px;margin-bottom:12px;display:flex;gap:9px;align-items:flex-start">
-          <span style="font-size:18px;flex-shrink:0">🏪</span>
-          <div>
-            <div style="font-size:12px;font-weight:700;color:#1e3a8a;margin-bottom:2px">Photo Instruction</div>
-            <div style="font-size:11px;color:#1e40af;line-height:1.5">Step outside the outlet and take a clear photo showing the <strong>outlet name/signage and entrance</strong>.</div>
-          </div>
-        </div>
-        <div class="photo-zone" id="nsPhotoZone">
-          <label for="nsPhotoInput0" class="photo-zone-label" id="nsPhotoZoneLabel">
-            <div class="photo-zone-ico" id="nsPzIco">📷</div>
-            <div class="photo-zone-lbl" id="nsPzLbl">Tap to photograph outlet exterior</div>
-            <div class="photo-zone-sub" id="nsPzSub">Stand outside — capture full storefront</div>
-          </label>
-          <input type="file" class="cam-input" id="nsPhotoInput0" accept="image/*" capture="environment" onchange="nsHandlePhoto(event)"/>
-        </div>
-        <div class="photo-guide">
-          <div class="guide-chip"><span>🏪</span> Full storefront</div>
-          <div class="guide-chip"><span>🪧</span> Outlet signage</div>
-          <div class="guide-chip"><span>🚪</span> Entrance visible</div>
-          <div class="guide-chip"><span>☀️</span> Good lighting</div>
-        </div>
-      </div>
-      <div class="err-msg" id="nserr3">Please add at least one product (or toggle No Order on) and take the outlet photo.</div>
-      <div class="btn-row"><button class="btn btn-sec" onclick="nsPrev(3)">&larr; Back</button><button class="btn btn-pri ns-btn-pri" onclick="nsNext(3)">Continue &rarr;</button></div>
-    </div>
-
-    <!-- NS STEP 4: NOTES & SIGN-OFF -->
-    <div class="step" id="nsstep-4">
-      <h2 class="ns-step-title">Notes &amp; Sign-Off</h2>
-      <p class="step-sub">Final details before submitting your field visit report.</p>
-      <div class="card">
-        <div class="field"><label for="nsComment">Comment / Visit Notes</label>
-          <textarea id="nsComment" placeholder="Any observations, market insights, challenges, or highlights..."></textarea>
-        </div>
-      </div>
-      <div id="nsPhotoSummaryCard" style="display:none" class="card">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:16px">📸</span><span style="font-size:12px;font-weight:600;color:var(--text)">Outlet photo attached</span></div>
-        <div id="nsPhotoSummaryGrid" style="display:flex;gap:8px;flex-wrap:wrap"></div>
-      </div>
-      <div class="card">
-        <div class="field"><label for="nsSignedBy">Sign Out with Your Name <span class="req">*</span></label>
-          <input type="text" id="nsSignedBy" class="ns-focus" placeholder="Type your full name to confirm accuracy"/>
-        </div>
-      </div>
-      <details class="about-details">
-        <summary class="about-summary">ℹ️ About this form</summary>
-        <div class="about-body">
-          <p>This form is for <strong>non-sales NKCC staff</strong> who visit the market — whether for research, customer relations, quality checks, or to collect orders. Submissions are recorded separately in the NKCC system.</p>
-          <div class="about-dev"><span style="font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Developed by</span><a href="mailto:dev@nkcc.co.ke" style="font-size:12px;font-weight:600;color:#2563eb;text-decoration:none">✉️ dev@nkcc.co.ke</a></div>
-        </div>
-      </details>
-      <div class="err-msg" id="nserr4">Please sign out with your full name before submitting.</div>
-      <div class="btn-row">
-        <button class="btn btn-sec" onclick="nsPrev(4)">&larr; Back</button>
-        <button class="btn ns-btn-sub btn-sub" id="nsSubmitBtn" onclick="nsSubmitForm()">Submit Visit &#10003;</button>
-      </div>
-    </div>
-
-    <!-- NS SUCCESS SCREEN -->
-    <div id="ns-success-screen" style="display:none;text-align:center;padding:40px 20px">
-      <div class="ns-suc-ico">&#9989;</div>
-      <h2 class="ns-suc-title">Field Visit Recorded!</h2>
-      <p style="font-size:13px;color:var(--muted);margin-bottom:20px">Saved to the NKCC Google Sheet successfully.</p>
-      <button class="btn btn-pri ns-btn-pri" onclick="nsResetForm()" style="max-width:220px;margin:0 auto;display:block">+ Record Another Visit</button>
-    </div>
-
-  </div><!-- /wrap -->
-</div><!-- /page-nonsales -->
 
 <!-- PHOTO LIGHTBOX -->
 <div id="photoLightbox" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.92);z-index:9999;overflow-y:auto">
@@ -1035,11 +808,13 @@ var stepLabels = ['Visit Info','Customer Details','Order Builder','Notes & Sign-
 
 window.addEventListener('DOMContentLoaded', function() {
   document.getElementById('visitDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('dbContent').innerHTML=dbSkeleton();
   startLocation();
   loadDashboard();
   setInterval(loadDashboard, 5 * 60 * 1000);
   applyAdminDataToForm();
   initOrderBuilder();
+  fetchCatalogue();
 });
 
 // ═══════════════════════════════════════════════
@@ -1303,15 +1078,54 @@ function showLocStatus(state,msg,guide){
 // ═══════════════════════════════════════════════
 //  SUBMIT
 // ═══════════════════════════════════════════════
-function submitForm(){
-  // Hard block if mock location was detected at any point this session
-  if (_mockDetected) {
-    showMockBlocker(_mockReasons.length ? _mockReasons : ['🔴 Mock location was detected during this session. Please uninstall any fake GPS app and restart.']);
-    return;
+// ═══════════════════════════════════════════════
+//  OFFLINE QUEUE
+// ═══════════════════════════════════════════════
+var QUEUE_KEY='mvf_queue';
+function queueLoad(){try{return JSON.parse(localStorage.getItem(QUEUE_KEY)||'[]');}catch(e){return[];}}
+function queueSave(q){try{localStorage.setItem(QUEUE_KEY,JSON.stringify(q));}catch(e){}}
+function queueAdd(payload){var q=queueLoad();payload._qid=Date.now()+'_'+Math.random().toString(36).slice(2);payload._queued=new Date().toISOString();q.push(payload);queueSave(q);updateQueueBadge();}
+function queueRemove(qid){var q=queueLoad().filter(function(p){return p._qid!==qid;});queueSave(q);updateQueueBadge();}
+function updateQueueBadge(){
+  var q=queueLoad();
+  var badge=document.getElementById('queueBadge');
+  var bar=document.getElementById('queueBar');
+  if(!badge||!bar)return;
+  if(!q.length){badge.style.display='none';bar.style.display='none';return;}
+  badge.style.display='flex';badge.textContent=q.length;
+  bar.style.display='flex';
+  document.getElementById('queueBarCount').textContent=q.length+' visit'+(q.length!==1?'s':'')+' queued offline';
+}
+function retryQueue(){
+  var q=queueLoad();
+  if(!q.length)return;
+  var bar=document.getElementById('queueBar');
+  if(bar){document.getElementById('queueBarBtn').disabled=true;document.getElementById('queueBarBtn').textContent='Sending...';}
+  var sent=0,failed=0;
+  function next(i){
+    if(i>=q.length){
+      var remaining=queueLoad();
+      updateQueueBadge();
+      if(bar){
+        document.getElementById('queueBarBtn').disabled=false;
+        document.getElementById('queueBarBtn').textContent='Retry Now';
+        if(!remaining.length){document.getElementById('queueBarCount').textContent='✅ All visits synced!';}
+        else{document.getElementById('queueBarCount').textContent=remaining.length+' visit'+(remaining.length!==1?'s':'')+' queued offline — tap to retry';}
+      }
+      return;
+    }
+    var p=q[i];
+    fetch(APPS_SCRIPT_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(p),headers:{'Content-Type':'application/json'}})
+      .then(function(){queueRemove(p._qid);sent++;next(i+1);})
+      .catch(function(){failed++;next(i+1);});
   }
-  if(!validate(4))return;
-  var btn=document.getElementById('submitBtn');
-  btn.disabled=true;btn.innerHTML='<span class="spin"></span>Saving...';
+  next(0);
+}
+// Auto-retry when coming back online
+window.addEventListener('online',function(){if(queueLoad().length)retryQueue();});
+document.addEventListener('DOMContentLoaded',function(){updateQueueBadge();});
+
+function buildPayload(){
   var orderItems=[];try{orderItems=JSON.parse(document.getElementById('orderItemsJSON').value||'[]');}catch(e){}
   var orderStr=noOrder?'NO ORDER':(orderItems.length?orderItems.map(function(i){return i.qty+'x '+i.name;}).join('; '):'NO ORDER');
   var _catsSeen={},_catsArr=[];
@@ -1319,8 +1133,7 @@ function submitForm(){
     var cat=Object.keys(PRODUCT_CATALOGUE).find(function(c){return PRODUCT_CATALOGUE[c].find(function(p){return p.code===i.code;});}) || '';
     if(cat && !_catsSeen[cat]){_catsSeen[cat]=true;_catsArr.push(cat);}
   });
-  var orderProducts=_catsArr.length?_catsArr.join(', '):'None';
-  var payload={
+  return {
     visitDate:document.getElementById('visitDate').value,
     region:document.getElementById('rgnVal').value,
     csrName:document.getElementById('csrVal').value,
@@ -1330,21 +1143,58 @@ function submitForm(){
     telephone:document.getElementById('telephone').value.trim(),
     distributor:document.getElementById('distributor').value.trim(),
     outletType:(document.querySelector('input[name="outletType"]:checked')||{}).value||'',
-    products:orderProducts,
+    products:_catsArr.length?_catsArr.join(', '):'None',
     orderGenerated:document.getElementById('orderAmt').value,
     orderDetails:orderStr,
     comment:document.getElementById('comment').value.trim(),
     locationName:locData.addr||'',
     signedBy:document.getElementById('signedBy').value.trim(),
   };
-  fetch(APPS_SCRIPT_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload),headers:{'Content-Type':'application/json'}})
-    .then(function(){showSuccess();})
-    .catch(function(){btn.disabled=false;btn.innerHTML='Submit Visit &#10003;';var e=document.getElementById('err4');e.textContent='Network error. Check connection and try again.';e.className='err-msg show';});
 }
 
-function showSuccess(){
+function submitForm(){
+  if(_mockDetected){
+    showMockBlocker(_mockReasons.length?_mockReasons:['🔴 Mock location detected. Uninstall fake GPS and restart.']);
+    return;
+  }
+  if(!validate(4))return;
+  var btn=document.getElementById('submitBtn');
+  btn.disabled=true;btn.innerHTML='<span class="spin"></span>Saving...';
+  var payload=buildPayload();
+  // Since mode:no-cors always resolves (no real error signal), we use online check
+  if(!navigator.onLine){
+    queueAdd(payload);
+    showSuccess(true);
+    btn.disabled=false;btn.innerHTML='Submit Visit &#10003;';
+    return;
+  }
+  fetch(APPS_SCRIPT_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload),headers:{'Content-Type':'application/json'}})
+    .then(function(){
+      // Also flush any previously queued submissions
+      if(queueLoad().length) setTimeout(retryQueue, 1000);
+      showSuccess(false);
+    })
+    .catch(function(){
+      queueAdd(payload);
+      showSuccess(true);
+      btn.disabled=false;btn.innerHTML='Submit Visit &#10003;';
+    });
+}
+
+function showSuccess(queued){
   document.getElementById('step-4').classList.remove('active');
-  document.getElementById('success-screen').style.display='block';
+  var screen=document.getElementById('success-screen');
+  screen.style.display='block';
+  // Update success message based on queued state
+  var qMsg=document.getElementById('successQueueMsg');
+  if(qMsg){
+    if(queued){
+      qMsg.style.display='block';
+      qMsg.innerHTML='<span style="font-size:16px">📶</span> No connection — saved locally. Will auto-sync when back online.';
+    } else {
+      qMsg.style.display='none';
+    }
+  }
   document.getElementById('progWrap').style.display='none';
   window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -1381,9 +1231,18 @@ function resetForm(){
 window.allRows=null;window.filteredRows=null;window.charts={};
 var _retryCount=0;
 
+function dbSkeleton(){
+  var bars='';
+  var widths=[72,55,88,40,65,50,80,35];
+  widths.forEach(function(w){
+    bars+='<div class="sk-bar-row"><div class="sk sk-label" style="width:90px"></div><div class="sk sk-bar" style="max-width:'+w+'%"></div><div class="sk sk-num"></div></div>';
+  });
+  return '<div class="sk-card"><div class="sk sk-title"></div><div class="sk-stat-grid"><div class="sk sk-stat"></div><div class="sk sk-stat"></div><div class="sk sk-stat"></div><div class="sk sk-stat"></div></div></div>'
+       + '<div class="sk-card"><div class="sk sk-title" style="width:35%;margin-bottom:16px"></div>'+bars+'</div>';
+}
 function loadDashboard(){
   document.getElementById('dbLastUpdated').textContent='Syncing...';
-  if(!window.allRows) document.getElementById('dbContent').innerHTML='<div class="db-loading"><div class="spin-lg"></div><div>Loading visits...</div></div>';
+  if(!window.allRows) document.getElementById('dbContent').innerHTML=dbSkeleton();
   var cbName='nkcc_cb_'+Date.now();
   var script=document.createElement('script');
   var settled=false;
@@ -1419,8 +1278,8 @@ function populateFilters(rows){
   _allCsrNames=Object.keys(csrs).sort();
   buildCsrList(_allCsrNames);
   var fRgn=document.getElementById('filterRegion');
-  fRgn.innerHTML='<option value="">All Regions</option>';
-  Object.keys(regions).sort().forEach(function(r){fRgn.innerHTML+='<option>'+r+'</option>';});
+  _allRgnNames=Object.keys(regions).sort();
+  buildRgnList(_allRgnNames);
 }
 function buildCsrList(names){
   var list=document.getElementById('csrDropdownList');
@@ -1464,6 +1323,48 @@ function selectCsr(val, label){
   document.getElementById('filterCSRInput').value=label||val;
   document.getElementById('csrDropdownList').style.display='none';
 }
+var _allRgnNames=[];
+function buildRgnList(names){
+  var list=document.getElementById('rgnDropdownList');
+  if(!list)return;
+  list.innerHTML='';
+  function makeItem(val,label,muted){
+    var d=document.createElement('div');
+    d.style.cssText='padding:8px 12px;font-size:12px;cursor:pointer;border-bottom:1px solid #f3f4f6;color:'+(muted?'var(--muted)':'var(--text)');
+    d.textContent=label;
+    d.addEventListener('mousedown',function(){selectRgn(val,label);});
+    d.addEventListener('mouseover',function(){d.style.background='var(--green-lt)';});
+    d.addEventListener('mouseout',function(){d.style.background='';});
+    return d;
+  }
+  list.appendChild(makeItem('','All Regions',true));
+  names.forEach(function(n){ list.appendChild(makeItem(n,n,false)); });
+}
+function openRgnDropdown(){
+  var q=(document.getElementById('filterRegionInput').value||'').toLowerCase().trim();
+  var names=q?_allRgnNames.filter(function(n){return n.toLowerCase().includes(q);}):_allRgnNames;
+  buildRgnList(names);
+  document.getElementById('rgnDropdownList').style.display='block';
+  document.getElementById('filterRegionInput').style.borderColor='var(--green)';
+}
+function filterRgnDropdown(){
+  var q=(document.getElementById('filterRegionInput').value||'').toLowerCase().trim();
+  var names=q?_allRgnNames.filter(function(n){return n.toLowerCase().includes(q);}):_allRgnNames;
+  buildRgnList(names);
+  document.getElementById('filterRegion').value='';if(document.getElementById('filterRegionInput'))document.getElementById('filterRegionInput').value='';
+  document.getElementById('rgnDropdownList').style.display='block';
+}
+function closeRgnDropdown(){
+  document.getElementById('rgnDropdownList').style.display='none';
+  document.getElementById('filterRegionInput').style.borderColor='';
+  var val=document.getElementById('filterRegion').value;
+  document.getElementById('filterRegionInput').value=val||'';
+}
+function selectRgn(val,label){
+  document.getElementById('filterRegion').value=val;
+  document.getElementById('filterRegionInput').value=label||val;
+  document.getElementById('rgnDropdownList').style.display='none';
+}
 
 // ═══════════════════════════════════════════════
 //  PAGE NAVIGATION + DROPDOWN
@@ -1471,14 +1372,13 @@ function selectCsr(val, label){
 var _currentView = 'overview';
 
 function switchPage(p){
-  ['form','dashboard','nonsales'].forEach(function(id){
+  ['form','dashboard'].forEach(function(id){
     document.getElementById('page-'+id).classList.remove('active');
     var navEl=document.getElementById('nav-'+id);if(navEl)navEl.classList.remove('active');
   });
   document.getElementById('page-'+p).classList.add('active');
   var navActive=document.getElementById('nav-'+p);if(navActive)navActive.classList.add('active');
-  if(p==='dashboard') loadDashboard();
-  if(p==='nonsales'){ nsUpdatePhotoSummary(); nsStartLocation(); }
+  if(p==='dashboard'){if(!window.allRows)document.getElementById('dbContent').innerHTML=dbSkeleton();loadDashboard();}
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -1879,13 +1779,45 @@ function renderTable(rows){
   }
   document.getElementById('section-records').style.display='block';
   var sorted=rows.slice().sort(function(a,b){return String(b['Timestamp']||'').localeCompare(String(a['Timestamp']||''));});
-  var html='<div class="card"><div class="table-wrap"><table><thead><tr><th>Date</th><th>CSR</th><th>Outlet</th><th>Region</th><th>Type</th><th>Status</th><th>Order (KSH)</th><th>Photo</th></tr></thead><tbody>';
-  sorted.forEach(function(r){
-    var status=r['New / Existing Customer']||'';
-    var badgeCls=status==='New'?'badge-new':'badge-existing';
-    html+='<tr><td>'+fmtDate(r['Date of Market Visit'])+'</td><td>'+shortName(r['CSR Name']||'')+'</td><td style="max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+((r['Outlet / Customer Name']||'').substring(0,20))+'</td><td>'+((r['Region']||'').replace('Nairobi ',''))+'</td><td><span class="badge badge-out">'+((r['Outlet Type']||'').substring(0,10))+'</span></td><td><span class="badge '+badgeCls+'">'+status+'</span></td><td style="font-weight:700;color:var(--green-dark)">'+fmtNum(parseFloat(String(r['Order Generated (KSH)']||0).replace(/,/g,''))||0)+'</td><td>'+(r['Photo URL']?'<a href="'+r['Photo URL']+'" target="_blank" class="photo-view-btn">📷 View</a>':'<span style="color:var(--muted);font-size:11px">—</span>')+'</td></tr>';
-  });
-  html+='</tbody></table></div></div>';
+  var isMobile=window.innerWidth<640;
+  var html='<div class="card">';
+  if(isMobile){
+    // Card layout for mobile
+    sorted.forEach(function(r){
+      var status=r['New / Existing Customer']||'';
+      var badgeCls=status==='New'?'badge-new':'badge-existing';
+      var amt=parseFloat(String(r['Order Generated (KSH)']||0).replace(/,/g,''))||0;
+      var region=(r['Region']||'').replace('Nairobi ','');
+      html+='<div style="border-bottom:1px solid var(--border);padding:12px 4px;display:flex;flex-direction:column;gap:6px">';
+      html+='<div style="display:flex;justify-content:space-between;align-items:flex-start">';
+      html+='<div><div style="font-weight:700;font-size:13px;color:var(--text)">'+(r['Outlet / Customer Name']||'—')+'</div>';
+      html+='<div style="font-size:11px;color:var(--muted);margin-top:2px">'+shortName(r['CSR Name']||'')+' &middot; '+fmtDate(r['Date of Market Visit'])+'</div></div>';
+      html+='<div style="font-family:Syne,sans-serif;font-size:15px;font-weight:800;color:var(--green-dark);white-space:nowrap">KSH '+fmtNum(Math.round(amt))+'</div>';
+      html+='</div>';
+      html+='<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">';
+      html+='<span class="badge badge-out">'+(r['Outlet Type']||'—')+'</span>';
+      html+='<span class="badge '+badgeCls+'">'+status+'</span>';
+      if(region) html+='<span style="font-size:11px;color:var(--muted)">📍 '+region+'</span>';
+      html+='</div>';
+      html+='</div>';
+    });
+  } else {
+    // Table layout for desktop
+    html+='<div class="table-wrap"><table><thead><tr><th>Date</th><th>CSR</th><th>Outlet</th><th>Region</th><th>Type</th><th>Status</th><th>Order (KSH)</th></tr></thead><tbody>';
+    sorted.forEach(function(r){
+      var status=r['New / Existing Customer']||'';
+      var badgeCls=status==='New'?'badge-new':'badge-existing';
+      var amt=parseFloat(String(r['Order Generated (KSH)']||0).replace(/,/g,''))||0;
+      html+='<tr><td>'+fmtDate(r['Date of Market Visit'])+'</td><td>'+shortName(r['CSR Name']||'')+'</td>';
+      html+='<td style="max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(r['Outlet / Customer Name']||'')+'</td>';
+      html+='<td>'+((r['Region']||'').replace('Nairobi ',''))+'</td>';
+      html+='<td><span class="badge badge-out">'+((r['Outlet Type']||'').substring(0,12))+'</span></td>';
+      html+='<td><span class="badge '+badgeCls+'">'+status+'</span></td>';
+      html+='<td style="font-weight:700;color:var(--green-dark)">'+fmtNum(Math.round(amt))+'</td></tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+  html+='</div>';
   document.getElementById('tableContent').innerHTML=html;
 }
 
@@ -2272,330 +2204,7 @@ function loadAndApplyStaff() {
 // ═══════════════════════════════════════════════
 //  NON-SALES FORM — STATE & LOGIC
 // ═══════════════════════════════════════════════
-var nsCur = 1;
-var nsLocData = {lat:null,lng:null,acc:null,addr:null};
-var nsWatchId = null;
-var nsBestAcc = Infinity;
-var nsStepLabels = ['Visit Info','Customer Details','Order Builder','Notes & Sign-Off'];
-var nsPhotoData = null;
-var nsOrderQtys = {};
-var nsActiveCat = 'All';
-var nsNoOrder = false;
-
 // ── Progress ──────────────────────────────────
-function nsUpdateProg() {
-  for (var i=1;i<=4;i++) {
-    var d=document.getElementById('nsd'+i), l=document.getElementById('nsl'+i);
-    d.className='ns-sdot';
-    if(i<nsCur){d.className+=' done';d.textContent='\u2713';}
-    else if(i===nsCur){d.className+=' active';d.textContent=i;}
-    else{d.textContent=i;}
-    if(l){l.className='sline ns-sline'+(i<nsCur?' done':'');}
-  }
-  document.getElementById('nsplab').innerHTML='Step <strong>'+nsCur+'</strong> of 4 &mdash; '+nsStepLabels[nsCur-1];
-}
-function nsGoTo(n){if(n>=nsCur)return;document.getElementById('nsstep-'+nsCur).classList.remove('active');nsCur=n;document.getElementById('nsstep-'+nsCur).classList.add('active');nsUpdateProg();window.scrollTo({top:0,behavior:'smooth'});}
-function nsNext(from){if(!nsValidate(from))return;document.getElementById('nsstep-'+from).classList.remove('active');nsCur=from+1;document.getElementById('nsstep-'+nsCur).classList.add('active');nsUpdateProg();if(nsCur===4)nsUpdatePhotoSummary();window.scrollTo({top:0,behavior:'smooth'});}
-function nsPrev(from){document.getElementById('nsstep-'+from).classList.remove('active');nsCur=from-1;document.getElementById('nsstep-'+nsCur).classList.add('active');nsUpdateProg();window.scrollTo({top:0,behavior:'smooth'});}
-
-// ── Validation ────────────────────────────────
-function nsValidate(step) {
-  var ok=true;
-  if(step===1){
-    if(!document.getElementById('nsVisitDate').value)ok=false;
-    if(!document.getElementById('nsDept').value)ok=false;
-    if(!document.getElementById('nsStaffName').value.trim())ok=false;
-    if(!document.getElementById('nsRegion').value)ok=false;
-    if(!nsLocData.addr){ok=false;var lb=document.getElementById('nsLocBox');if(lb){lb.className='loc-simple ns-loc-simple loc-err';lb.style.outline='2px solid var(--red)';}}
-    else{var lb2=document.getElementById('nsLocBox');if(lb2)lb2.style.outline='';}
-  }
-  if(step===2){
-    if(!document.getElementById('nsOutletName').value.trim())ok=false;
-    if(!document.querySelector('input[name="nsCustStatus"]:checked'))ok=false;
-    if(!document.getElementById('nsContactPerson').value.trim())ok=false;
-    if(!document.getElementById('nsTelephone').value.trim())ok=false;
-    if(!document.getElementById('nsDistributor').value.trim())ok=false;
-    if(!document.querySelector('input[name="nsOutletType"]:checked'))ok=false;
-  }
-  if(step===3){
-    var hasOrder = nsNoOrder || Object.keys(nsOrderQtys).length > 0;
-    if(!hasOrder)ok=false;
-    if(!nsPhotoData){ok=false;document.getElementById('nsPhotoSection').classList.add('photo-required-err');}
-    else{document.getElementById('nsPhotoSection').classList.remove('photo-required-err');}
-  }
-  if(step===4){if(!document.getElementById('nsSignedBy').value.trim())ok=false;}
-  var e=document.getElementById('nserr'+step);
-  e.className=ok?'err-msg':'err-msg show';
-  return ok;
-}
-
-// ── Location ──────────────────────────────────
-function nsShowLocStatus(state,msg,guide){
-  var box=document.getElementById('nsLocBox'),icon=document.getElementById('nsLocIcon'),text=document.getElementById('nsLocText'),retry=document.getElementById('nsLocRetry');
-  if(!box)return;
-  box.className='loc-simple ns-loc-simple';
-  if(state==='scanning'){box.classList.add('ns-loc-scanning','loc-scanning');icon.textContent='📡';icon.style.display='';text.innerHTML=msg;text.className='loc-simple-text loc-pulse';retry.style.display='none';}
-  else if(state==='ok'){box.classList.add('ns-loc-ok','loc-ok');icon.textContent='';icon.style.display='none';text.innerHTML=msg;text.className='loc-simple-text';retry.style.display='none';}
-  else{box.classList.add('loc-err');icon.textContent='⚠️';icon.style.display='';text.innerHTML=msg+(guide||'');text.className='loc-simple-text';retry.style.display='inline-block';}
-}
-
-function nsStartLocation(){
-  if(!navigator.geolocation){nsShowLocStatus('error','Location not supported on this device.');return;}
-  nsShowLocStatus('scanning','Detecting location...');
-  nsLocData={lat:null,lng:null,acc:null,addr:null};nsBestAcc=Infinity;
-  var reverseGeoTimer=null;
-  if(nsWatchId!==null){navigator.geolocation.clearWatch(nsWatchId);nsWatchId=null;}
-  nsWatchId=navigator.geolocation.watchPosition(
-    function(pos){
-      var lat=pos.coords.latitude,lng=pos.coords.longitude,acc=Math.round(pos.coords.accuracy);
-      detectMockLocation(pos, function(isMock, reasons) {
-        if(isMock){navigator.geolocation.clearWatch(nsWatchId);nsWatchId=null;showMockBlocker(reasons);return;}
-        if(acc<nsBestAcc){
-          nsBestAcc=acc;nsLocData.lat=lat.toFixed(7);nsLocData.lng=lng.toFixed(7);nsLocData.acc=acc;
-          if(reverseGeoTimer)clearTimeout(reverseGeoTimer);
-          reverseGeoTimer=setTimeout(function(){
-            var url='https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lng+'&format=json&zoom=19&addressdetails=1';
-            fetch(url,{headers:{'Accept-Language':'en'}}).then(function(r){return r.json();}).then(function(d){
-              if(!d||!d.address){nsShowLocStatus('ok','📍 Location detected');nsLocData.addr='Location detected';return;}
-              var a=d.address,parts=[];
-              var place=a.amenity||a.shop||a.office||a.leisure||a.building_name||'';if(place)parts.push(place);
-              var road=a.road||a.street||a.pedestrian||'';if(road)parts.push((a.house_number?a.house_number+' ':'')+road);
-              var sub=a.estate||a.neighbourhood||a.suburb||'';if(sub&&sub!==road)parts.push(sub);
-              var city=a.city||a.town||a.county||'';if(city)parts.push(city);
-              var name=parts.length?parts.join(', '):(d.display_name||'').split(',').slice(0,3).join(', ').trim();
-              nsLocData.addr=name;nsShowLocStatus('ok','📍 '+name);
-            }).catch(function(){nsShowLocStatus('ok','📍 Location detected');nsLocData.addr='Location detected';});
-          },600);
-          if(acc<=20){navigator.geolocation.clearWatch(nsWatchId);nsWatchId=null;}
-        }
-      });
-    },
-    function(err){
-      navigator.geolocation.clearWatch(nsWatchId);nsWatchId=null;
-      var msg='Could not detect location. Tap Retry.';
-      if(err.code===1)msg='📵 Location access was blocked.';
-      nsShowLocStatus('error',msg);
-    },
-    {enableHighAccuracy:true,timeout:40000,maximumAge:0}
-  );
-}
-
-// ── Photo ─────────────────────────────────────
-function nsHandlePhoto(event) {
-  var file=event.target.files&&event.target.files[0];if(!file)return;
-  var zone=document.getElementById('nsPhotoZone');zone.style.opacity='0.6';
-  var reader=new FileReader();
-  reader.onload=function(e){
-    var img=new Image();
-    img.onload=function(){
-      var canvas=document.createElement('canvas');
-      var maxW=1024,maxH=1024,w=img.width,h=img.height;
-      if(w>maxW){h=Math.round(h*maxW/w);w=maxW;}if(h>maxH){w=Math.round(w*maxH/h);h=maxH;}
-      canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(img,0,0,w,h);
-      nsPhotoData=canvas.toDataURL('image/jpeg',0.78);zone.style.opacity='1';
-      nsRenderPhotoZone(nsPhotoData);nsUpdatePhotoSummary();
-      document.getElementById('nsPhotoSection').classList.remove('photo-required-err');
-    };
-    img.onerror=function(){zone.style.opacity='1';};img.src=e.target.result;
-  };reader.readAsDataURL(file);
-}
-
-function nsRenderPhotoZone(src) {
-  var zone=document.getElementById('nsPhotoZone');
-  document.getElementById('nsPzIco').style.display='none';document.getElementById('nsPzLbl').style.display='none';document.getElementById('nsPzSub').style.display='none';document.getElementById('nsPhotoZoneLabel').style.display='none';
-  ['nsPzImg','nsPzOkBadge','nsPzRetakeLabel','nsPzRemoveBtn'].forEach(function(id){var el=document.getElementById(id);if(el)el.remove();});
-  var imgEl=document.createElement('img');imgEl.id='nsPzImg';imgEl.src=src;zone.appendChild(imgEl);
-  var badge=document.createElement('div');badge.id='nsPzOkBadge';badge.className='photo-ok-badge';badge.style.background='rgba(30,58,138,.85)';badge.textContent='✅ Photo saved — tap to retake';zone.appendChild(badge);
-  var retakeLabel=document.createElement('label');retakeLabel.id='nsPzRetakeLabel';retakeLabel.className='retake-label';retakeLabel.setAttribute('for','nsPhotoInput0');zone.appendChild(retakeLabel);
-  var removeBtn=document.createElement('button');removeBtn.id='nsPzRemoveBtn';removeBtn.className='photo-remove';removeBtn.style.background='rgba(37,99,235,.9)';removeBtn.type='button';removeBtn.innerHTML='&#x2715;';
-  removeBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();nsRemovePhoto();});
-  zone.appendChild(removeBtn);zone.classList.add('has-photo');
-}
-
-function nsRemovePhoto() {
-  nsPhotoData=null;var zone=document.getElementById('nsPhotoZone');
-  zone.classList.remove('has-photo');zone.style.opacity='1';
-  document.getElementById('nsPzIco').style.display='';document.getElementById('nsPzLbl').style.display='';document.getElementById('nsPzSub').style.display='';document.getElementById('nsPhotoZoneLabel').style.display='';
-  ['nsPzImg','nsPzOkBadge','nsPzRetakeLabel','nsPzRemoveBtn'].forEach(function(id){var el=document.getElementById(id);if(el)el.remove();});
-  document.getElementById('nsPhotoInput0').value='';nsUpdatePhotoSummary();
-}
-
-function nsUpdatePhotoSummary() {
-  var card=document.getElementById('nsPhotoSummaryCard'),grid=document.getElementById('nsPhotoSummaryGrid');
-  if(!card||!grid)return;
-  if(!nsPhotoData){card.style.display='none';return;}
-  card.style.display='block';grid.innerHTML='';
-  var thumb=document.createElement('img');thumb.src=nsPhotoData;thumb.style.cssText='width:80px;height:80px;object-fit:cover;border-radius:8px;border:2px solid #2563eb';
-  grid.appendChild(thumb);
-}
-
-// ── Order Builder (NS) ────────────────────────
-function nsInitOrderBuilder() {
-  var cats=['All'].concat(Object.keys(PRODUCT_CATALOGUE));
-  var pillsEl=document.getElementById('nsCatPills');pillsEl.innerHTML='';
-  cats.forEach(function(cat){
-    var btn=document.createElement('button');
-    btn.className='cat-pill ns-cat-pill'+(cat==='All'?' active':'');
-    btn.textContent=cat==='All'?'🛒 All':cat;
-    btn.onclick=function(){
-      nsActiveCat=cat;
-      document.querySelectorAll('.ns-cat-pill').forEach(function(p){p.classList.remove('active');});
-      btn.classList.add('active');nsRenderProductList();
-    };
-    pillsEl.appendChild(btn);
-  });
-  nsRenderProductList();
-}
-
-function nsGetFilteredProducts(){
-  var q=(document.getElementById('nsProductSearch').value||'').toLowerCase().trim(),all=[];
-  Object.keys(PRODUCT_CATALOGUE).forEach(function(cat){
-    if(nsActiveCat!=='All'&&nsActiveCat!==cat)return;
-    PRODUCT_CATALOGUE[cat].forEach(function(p){if(!q||p.name.toLowerCase().includes(q)||p.code.toLowerCase().includes(q))all.push(p);});
-  });return all;
-}
-
-function nsRenderProductList(){
-  var list=document.getElementById('nsProductList'),products=nsGetFilteredProducts();
-  if(!products.length){list.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px">No products found</div>';return;}
-  list.innerHTML='';
-  products.forEach(function(p){
-    var qty=nsOrderQtys[p.code]||0;
-    var packUnit=p.pack?p.pack.replace(/s$/i,'').replace(/carton/i,'Ctn').replace(/tray/i,'Tray').replace(/crate/i,'Crate').replace(/bag/i,'Bag').replace(/bucket/i,'Bucket').replace(/pack/i,'Pack').replace(/pcs/i,'PC'):'';
-    var row=document.createElement('div');row.className='prod-row ns-prod-row'+(qty>0?' has-qty':'');row.id='nsprodrow-'+p.code;
-    row.innerHTML='<div class="prod-info"><div class="prod-name">'+p.name+'</div><div class="prod-meta">Code: '+p.code+' &nbsp;|&nbsp; per '+p.pack+'</div></div>'
-      +'<div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex-shrink:0;margin-right:4px">'
-      +'<div class="prod-price" style="color:#1e3a8a">KSH '+fmtNum(p.price)+'<span style="font-size:9px;font-weight:500;color:var(--muted)"> /'+packUnit+'</span></div>'
-      +'<div id="nssub-'+p.code+'" style="font-size:11px;font-weight:700;color:#1e3a8a;min-height:14px">'+(qty>0?'KSH '+fmtNum(Math.round(qty*p.price)):'')+'</div>'
-      +'</div>'
-      +'<div class="qty-ctrl"><button class="qty-btn" onclick="nsChangeQty(\''+p.code+'\',-1)">−</button><span class="qty-val" id="nsqty-'+p.code+'">'+qty+'</span><button class="qty-btn ns-qty-btn plus" onclick="nsChangeQty(\''+p.code+'\',1)">+</button></div>';
-    list.appendChild(row);
-  });
-}
-
-function nsChangeQty(code,delta){
-  var current=nsOrderQtys[code]||0,newQty=Math.max(0,current+delta);
-  if(newQty===0)delete nsOrderQtys[code];else nsOrderQtys[code]=newQty;
-  var qtyEl=document.getElementById('nsqty-'+code),rowEl=document.getElementById('nsprodrow-'+code),subEl=document.getElementById('nssub-'+code);
-  if(qtyEl)qtyEl.textContent=newQty;
-  if(rowEl){if(newQty>0)rowEl.classList.add('has-qty');else rowEl.classList.remove('has-qty');}
-  if(subEl){var price=0;Object.keys(PRODUCT_CATALOGUE).forEach(function(cat){PRODUCT_CATALOGUE[cat].forEach(function(p){if(p.code===code)price=p.price;});});subEl.textContent=newQty>0?'KSH '+fmtNum(Math.round(newQty*price)):'';}
-  nsUpdateOrderSummary();
-}
-
-function nsFilterProducts(){nsRenderProductList();}
-
-function nsUpdateOrderSummary(){
-  var total=0,items=[];
-  Object.keys(PRODUCT_CATALOGUE).forEach(function(cat){
-    PRODUCT_CATALOGUE[cat].forEach(function(p){
-      var qty=nsOrderQtys[p.code]||0;
-      if(qty>0){var lt=qty*p.price;total+=lt;items.push({code:p.code,name:p.name,pack:p.pack,price:p.price,qty:qty,lineTotal:lt});}
-    });
-  });
-  var summaryBox=document.getElementById('nsOrderSummaryBox'),summaryLines=document.getElementById('nsSummaryLines'),totalDisplay=document.getElementById('nsOrderTotalDisplay');
-  if(items.length===0){summaryBox.style.display='none';}
-  else{
-    summaryBox.style.display='block';summaryLines.innerHTML='';
-    items.forEach(function(item){
-      var line=document.createElement('div');line.className='order-summary-line';
-      line.innerHTML='<div class="order-summary-name">'+item.name+'<br><span style="font-size:10px;opacity:.7">'+item.qty+' '+item.pack+' × KSH '+fmtNum(item.price)+'</span></div><div class="order-summary-val">KSH '+fmtNum(Math.round(item.lineTotal))+'</div>';
-      summaryLines.appendChild(line);
-    });
-    totalDisplay.textContent='KSH '+fmtNum(Math.round(total));
-  }
-  document.getElementById('nsOrderAmt').value=Math.round(total);
-  document.getElementById('nsOrderItemsJSON').value=JSON.stringify(items.map(function(i){return{code:i.code,name:i.name,qty:i.qty,pack:i.pack,price:i.price,lineTotal:Math.round(i.lineTotal)};}));
-}
-
-function nsClearAllOrder(){nsOrderQtys={};nsRenderProductList();nsUpdateOrderSummary();}
-
-function nsHandleNoOrderToggle(){
-  nsNoOrder=document.getElementById('nsNoOrderToggle').checked;
-  document.getElementById('nsOrderBuilderPanel').style.display=nsNoOrder?'none':'block';
-  document.getElementById('nsNoOrderBanner').style.display=nsNoOrder?'block':'none';
-  if(nsNoOrder){document.getElementById('nsOrderAmt').value='0';document.getElementById('nsOrderItemsJSON').value='[]';}
-  else nsUpdateOrderSummary();
-}
-
-// ── Submit ────────────────────────────────────
-function nsSubmitForm(){
-  if(_mockDetected){showMockBlocker(_mockReasons.length?_mockReasons:['🔴 Mock location detected.']);return;}
-  if(!nsValidate(4))return;
-  var btn=document.getElementById('nsSubmitBtn');
-  btn.disabled=true;btn.innerHTML='<span class="spin"></span>Saving...';
-  var orderItems=[];try{orderItems=JSON.parse(document.getElementById('nsOrderItemsJSON').value||'[]');}catch(e){}
-  var orderStr=nsNoOrder?'NO ORDER':(orderItems.length?orderItems.map(function(i){return i.qty+'x '+i.name;}).join('; '):'NO ORDER');
-  var _catsSeen={},_catsArr=[];
-  orderItems.forEach(function(i){
-    var cat=Object.keys(PRODUCT_CATALOGUE).find(function(c){return PRODUCT_CATALOGUE[c].find(function(p){return p.code===i.code;});})||'';
-    if(cat&&!_catsSeen[cat]){_catsSeen[cat]=true;_catsArr.push(cat);}
-  });
-  var payload={
-    formType:'Non-Sales Field Visit',
-    visitDate:document.getElementById('nsVisitDate').value,
-    region:document.getElementById('nsRegion').value,
-    csrName:document.getElementById('nsStaffName').value.trim(),
-    department:document.getElementById('nsDept').value,
-    outletName:document.getElementById('nsOutletName').value.trim(),
-    customerStatus:(document.querySelector('input[name="nsCustStatus"]:checked')||{}).value||'',
-    contactPerson:document.getElementById('nsContactPerson').value.trim(),
-    telephone:document.getElementById('nsTelephone').value.trim(),
-    distributor:document.getElementById('nsDistributor').value.trim(),
-    outletType:(document.querySelector('input[name="nsOutletType"]:checked')||{}).value||'',
-    products:_catsArr.length?_catsArr.join(', '):'None',
-    orderGenerated:document.getElementById('nsOrderAmt').value,
-    orderDetails:orderStr,
-    comment:document.getElementById('nsComment').value.trim(),
-    locationName:nsLocData.addr||'',
-    signedBy:document.getElementById('nsSignedBy').value.trim(),
-    photoCount:nsPhotoData?1:0,
-    photo1:nsPhotoData||''
-  };
-  fetch(APPS_SCRIPT_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload),headers:{'Content-Type':'application/json'}})
-    .then(function(){nsShowSuccess();})
-    .catch(function(){btn.disabled=false;btn.innerHTML='Submit Visit &#10003;';var e=document.getElementById('nserr4');e.textContent='Network error. Check connection and try again.';e.className='err-msg show';});
-}
-
-function nsShowSuccess(){
-  document.getElementById('nsstep-4').classList.remove('active');
-  document.getElementById('ns-success-screen').style.display='block';
-  document.getElementById('nsProgWrap').style.display='none';
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function nsResetForm(){
-  document.getElementById('ns-success-screen').style.display='none';
-  document.getElementById('nsProgWrap').style.display='block';
-  document.querySelectorAll('#page-nonsales input[type=text],#page-nonsales input[type=tel],#page-nonsales textarea').forEach(function(el){el.value='';});
-  document.querySelectorAll('#page-nonsales input[type=radio],#page-nonsales input[type=checkbox]').forEach(function(el){el.checked=false;});
-  document.getElementById('nsVisitDate').value=new Date().toISOString().split('T')[0];
-  document.getElementById('nsDept').value='';document.getElementById('nsRegion').value='';
-  document.getElementById('nsSubmitBtn').disabled=false;document.getElementById('nsSubmitBtn').innerHTML='Submit Visit &#10003;';
-  document.querySelectorAll('#page-nonsales .err-msg').forEach(function(el){el.className='err-msg';});
-  nsPhotoData=null;nsRemovePhoto();nsUpdatePhotoSummary();
-  if(nsWatchId!==null){navigator.geolocation.clearWatch(nsWatchId);nsWatchId=null;}
-  nsLocData={lat:null,lng:null,acc:null,addr:null};
-  nsOrderQtys={};nsNoOrder=false;
-  document.getElementById('nsNoOrderToggle').checked=false;
-  document.getElementById('nsOrderBuilderPanel').style.display='block';
-  document.getElementById('nsNoOrderBanner').style.display='none';
-  document.getElementById('nsOrderAmt').value='0';document.getElementById('nsOrderItemsJSON').value='[]';
-  document.getElementById('nsProductSearch').value='';
-  nsActiveCat='All';
-  document.querySelectorAll('.ns-cat-pill').forEach(function(p,i){p.classList.toggle('active',i===0);});
-  nsRenderProductList();nsUpdateOrderSummary();
-  nsCur=1;document.getElementById('nsstep-1').classList.add('active');nsUpdateProg();
-  window.scrollTo({top:0,behavior:'smooth'});nsStartLocation();
-}
-
-// Initialise NS form on page load
-window.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('nsVisitDate').value = new Date().toISOString().split('T')[0];
-  nsInitOrderBuilder();
-  // NS location starts only when user visits the page (switchPage handles it)
-});
-
 // ═══════════════════════════════════════════════
 //  ADMIN PANEL
 // ═══════════════════════════════════════════════
